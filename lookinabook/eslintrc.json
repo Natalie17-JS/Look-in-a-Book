@@ -1,0 +1,11 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "react/prop-types": "off",
+    "react/function-component-definition": [
+      "error",
+      { "namedComponents": "function-declaration" }
+    ],
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  }
+}

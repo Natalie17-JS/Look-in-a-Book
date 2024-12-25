@@ -3,9 +3,13 @@ import windows from "@/images/windows.svg";
 import cloudsPicture from "@/images/clouds-picture.svg";
 import dayPicture from "@/images/day-picture.svg";
 import nightPicture from "@/images/night-picture.svg";
-import styles from "./componentsStyles/ThemeSwitcher.module.css";
+import styles from "./ThemeSwitcher.module.css";
 
-const Window = ({ activeImage }) => {
+interface WindowProps {
+  activeImage: number | null;
+}
+
+const Window: React.FC<WindowProps> = ({ activeImage }) => {
   return (
     <div className={styles["windows-container"]}>
       {activeImage === 0 && (

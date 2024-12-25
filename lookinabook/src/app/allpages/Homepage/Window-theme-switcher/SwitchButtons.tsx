@@ -2,14 +2,18 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import cloudsSwitcher from "@/images/clouds-switcher.svg";
 import sunSwitcher from "@/images/sun-switcher.svg";
-import nightSwitcher from "@/images/night-switcher.svg";
-import { useTheme } from "@/app/context/ThemeContext";
-import styles from "./componentsStyles/ThemeSwitcher.module.css";
+import moonSwitcher from "@/images/moon-switcher.svg";
+import { useTheme } from "@/app/context/themeContext";
+import styles from "./ThemeSwitcher.module.css";
 
-const SwitchButtons = ({ onSwitch }) => {
+interface SwitchButtonsProps {
+  onSwitch: (imageIndex: number) => void; // Функция для переключения, принимает индекс изображения
+}
+
+const SwitchButtons: React.FC<SwitchButtonsProps> = ({ onSwitch }) => {
   const { theme, toggleTheme } = useTheme();
-  const [activeButton, setActiveButton] = useState(null);
-  const [buttonClicked, setButtonClicked] = useState(false);
+  const [activeButton, setActiveButton] = useState<number | null>(null); // Индекс активной кнопки
+  const [buttonClicked, setButtonClicked] = useState<boolean>(false);
 
   useEffect(() => {
     if (theme === "light") {
@@ -21,7 +25,7 @@ const SwitchButtons = ({ onSwitch }) => {
     }
   }, [theme]);
 
-  const handleSwitch = (imageIndex) => {
+  const handleSwitch = (imageIndex: number) => {
     if (imageIndex !== activeButton || !buttonClicked) {
       onSwitch(imageIndex);
       setButtonClicked(true);
@@ -65,7 +69,7 @@ const SwitchButtons = ({ onSwitch }) => {
         onClick={() => handleSwitch(2)}
       >
         <Image
-          src={nightSwitcher}
+          src={moonSwitcher}
           alt="Night"
           className={styles["switchbtn-image"]}
         />
