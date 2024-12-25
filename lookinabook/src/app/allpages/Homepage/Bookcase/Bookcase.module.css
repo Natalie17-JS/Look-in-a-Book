@@ -1,0 +1,9 @@
+.bookcase {
+  grid-area: bookcase;
+}
+
+.books {
+  border: 20px solid rgb(113, 75, 25);
+  height: auto;
+  width: 70%;
+}

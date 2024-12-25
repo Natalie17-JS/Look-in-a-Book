@@ -5,7 +5,7 @@ import doornight from "@/images/door-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "./componentsStyles/Door.module.css";
+import styles from "./Door.module.css";
 
 export default function Door() {
   const { theme } = useTheme();
