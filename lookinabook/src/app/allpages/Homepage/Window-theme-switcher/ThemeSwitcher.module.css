@@ -1,3 +1,55 @@
 .theme-switcher-container {
   grid-area: windows;
+  display: flex;
+  /*align-items: flex-start;*/
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+/*--------------------------------Window-----------------------------------*/
+.windows-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  /*margin-top: -250px;*/
+}
+
+.windows {
+  position: absolute;
+  top: 0%;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+.image-in-windows {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/*---------------------------------switch buttons-------------------------------*/
+.switchbtn-image {
+  width: 80%;
+  height: auto;
+}
+.switch-btn.active {
+  margin-top: 30px;
+}
+.switch-btn-container {
+  width: 30%;
+  height: auto;
+  display: flex;
+  margin-top: -100px;
+  /*margin-left: 100px;*/
+}
+.switch-btn {
+  background-color: transparent;
+  outline: none;
+  border: none;
 }

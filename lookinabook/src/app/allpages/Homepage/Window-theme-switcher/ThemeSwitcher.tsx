@@ -3,7 +3,7 @@ import SwitchButtons from "./SwitchButtons";
 import Window from "./Window";
 import { useTheme } from "@/app/context/themeContext";
 
-import styles from "./componentsStyles/ThemeSwitcher.module.css";
+import styles from "./ThemeSwitcher.module.css";
 
 const ThemeSwitcher = () => {
   const { theme } = useTheme();

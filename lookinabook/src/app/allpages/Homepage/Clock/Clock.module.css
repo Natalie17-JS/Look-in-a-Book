@@ -1,3 +1,14 @@
 .clock {
   grid-area: clock;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  border: 1px solid red;
+}
+
+.clock-image {
+  width: 40%;
+  height: auto;
 }

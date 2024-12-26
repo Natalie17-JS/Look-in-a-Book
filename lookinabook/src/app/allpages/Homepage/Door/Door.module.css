@@ -1,3 +1,29 @@
 .door-container {
   grid-area: door;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.door {
+  position: relative;
+  width: 100%;
+  /*display: flex;
+  justify-content: center;*/
+}
+.door-image {
+  width: 90%;
+  height: auto;
+}
+.welcome-text-container {
+  width: 40%;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  text-align: center;
+}
+.door-text {
+  font-size: 1vw;
+  /*text-anchor: middle;*/
 }

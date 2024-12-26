@@ -15,21 +15,21 @@ const Window: React.FC<WindowProps> = ({ activeImage }) => {
       {activeImage === 0 && (
         <Image
           src={dayPicture}
-          className={styles["image-under-windows"]}
+          className={styles["image-in-windows"]}
           alt="Day"
         />
       )}
       {activeImage === 1 && (
         <Image
           src={cloudsPicture}
-          className={styles["image-under-windows"]}
+          className={styles["image-in-windows"]}
           alt="Clouds"
         />
       )}
       {activeImage === 2 && (
         <Image
           src={nightPicture}
-          className={styles["image-under-windows"]}
+          className={styles["image-in-windows"]}
           alt="Night"
         />
       )}
