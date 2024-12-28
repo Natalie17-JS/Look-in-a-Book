@@ -1,0 +1,54 @@
+.shelf-container {
+  grid-area: shelf;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+.shelf {
+  width: 80%;
+  border-bottom: 25px solid rgb(92, 64, 28);
+  border-radius: 5px;
+}
+.shelf-elements {
+  display: flex;
+  width: 90%;
+  justify-content: space-evenly;
+  align-items: end;
+  margin: 0 auto;
+}
+.photoram {
+  width: 130px;
+  height: 150px;
+  background-color: grey;
+  border: 15px solid rgb(120, 69, 24);
+}
+.flowers {
+  width: 120px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  /*border: 1px solid red;*/
+}
+.flowers-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: -2px;
+}
+.description {
+  width: 250px;
+  height: 150px;
+  background-color: rgb(173, 173, 173);
+}
+.description.dark {
+  background-color: transparent;
+  border: 2px double white;
+}
+.description.gray {
+  background-color: rgb(244, 230, 168);
+  border: 2px double rgb(41, 41, 41);
+}
+.description.light {
+  background-color: rgb(87, 87, 87);
+  border: 2px double black;
+}

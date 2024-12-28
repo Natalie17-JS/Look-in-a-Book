@@ -1,0 +1,22 @@
+.sidewindow {
+  width: 20%;
+
+  /*border: 1px solid red;*/
+}
+.sidewindow-image {
+  width: auto;
+  margin-left: 30px;
+  height: 99vh;
+}
+
+.sidewindow.light {
+  background-color: white;
+}
+.sidewindow.gray {
+  background-color: rgb(185, 180, 166);
+  color: rgb(26, 26, 26);
+}
+.sidewindow.dark {
+  background-color: rgb(36, 36, 36);
+  color: white;
+}

@@ -1,0 +1,23 @@
+.notebook {
+  width: 35%;
+  position: relative;
+}
+.notebook-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: -8px;
+}
+
+.buttons {
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.signout-btn,
+.settings-btn {
+  width: 100px;
+  border-radius: 3px;
+}

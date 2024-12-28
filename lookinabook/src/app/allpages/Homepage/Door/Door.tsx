@@ -32,12 +32,12 @@ export default function Door() {
     <p className="door-text">My room</p>
     </div>*/}
 
-          <div className="welcome-text-container">
+          {/*<div className="welcome-text-container">
             <p className="door-text">Hello, writer!</p>
             <p className="door-text">
               Welcome to our community where you can create wonderful things
             </p>
-          </div>
+          </div>*/}
         </div>
       </div>
     </Link>

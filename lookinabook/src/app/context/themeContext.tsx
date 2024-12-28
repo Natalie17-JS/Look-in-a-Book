@@ -1,47 +1,46 @@
-import { useState, useContext, createContext, ReactNode } from "react";
+"use client";
+
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
 // Тип для темы
 type Theme = "light" | "dark" | "gray";
 
+// Тип для контекста
 interface ThemeContextType {
-  theme: Theme; // Используем тип "light" | "dark" | "gray"
-  setTheme: React.Dispatch<React.SetStateAction<Theme>>; // Типизируем setTheme
-  toggleTheme: (theme: string) => void; // Функция для переключения темы
+  theme: Theme;
+  toggleTheme: (newTheme: Theme) => void;
 }
 
-const themeContext = createContext<ThemeContextType | undefined>(undefined);
+// Создаем контекст с начальным значением `undefined`
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 // Хук для использования контекста
-export const useTheme = () => {
-  const thcontext = useContext(themeContext);
-  if (!thcontext) {
+export const useTheme = (): ThemeContextType => {
+  const context = useContext(ThemeContext);
+
+  if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
-  return thcontext;
+
+  return context;
 };
 
+// Тип для свойств провайдера
 interface ThemeProviderProps {
   children: ReactNode;
 }
 
-// Провайдер для контекста
+// Создаем провайдер контекста
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>("light"); // Начальная тема - светлая
+  const [theme, setTheme] = useState<Theme>("light"); // Начальная тема — 'light'
 
-  // Функция для переключения темы
-  const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-    } else if (theme === "dark") {
-      setTheme("gray");
-    } else {
-      setTheme("light");
-    }
+  const toggleTheme = (newTheme: Theme) => {
+    setTheme(newTheme);
   };
 
   return (
-    <themeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
-    </themeContext.Provider>
+    </ThemeContext.Provider>
   );
 };
