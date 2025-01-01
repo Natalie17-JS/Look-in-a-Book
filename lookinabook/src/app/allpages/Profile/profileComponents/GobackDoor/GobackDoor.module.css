@@ -1,0 +1,12 @@
+.gobackdoor {
+  grid-area: gobackdoor;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.gobackdoor-image {
+  width: 80%;
+  height: 100%;
+}

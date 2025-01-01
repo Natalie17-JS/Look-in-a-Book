@@ -1,0 +1,24 @@
+.profile-container.light {
+  background-color: white;
+}
+.profile-container.gray {
+  background-color: rgb(185, 180, 166);
+  color: rgb(26, 26, 26);
+}
+.profile-container.dark {
+  background-color: rgb(36, 36, 36);
+  color: white;
+}
+
+/*-----------------------------Room------------------------------*/
+.profile-container {
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  /* border: 1px solid green;*/
+  grid-template-columns: 70% 30%;
+  grid-template-rows: 25% 75%;
+  grid-template-areas:
+    "shelf littleclock"
+    "worktable gobackdoor";
+}

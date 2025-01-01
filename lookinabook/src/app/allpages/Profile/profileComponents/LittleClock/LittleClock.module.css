@@ -1,0 +1,14 @@
+.littleclock {
+  grid-area: littleclock;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  /*border: 1px solid red;*/
+}
+
+.little-clock-image {
+  width: 40%;
+  height: auto;
+}
