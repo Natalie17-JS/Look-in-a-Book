@@ -5,7 +5,7 @@ import sidewindowclouds from "@/images/long-window-clouds.svg";
 import sidewindownight from "@/images/long-window-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import Image from "next/image";
-import styles from "./componentsStyles/SideWindow.module.css";
+import styles from "./Sidewindow.module.css";
 
 export default function SideWindow() {
   const { theme } = useTheme();

@@ -23,7 +23,7 @@ export default function Door() {
   }
 
   return (
-    <Link href="/allPages/myRoom">
+    <Link href="/allpages/profile">
       <div className={styles["door-container"]}>
         <div className={styles.door}>
           <Image src={doorImage} alt="door" className={styles["door-image"]} />

@@ -5,11 +5,12 @@
   align-items: flex-end;
   height: 100%;
   width: 100%;
-  border: 1px solid yellow;
+  /*border: 1px solid yellow;*/
 }
 
 .books {
   border: 20px solid rgb(113, 75, 25);
   height: 90%;
   width: 90%;
+  margin-bottom: 15px;
 }

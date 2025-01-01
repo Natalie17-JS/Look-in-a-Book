@@ -4,7 +4,7 @@ import Image from "next/image";
 import notebookday from "@/images/notebook-day.svg";
 import notebooknight from "@/images/notebook-night.svg";
 import { useTheme } from "@/app/context/themeContext";
-import styles from "./componentsStyles/Notebook.module.css";
+import styles from "./Notebook.module.css";
 
 export default function Notebook() {
   const { theme } = useTheme();
