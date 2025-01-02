@@ -24,11 +24,15 @@ export default function GoBackDoor() {
 
   return (
     <div className={styles.gobackdoor}>
-      <Image
-        src={doorImage}
-        alt="go-back-door"
-        className={styles["gobackdoor-image"]}
-      />
+      <div className={styles.door}>
+        <Link href="/">
+          <Image
+            src={doorImage}
+            alt="go-back-door"
+            className={styles["gobackdoor-image"]}
+          />
+        </Link>
+      </div>
     </div>
   );
 }

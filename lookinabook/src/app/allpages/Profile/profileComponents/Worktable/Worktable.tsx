@@ -4,9 +4,19 @@ import styles from "./Worktable.module.css";
 import { useTheme } from "@/app/context/themeContext";
 import Posts from "../Posts/Posts";
 import NotebookBooks from "../NotebookBooks/NotebookBooks";
+import Recommendations from "../Recommendations/Recommendations";
+import PostsDrafts from "../PostsDrafts/PostsDrafts";
+import BooksDrafts from "../BooksDrafts/BooksDrafts";
+import SavedBooks from "../SavedBooks/SavedBooks";
 import { useState } from "react";
 
-type ComponentName = "notebookbooks" | "posts";
+type ComponentName =
+  | "notebookbooks"
+  | "posts"
+  | "recommendations"
+  | "postsdrafts"
+  | "booksdrafts"
+  | "savedbooks";
 
 export default function Worktable() {
   const { theme } = useTheme();
@@ -22,9 +32,13 @@ export default function Worktable() {
       <div className={styles.ontablethings}>
         {activeComponent === "notebookbooks" && <NotebookBooks />}
         {activeComponent === "posts" && <Posts />}
+        {activeComponent === "recommendations" && <Recommendations />}
+        {activeComponent === "postsdrafts" && <PostsDrafts />}
+        {activeComponent === "booksdrafts" && <BooksDrafts />}
+        {activeComponent === "savedbooks" && <SavedBooks />}
       </div>
 
-      <div className={styles.upper}></div>
+      <div className={styles.upperpart}></div>
 
       <div className={styles.yashiki}>
         <div className={styles["yashiki-left"]}>
@@ -42,13 +56,23 @@ export default function Worktable() {
           <div className={styles.yashik}>
             <div className={styles.insidepart}>
               <div className={styles.tag}></div>
-              <p className={styles["yashik-text"]}>Posts drafts</p>
+              <button
+                onClick={() => handleSwitchContent("postsdrafts")}
+                className={styles["switch-content-btn"]}
+              >
+                <p className={styles["yashik-text"]}>Posts drafts</p>
+              </button>
             </div>
           </div>
           <div className={styles.yashik}>
             <div className={styles.insidepart}>
               <div className={styles.tag}></div>
-              <p className={styles["yashik-text"]}>Recommendations</p>
+              <button
+                onClick={() => handleSwitchContent("recommendations")}
+                className={styles["switch-content-btn"]}
+              >
+                <p className={styles["yashik-text"]}>Recommendations</p>
+              </button>
             </div>
           </div>
         </div>
@@ -56,13 +80,23 @@ export default function Worktable() {
           <div className={styles.yashik}>
             <div className={styles.insidepart}>
               <div className={styles.tag}></div>
-              <p className={styles["yashik-text"]}>Books drafts</p>
+              <button
+                onClick={() => handleSwitchContent("booksdrafts")}
+                className={styles["switch-content-btn"]}
+              >
+                <p className={styles["yashik-text"]}>Books drafts</p>
+              </button>
             </div>
           </div>
           <div className={styles.yashik}>
             <div className={styles.insidepart}>
               <div className={styles.tag}></div>
-              <p className={styles["yashik-text"]}>Saved books</p>
+              <button
+                onClick={() => handleSwitchContent("savedbooks")}
+                className={styles["switch-content-btn"]}
+              >
+                <p className={styles["yashik-text"]}>Saved books</p>
+              </button>
             </div>
           </div>
           <div className={styles.yashik}>

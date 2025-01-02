@@ -5,6 +5,7 @@ import notebookday from "@/images/notebook-day.svg";
 import notebooknight from "@/images/notebook-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./Notebook.module.css";
+import Link from "next/link";
 
 export default function Notebook() {
   const { theme } = useTheme();
@@ -30,7 +31,9 @@ export default function Notebook() {
 
       <div className={styles.buttons}>
         <button className={styles["signout-btn"]}>Sign out</button>
-        <button className={styles["settings-btn"]}>Edit profile</button>
+        <Link href="/allpages/profile/edit-profile">
+          <button className={styles["settings-btn"]}>Edit profile</button>
+        </Link>
       </div>
     </div>
   );

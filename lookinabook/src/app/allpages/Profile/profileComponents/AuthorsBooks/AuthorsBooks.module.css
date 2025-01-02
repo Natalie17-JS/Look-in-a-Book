@@ -3,3 +3,8 @@
   height: auto;
   margin-bottom: -14px;
 }
+.author-books-container {
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+}
