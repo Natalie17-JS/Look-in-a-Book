@@ -9,6 +9,7 @@ import PostsDrafts from "../PostsDrafts/PostsDrafts";
 import BooksDrafts from "../BooksDrafts/BooksDrafts";
 import SavedBooks from "../SavedBooks/SavedBooks";
 import { useState } from "react";
+import Link from "next/link";
 
 type ComponentName =
   | "notebookbooks"
@@ -45,6 +46,7 @@ export default function Worktable() {
           <div className={styles.yashik}>
             <div className={styles.insidepart}>
               <div className={styles.tag}></div>
+
               <button
                 onClick={() => handleSwitchContent("posts")}
                 className={styles["switch-content-btn"]}
