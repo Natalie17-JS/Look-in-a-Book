@@ -1,0 +1,108 @@
+.bookshelf-fiction {
+  display: flex;
+}
+
+.shelf {
+  display: flex;
+  /*padding-top: 10px;*/
+  align-items: flex-end;
+  border-bottom: 20px solid rgb(113, 75, 25);
+  /*margin-block: 20px;*/
+}
+
+.book {
+  border: 1px rgb(52, 52, 52) solid;
+  width: 20px;
+  background-color: #afa063;
+}
+
+.first {
+  height: 118px;
+}
+
+.second {
+  height: 100px;
+}
+
+.third {
+  height: 115px;
+}
+
+.forth {
+  margin-left: 1.3rem;
+  height: 120px;
+  transform: skew(20deg, -20deg);
+  margin-bottom: 0.2rem;
+}
+.fifth {
+  height: 105px;
+  transform: skew(20deg, -20deg);
+  margin-left: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+.sixth {
+  height: 90px;
+  transform: skew(30deg, -30deg);
+  margin-left: 1rem;
+  width: 15px;
+  margin-bottom: 0.2rem;
+}
+.seventh {
+  height: 120px;
+  margin-left: 1.6rem;
+  width: 20px;
+}
+.eighth {
+  height: 150px;
+  width: 10px;
+}
+
+.ninth {
+  height: 160px;
+  width: 12px;
+}
+
+.tenth {
+  height: 140px;
+  width: 14px;
+}
+
+.eleventh {
+  height: 120px;
+  width: 25px;
+}
+.twelfth {
+  transform: skew(-10deg, 10deg);
+  height: 110px;
+  width: 25px;
+  margin-left: 0.6rem;
+  margin-bottom: 0.2rem;
+}
+.thirteenth {
+  transform: skew(-15deg, 15deg);
+  height: 120px;
+  width: 20px;
+  margin-left: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.fourteenth {
+  transform: skew(-15deg, 15deg);
+  height: 125px;
+  width: 18px;
+  margin-bottom: 0.2rem;
+}
+
+.feefteenth {
+  transform: skew(-20deg, 20deg);
+  height: 130px;
+  width: 15px;
+  margin-bottom: 0.2rem;
+  margin-left: 0.5rem;
+}
+
+.sixteenth {
+  height: 145px;
+  width: 15px;
+  margin-left: 1.5rem;
+}
