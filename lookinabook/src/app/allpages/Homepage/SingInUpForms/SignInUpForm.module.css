@@ -1,0 +1,63 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.submitButton {
+  background: #0070f3;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background: #005bb5;
+}
+.registerLink {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.registerLink:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: tomato;
+  font-size: 12px;
+}
+/*-----------------------------input theme color -----------------*/
+.light {
+  background: #f5f5f5;
+  color: black;
+}
+
+.gray {
+  background: gray;
+  color: rgb(201, 201, 201);
+  border: 1px solid rgb(26, 26, 26);
+}
+
+.dark {
+  background: rgb(26, 26, 26);
+  color: white;
+  border: 1px solid white;
+}

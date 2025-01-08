@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import styles from "./componentsStyles/SignInModal.module.css";
+import styles from "./SignInUpForm.module.css";
 
 // Типизация данных формы
 interface RegisterFormData {
@@ -39,6 +39,7 @@ export default function RegisterForm() {
             className={styles.input}
             type="email"
             id="email"
+            placeholder="Enter your email..."
             {...register("email", {
               required: "Email is required",
               pattern: {
@@ -60,6 +61,7 @@ export default function RegisterForm() {
             className={styles.input}
             type="password"
             id="password"
+            placeholder="Enter your password..."
             {...register("password", {
               required: "Password is required",
               minLength: {
@@ -81,6 +83,7 @@ export default function RegisterForm() {
             className={styles.input}
             type="password"
             id="confirmPassword"
+            placeholder="Confirm your password..."
             {...register("confirmPassword", {
               required: "Please confirm your password",
               validate: (value) =>

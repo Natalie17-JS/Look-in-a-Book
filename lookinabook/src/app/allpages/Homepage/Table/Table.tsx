@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import tableday from "@/images/table-day.svg";
 import tablenight from "@/images/table-night.svg";
 import Image from "next/image";
-//import SignInModal from "./SignInModal";
+import SignInModal from "../Signin-modal-window/SignInModal";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./Table.module.css";
 
@@ -41,7 +41,7 @@ export default function Table() {
           alt="table-day"
         />
       </div>
-      {/*<SignInModal isOpen={isModalOpen} onClose={closeModal} />*/}
+      <SignInModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 }

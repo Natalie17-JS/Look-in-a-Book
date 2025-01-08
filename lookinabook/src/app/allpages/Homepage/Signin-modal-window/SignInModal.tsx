@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./componentsStyles/SignInModal.module.css";
+import styles from "./Modal.module.css";
 import { useTheme } from "@/app/context/themeContext";
 import RegisterForm from "../SingInUpForms/RegisterForm";
 import SignInForm from "../SingInUpForms/SignInForm";
