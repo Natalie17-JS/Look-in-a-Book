@@ -5,6 +5,7 @@ import styles from "./SignInUpForm.module.css";
 
 // Типизация данных формы
 interface RegisterFormData {
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -31,6 +32,24 @@ export default function RegisterForm() {
     <>
       <h2>Register</h2>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="username">
+            Name:
+          </label>
+          <input
+            className={styles.input}
+            type="username"
+            id="username"
+            placeholder="Enter your name..."
+            {...register("username", {
+              required: "Name is required",
+            })}
+          />
+          {errors.username && (
+            <p className={styles.error}>{errors.username.message}</p>
+          )}
+        </div>
+
         <div className={styles.formGroup}>
           <label className={styles.label} htmlFor="email">
             Email:

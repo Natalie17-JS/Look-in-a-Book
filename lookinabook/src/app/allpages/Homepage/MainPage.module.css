@@ -3,7 +3,8 @@
   background-color: white;
 }
 .room-container.gray {
-  background-color: rgb(185, 180, 166);
+  /*background-color: rgb(185, 180, 166);*/
+  background-color: rgb(126, 120, 113);
   color: rgb(26, 26, 26);
 }
 .room-container.dark {

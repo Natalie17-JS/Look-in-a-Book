@@ -65,7 +65,7 @@ export default function SignInForm() {
             Password:
           </label>
           <input
-            className={styles.input}
+            className={`${styles.input} ${themeInput}`}
             type="password"
             id="password"
             {...register("password", {
