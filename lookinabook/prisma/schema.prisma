@@ -12,3 +12,163 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement()) // Уникальный идентификатор
+  username  String?   @unique                      // Уникальное имя пользователя
+  email     String   @unique                      // Уникальный email
+  password  String                                // Пароль (хранится в зашифрованном виде)
+  role      Role     @default(USER)               // Роль пользователя
+  createdAt DateTime @default(now())              // Дата создания
+  updatedAt DateTime @updatedAt                   // Автообновляемая дата изменения
+
+  // Связи
+  books       Book[]    @relation(onDelete: Cascade) // Удаляем книги
+  comments    Comment[] // Комментарии пользователя остаются
+  likes       Like[]    // Лайки остаются
+  subscriptionsAsSubscriber Subscription[] @relation("SubscriptionsAsSubscriber", onDelete: Cascade) // Удаляем его подписки
+  subscriptionsAsSubscribedTo Subscription[] @relation("SubscriptionsAsSubscribedTo", onDelete: Cascade) // Удаляем подписки на него
+  messagesSent Message[] // Сообщения остаются
+  messagesReceived Message[] // Сообщения остаются
+
+enum Role {
+  USER       // Обычный пользователь
+  ADMIN      // Администратор
+}
+}
+
+model Book {
+  id          Int      @id @default(autoincrement()) // Уникальный идентификатор книги
+  title       String                                 // Название книги
+  annotation  String?                                // Аннотация (опционально)
+  slug        String   @unique                      // Уникальный slug для книги
+  cover       String?                               // URL обложки книги
+  createdAt   DateTime @default(now())              // Дата создания
+  updatedAt   DateTime @updatedAt                   // Дата изменения
+
+  // Связи
+  authorId    Int                                   // ID автора книги
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // Связь с автором
+  chapters    Chapter[] @relation(onDelete: Cascade)                           // Главы книги
+  comments    Comment[] @relation(onDelete: Cascade) // Удаляем комментарии на книги
+  likes       Like[]
+}
+
+model Chapter {
+  id         Int      @id @default(autoincrement()) // Уникальный идентификатор главы
+  title      String                                // Название главы
+  content    String                                // Содержимое главы
+  createdAt  DateTime @default(now())             // Дата создания
+  updatedAt  DateTime @updatedAt                  // Дата изменения
+
+  // Связь с книгой
+  bookId     Int                                 // ID книги
+  book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade) // Связь с книгой
+
+   comments    Comment[] @relation(onDelete: Cascade)
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement()) // Уникальный идентификатор комментария
+  content    String                                // Содержимое комментария
+  createdAt  DateTime @default(now())              // Дата создания
+  updatedAt  DateTime @updatedAt                   // Дата изменения
+
+  // Связи
+  authorId   Int                                   // ID автора комментария
+  author     User     @relation(fields: [authorId], references: [id], onDelete: SetNull) // Связь с автором
+
+  // Возможные цели комментария
+  bookId     Int?                                  // ID книги (если комментарий к книге)
+  book       Book?    @relation(fields: [bookId], references: [id], onDelete: Cascade) // Связь с книгой
+
+  chapterId  Int?                                  // ID главы книги (если комментарий к главе)
+  chapter    Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade) // Связь с главой
+
+  postId     Int?                                  // ID поста (если комментарий к посту)
+  post       Post?    @relation(fields: [postId], references: [id], onDelete: Cascade) // Связь с постом
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  authorId   Int
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // Автор поста
+
+  comments   Comment[]  // Связь с комментариями
+  likes       Like[]
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  type      LikeType // Тип лайка: COVER, PLOT, WRITING_STYLE, POST
+  createdAt DateTime @default(now()) // Дата создания
+  userId    Int      // ID пользователя, который поставил лайк
+  user      User     @relation(fields: [userId], references: [id]) // Связь с пользователем
+
+  // Связь с книгой (опционально)
+  bookId    Int?     // ID книги
+  book      Book?    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  // Связь с постом (опционально)
+  postId    Int?     // ID поста
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([type, userId, bookId], map: "unique_like_book") // Уникальность лайка для книги
+  @@unique([userId, postId], map: "unique_like_post")       // Уникальность лайка для поста
+}
+
+enum LikeType {
+  COVER          // Лайк за обложку
+  PLOT           // Лайк за сюжет
+  WRITING_STYLE  // Лайк за стиль написания
+  POST           // Лайк за пост
+}
+
+model Subscription {
+  id             Int      @id @default(autoincrement()) // Уникальный идентификатор подписки
+  createdAt      DateTime @default(now())              // Дата создания подписки
+
+  // Подписчик
+  subscriberId   Int     // ID пользователя, который подписался
+  subscriber     User    @relation("SubscriptionsAsSubscriber", fields: [subscriberId], references: [id], onDelete: Cascade) // Связь с пользователем, который подписан
+
+  // На кого подписались
+  subscribedToId Int     // ID пользователя, на которого подписались
+  subscribedTo   User    @relation("SubscriptionsAsSubscribedTo", fields: [subscribedToId], references: [id], onDelete: Cascade) // Связь с пользователем, на которого подписались
+
+  @@unique([subscriberId, subscribedToId]) // Уникальность подписки
+}
+
+model Message {
+  id          Int      @id @default(autoincrement()) // Уникальный идентификатор сообщения
+  text        String   // Текст сообщения
+  createdAt   DateTime @default(now())               // Дата создания сообщения
+  senderId    Int     // ID пользователя, который отправил сообщение
+  recipientId Int     // ID пользователя, которому отправили сообщение
+  isRead      Boolean @default(false)                  // Статус прочтения сообщения (по умолчанию false)
+
+  // Отправитель сообщения
+  sender      User    @relation("SentMessages", fields: [senderId], references: [id], onDelete: SetNull) // Связь с пользователем, который отправил сообщение
+
+  // Получатель сообщения
+  recipient   User    @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: SetNull) // Связь с пользователем, которому отправлено сообщение
+
+  // Сообщение принадлежит обоим пользователям
+  @@index([senderId, recipientId])  // Индекс для быстрого поиска сообщений между пользователями
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())   // Уникальный идентификатор уведомления
+  type        String   // Тип уведомления (например, "like", "comment", "follow")
+  message     String   // Сообщение уведомления (например, "Ваш пост лайкнул пользователь X")
+  createdAt   DateTime @default(now())  // Дата создания уведомления
+
+  userId      Int     // ID пользователя, которому отправляется уведомление
+  user        User    @relation(fields: [userId], references: [id])  // Связь с пользователем
+  isRead      Boolean @default(false)  // Статус прочтения уведомления
+}
