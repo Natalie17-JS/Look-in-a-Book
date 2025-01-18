@@ -1,18 +1,18 @@
 "use client";
 
-import styles from "./componentsStyles/AuthorBooksCarousel.module.css";
+import styles from "./CarouselDetails.module.css";
 import { useState, ReactNode } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const PAGE_WIDTH = 400;
-const ITEM_MARGIN = 20;
+const PAGE_WIDTH = 140;
+const ITEM_MARGIN = 10;
 const ITEMS_PER_SLIDE = 3;
 
 interface AuthorBooksCarouselProps {
   children: ReactNode[]; // Массив дочерних элементов
 }
 
-export default function AuthorBooksCarousel({
+export default function AuthorBooksCarouselDetails({
   children,
 }: AuthorBooksCarouselProps) {
   const [offset, setOffset] = useState(0);

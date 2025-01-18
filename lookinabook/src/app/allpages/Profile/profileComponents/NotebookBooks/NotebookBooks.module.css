@@ -4,3 +4,11 @@
   justify-content: space-evenly;
   align-items: flex-end;
 }
+.books-list-container {
+  display: flex;
+  gap: 15px;
+}
+.add-book-btn {
+  width: 100px;
+  border-radius: 5px;
+}

@@ -1,0 +1,42 @@
+.carousel-container {
+  background-color: rgb(87, 87, 87);
+  width: calc((140px + 10px) * 3 + 10px); /* Ширина рассчитана на 3 элемента */
+  padding-block: 20px;
+  overflow: hidden; /* Скроет элементы за границей контейнера */
+  display: flex;
+  align-items: center;
+  position: relative; /* Для управления стрелками */
+}
+
+.window {
+  width: 100%; /* Ширина окна будет равна ширине контейнера */
+  height: 100%;
+  overflow: hidden; /* Скрывает элементы за пределами окна */
+  display: flex; /* Для горизонтальной прокрутки */
+}
+
+.carousel-item {
+  margin-right: 10px; /* Отступ между элементами */
+}
+
+.all-pages-container {
+  height: 100%;
+  display: flex;
+  transition: transform 300ms ease-in-out; /* Анимация перемещения */
+}
+
+.arrow {
+  cursor: pointer;
+  z-index: 10; /* Убедитесь, что стрелки видны поверх контента */
+  position: absolute; /* Разместить стрелки поверх слайдера */
+  top: 50%; /* Центрирование по вертикали */
+  transform: translateY(-50%);
+}
+
+.arrow:first-of-type {
+  left: 10px; /* Расположение левой стрелки */
+}
+
+.arrow:last-of-type {
+  right: 10px; /* Расположение правой стрелки */
+}

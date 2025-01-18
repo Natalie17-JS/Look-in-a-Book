@@ -1,9 +1,9 @@
-import AuthorBooksCarousel from "./CarouselDetails";
+import AuthorBooksCarouselDetails from "./CarouselDetails";
 import styles from "./BooksCarousel.module.css";
 
-export default function CarouselInWindow() {
+export default function AuthorsBooksCarousel() {
   return (
-    <AuthorBooksCarousel>
+    <AuthorBooksCarouselDetails>
       <div className={`${styles.item} ${styles.item1}`}></div>
       <div className={`${styles.item} ${styles.item2}`}></div>
       <div className={`${styles.item} ${styles.item3}`}></div>
@@ -14,6 +14,6 @@ export default function CarouselInWindow() {
       <div className={`${styles.item} ${styles.item8}`}></div>
       <div className={`${styles.item} ${styles.item9}`}></div>
       <div className={`${styles.item} ${styles.item10}`}></div>
-    </AuthorBooksCarousel>
+    </AuthorBooksCarouselDetails>
   );
 }
