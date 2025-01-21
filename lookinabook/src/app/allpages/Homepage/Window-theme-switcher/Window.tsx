@@ -1,8 +1,8 @@
 import Image from "next/image";
-import windows from "@/images/windows.svg";
-import cloudsPicture from "@/images/clouds-picture.svg";
-import dayPicture from "@/images/day-picture.svg";
-import nightPicture from "@/images/night-picture.svg";
+import windows from "@/app/images/windows.svg";
+import cloudsPicture from "@/app/images/clouds-picture.svg";
+import dayPicture from "@/app/images/day-picture.svg";
+import nightPicture from "@/app/images/night-picture.svg";
 import styles from "./ThemeSwitcher.module.css";
 
 interface WindowProps {

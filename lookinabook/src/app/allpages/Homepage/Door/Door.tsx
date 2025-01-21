@@ -1,7 +1,7 @@
 "use client";
 
-import doorday from "@/images/door-day.svg";
-import doornight from "@/images/door-night.svg";
+import doorday from "@/app/images/door-day.svg";
+import doornight from "@/app/images/door-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import Image from "next/image";
 import Link from "next/link";

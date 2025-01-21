@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import notebookday from "@/images/notebook-day.svg";
-import notebooknight from "@/images/notebook-night.svg";
+import notebookday from "@/app/images/notebook-day.svg";
+import notebooknight from "@/app/images/notebook-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./Notebook.module.css";
 import Link from "next/link";

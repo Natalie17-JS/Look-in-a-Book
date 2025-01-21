@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import flowers from "@/images/flowers-on-shelf.svg";
+import flowers from "@/app/images/flowers-on-shelf.svg";
 import styles from "./Shelf.module.css";
 import { useTheme } from "@/app/context/themeContext";
 

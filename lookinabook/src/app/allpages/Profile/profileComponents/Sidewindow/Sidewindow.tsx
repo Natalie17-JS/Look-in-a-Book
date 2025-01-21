@@ -1,8 +1,8 @@
 "use client";
 
-import sidewindowday from "@/images/long-window-day.svg";
-import sidewindowclouds from "@/images/long-window-clouds.svg";
-import sidewindownight from "@/images/long-window-night.svg";
+import sidewindowday from "@/app/images/long-window-day.svg";
+import sidewindowclouds from "@/app/images/long-window-clouds.svg";
+import sidewindownight from "@/app/images/long-window-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import Image from "next/image";
 import styles from "./Sidewindow.module.css";

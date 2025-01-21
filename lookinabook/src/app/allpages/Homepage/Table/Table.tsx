@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import tableday from "@/images/table-day.svg";
-import tablenight from "@/images/table-night.svg";
+import tableday from "@/app/images/table-day.svg";
+import tablenight from "@/app/images/table-night.svg";
 import Image from "next/image";
 import SignInModal from "../Signin-modal-window/SignInModal";
 import { useTheme } from "@/app/context/themeContext";

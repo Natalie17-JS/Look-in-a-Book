@@ -2,9 +2,9 @@
 
 import styles from "./LittleClock.module.css";
 import Image from "next/image";
-import littleClockLight from "@/images/clock-day.svg";
-import littleClockClouds from "@/images/clock-grey.svg";
-import littleClockNight from "@/images/clock-night.svg";
+import littleClockLight from "@/app/images/clock-day.svg";
+import littleClockClouds from "@/app/images/clock-grey.svg";
+import littleClockNight from "@/app/images/clock-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 
 const LittleClock = () => {

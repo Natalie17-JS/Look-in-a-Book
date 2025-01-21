@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import cloudsSwitcher from "@/images/clouds-switcher.svg";
-import sunSwitcher from "@/images/sun-switcher.svg";
-import moonSwitcher from "@/images/moon-switcher.svg";
+import cloudsSwitcher from "@/app/images/clouds-switcher.svg";
+import sunSwitcher from "@/app/images/sun-switcher.svg";
+import moonSwitcher from "@/app/images/moon-switcher.svg";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./ThemeSwitcher.module.css";
 

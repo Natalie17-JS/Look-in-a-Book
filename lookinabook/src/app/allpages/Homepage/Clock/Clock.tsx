@@ -1,8 +1,8 @@
 "use client";
 
-import clockday from "@/images/clock-day.svg";
-import clockdark from "@/images/clock-night.svg";
-import clockgrey from "@/images/clock-grey.svg";
+import clockday from "@/app/images/clock-day.svg";
+import clockdark from "@/app/images/clock-night.svg";
+import clockgrey from "@/app/images/clock-grey.svg";
 import { useTheme } from "@/app/context/themeContext";
 import Image from "next/image";
 import styles from "./Clock.module.css";

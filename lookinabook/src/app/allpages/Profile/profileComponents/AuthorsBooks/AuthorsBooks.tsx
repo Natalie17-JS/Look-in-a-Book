@@ -1,4 +1,4 @@
-import books from "@/images/books.svg";
+import books from "@/app/images/books.svg";
 import styles from "./AuthorsBooks.module.css";
 import Image from "next/image";
 import Link from "next/link";
