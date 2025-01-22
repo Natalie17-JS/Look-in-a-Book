@@ -5,7 +5,7 @@ export type CreateUserArgs = {
   email: string;
   password: string;
   bio?: string;
-  avatar?: string; // URL аватара (опционально)
+  avatar?: string;
 };
 
 export type UpdateUserArgs = {
@@ -14,7 +14,7 @@ export type UpdateUserArgs = {
   email?: string;
   password?: string;
   bio?: string;
-  avatar?: string; // URL аватара (опционально)
+  avatar?: string;
 };
 
 export type DeleteUserArgs = {
@@ -25,8 +25,18 @@ export type GetUserArgs = {
   id: number;
 };
 
+export type LoginUserArgs = {
+  email: string;
+  password: string;
+};
+
 export type AuthenticatedUser = {
   id: number;
+};
+
+export type LoginResponse = {
+  user: User;
+  token: string;
 };
 
 export type UserResolvers = {
@@ -43,6 +53,7 @@ export type UserResolvers = {
     registerUser: (parent: unknown, args: CreateUserArgs) => Promise<User>;
     updateUser: (parent: unknown, args: UpdateUserArgs) => Promise<User>;
     deleteUser: (parent: unknown, args: DeleteUserArgs) => Promise<User>;
+    loginUser: (parent: unknown, args: LoginUserArgs) => Promise<LoginResponse>;
     logout: (
       parent: unknown,
       args: unknown,
