@@ -2,10 +2,13 @@ import prisma from "@/app/server/prisma/prismaClient";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { UserResolvers } from "../resolversTypes/UserResolversTypes";
+import { DateTimeResolver } from "graphql-scalars";
 
 const SECRET_KEY = process.env.JWT_SECRET || "your-secret-key";
 
 export const resolvers: UserResolvers = {
+  Date: DateTimeResolver,
+
   Query: {
     // Получить пользователя по ID
     async getUser(_, { id }) {
