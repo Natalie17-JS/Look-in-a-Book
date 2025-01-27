@@ -1,13 +1,11 @@
 import prisma from "@/app/server/prisma/prismaClient";
 import argon2 from "argon2";
-import jwt from "jsonwebtoken";
 import { UserResolvers } from "../resolversTypes/UserResolversTypes";
-import { DateTimeResolver } from "graphql-scalars";
-
-const SECRET_KEY = process.env.JWT_SECRET || "your-secret-key";
+import { DateTime } from "../resolversTypes/UserResolversTypes";
+import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
 
 export const resolvers: UserResolvers = {
-  Date: DateTimeResolver,
+  DateTime,
 
   Query: {
     // Получить пользователя по ID
@@ -33,7 +31,7 @@ export const resolvers: UserResolvers = {
     },
 
     // Получить текущего авторизованного пользователя
-    async getCurrentUser(_, __, { context }) {
+    async getCurrentUser(_, __, { req, prisma }) {
       try {
         const { user } = context;
         if (!user) {
@@ -114,8 +112,9 @@ export const resolvers: UserResolvers = {
     },
 
     // Вход в систему
-    async loginUser(_, { email, password }) {
+    async loginUser(_, { email, password }, { res }) {
       try {
+        // Проверить, существует ли пользователь с указанным email
         const user = await prisma.user.findUnique({
           where: { email },
         });
@@ -124,18 +123,23 @@ export const resolvers: UserResolvers = {
           throw new Error("User not found");
         }
 
-        const validPassword = await argon2.verify(user.password, password);
-        if (!validPassword) {
-          throw new Error("Invalid password");
+        // Проверить пароль
+        const isPasswordValid = await argon2.verify(user.password, password);
+        if (!isPasswordValid) {
+          throw new Error("Invalid credentials");
         }
 
-        const token = jwt.sign({ id: user.id }, SECRET_KEY, {
-          expiresIn: "1d",
-        });
+        // Создать токены
+        const accessToken = generateAccessToken(user.id);
+        const refreshToken = generateRefreshToken(user.id);
+
+        // Установить refreshToken в cookie
+        res.setHeader("Set-Cookie", [
+          `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=604800; Secure; SameSite=Strict`,
+        ]);
 
         return {
-          user,
-          token,
+          accessToken,
         };
       } catch (error) {
         console.error("Error during login:", error);
@@ -144,19 +148,36 @@ export const resolvers: UserResolvers = {
     },
 
     // Выход из системы (удаление токена)
-    async logout(_, __, { context }) {
+    async logout(_, __, { res }) {
       try {
-        const { user } = context;
-        if (!user) {
-          throw new Error("Not authenticated");
-        }
-
-        // Здесь можно реализовать логику удаления токена из клиента
+        // Удаление refreshToken с помощью clearCookie
+        res.clearCookie("refreshToken", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production", // Устанавливать true только в продакшене
+          sameSite: "strict",
+          path: "/", // Гарантирует удаление для всех путей
+        });
+    
         return true;
       } catch (error) {
         console.error("Error during logout:", error);
         throw new Error("Failed to logout");
       }
     },
-  },
-};
+  }
+    
+    /*async logout(_, __, { res }) {
+      try {
+        // Удаление refreshToken из cookie
+        res.setHeader("Set-Cookie", [
+          "refreshToken=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=Strict",
+        ]);
+
+        return true;
+      } catch (error) {
+        console.error("Error during logout:", error);
+        throw new Error("Failed to logout");
+      }
+    },
+  },*/
+

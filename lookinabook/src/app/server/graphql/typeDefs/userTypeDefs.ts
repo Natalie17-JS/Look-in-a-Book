@@ -14,7 +14,7 @@ type User {
   bio: String 
   avatar: String 
 
-  # Связи
+  
   books: [Book!]! 
   comments: [Comment!]! 
   likes: [Like!]! 
@@ -25,6 +25,11 @@ type User {
   messagesSent: [Message!]! 
   messagesReceived: [Message!]!
   pointsLogs: [PointsLog!]! 
+}
+
+type LoginResponse {
+  accessToken: String!
+  refreshToken: String!
 }
 
 type Query {
@@ -42,7 +47,9 @@ type Mutation {
     avatar: String
   ): User!
 
-  loginUser(email: String!, password: String!): String! 
+  loginUser(email: String!, password: String!): LoginResponse!
+
+  refreshAccessToken: String!
 
   updateUser(
     id: ID!
@@ -51,7 +58,7 @@ type Mutation {
     password: String
     bio: String
     avatar: String
-  ): User! 
+  ): User!
 
   deleteUser(id: ID!): User! 
 
