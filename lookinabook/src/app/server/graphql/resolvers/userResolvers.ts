@@ -3,6 +3,7 @@ import argon2 from "argon2";
 import { UserResolvers } from "../resolversTypes/UserResolversTypes";
 import { DateTime } from "../resolversTypes/UserResolversTypes";
 import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
+import { Role } from "@prisma/client";
 
 export const resolvers: UserResolvers = {
   DateTime,
@@ -13,6 +14,18 @@ export const resolvers: UserResolvers = {
       try {
         return await prisma.user.findUnique({
           where: { id },
+          include: {
+            books: true,
+            comments: true,
+            likes: true,
+            posts: true,
+            notifications: true,
+            subscriptionsAsSubscriber: true,
+            subscriptionsAsSubscribedTo: true,
+            messagesSent: true,
+            messagesReceived: true,
+            pointsLogs: true,
+          },
         });
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -33,13 +46,27 @@ export const resolvers: UserResolvers = {
     // Получить текущего авторизованного пользователя
     async getCurrentUser(_, __, { req, prisma }) {
       try {
-        const { user } = context;
+        // Предполагается, что пользователь добавляется в req.user через middleware
+        const user = req.user;
         if (!user) {
           throw new Error("Not authenticated");
         }
 
+        // Ищем пользователя в базе данных
         return await prisma.user.findUnique({
           where: { id: user.id },
+          include: {
+            books: true,
+            comments: true,
+            likes: true,
+            posts: true,
+            notifications: true,
+            subscriptionsAsSubscriber: true,
+            subscriptionsAsSubscribedTo: true,
+            messagesSent: true,
+            messagesReceived: true,
+            pointsLogs: true,
+          },
         });
       } catch (error) {
         console.error("Error fetching current user:", error);
@@ -66,6 +93,33 @@ export const resolvers: UserResolvers = {
       } catch (error) {
         console.error("Error registering user:", error);
         throw new Error("Failed to register user");
+      }
+    },
+
+    async createAdmin(_, { username, email, password }, { req }) {
+      try {
+        // Проверка, имеет ли текущий пользователь права администратора
+        if (!req.user || req.user.role !== Role.ADMIN) {
+          throw new Error("Not authorized to create an admin");
+        }
+
+        // Хэшируем пароль
+        const hashedPassword = await argon2.hash(password);
+
+        // Создаём администратора
+        const admin = await prisma.user.create({
+          data: {
+            username,
+            email,
+            password: hashedPassword,
+            role: "ADMIN", // Устанавливаем роль ADMIN
+          },
+        });
+
+        return admin;
+      } catch (error) {
+        console.error("Error creating admin:", error);
+        throw new Error("Failed to create admin");
       }
     },
 
@@ -130,8 +184,16 @@ export const resolvers: UserResolvers = {
         }
 
         // Создать токены
-        const accessToken = generateAccessToken(user.id);
-        const refreshToken = generateRefreshToken(user.id);
+        const accessToken = generateAccessToken({
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        });
+        const refreshToken = generateRefreshToken({
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        });
 
         // Установить refreshToken в cookie
         res.setHeader("Set-Cookie", [
@@ -139,6 +201,7 @@ export const resolvers: UserResolvers = {
         ]);
 
         return {
+          user,
           accessToken,
         };
       } catch (error) {
@@ -150,23 +213,21 @@ export const resolvers: UserResolvers = {
     // Выход из системы (удаление токена)
     async logout(_, __, { res }) {
       try {
-        // Удаление refreshToken с помощью clearCookie
-        res.clearCookie("refreshToken", {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production", // Устанавливать true только в продакшене
-          sameSite: "strict",
-          path: "/", // Гарантирует удаление для всех путей
-        });
-    
+        // Установить заголовок Set-Cookie для удаления refreshToken
+        res.setHeader("Set-Cookie", [
+          `refreshToken=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=Strict`,
+        ]);
+
         return true;
       } catch (error) {
         console.error("Error during logout:", error);
         throw new Error("Failed to logout");
       }
     },
-  }
-    
-    /*async logout(_, __, { res }) {
+  },
+};
+
+/*async logout(_, __, { res }) {
       try {
         // Удаление refreshToken из cookie
         res.setHeader("Set-Cookie", [
@@ -180,4 +241,3 @@ export const resolvers: UserResolvers = {
       }
     },
   },*/
-

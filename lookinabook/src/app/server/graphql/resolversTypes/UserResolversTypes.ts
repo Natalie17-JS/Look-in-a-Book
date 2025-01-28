@@ -1,6 +1,7 @@
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import { GraphQLScalarType, Kind, ValueNode } from "graphql";
 import { NextApiRequest, NextApiResponse } from "next";
+import { CustomApiRequest } from "../../auth/authMiddleware";
 import prisma from "../../prisma/prismaClient";
 
 export const DateTime = new GraphQLScalarType({
@@ -34,6 +35,13 @@ export type CreateUserArgs = {
   avatar?: string;
 };
 
+export type CreateAdminArgs = {
+  username: string;
+  email: string;
+  password: string;
+  role: Role;
+};
+
 export type UpdateUserArgs = {
   id: number;
   username?: string;
@@ -62,11 +70,11 @@ export type AuthenticatedUser = {
 
 export type LoginResponse = {
   user: User;
-  token: string;
+  accessToken: string;
 };
 
 export interface IContext {
-  req: NextApiRequest;
+  req: CustomApiRequest;
   res: NextApiResponse;
   prisma: typeof prisma; // Используйте тип экземпляра prisma
   user?: User | null; // user - это информация о текущем пользователе (если есть)
@@ -79,13 +87,18 @@ export type UserResolvers = {
     getCurrentUser: (
       parent: unknown,
       args: unknown,
-      context: { user: AuthenticatedUser }
+      context: IContext
     ) => Promise<User | null>;
   };
   Mutation: {
     registerUser: (
       parent: unknown,
       args: CreateUserArgs,
+      context: IContext
+    ) => Promise<User>;
+    createAdmin: (
+      parent: unknown,
+      args: CreateAdminArgs,
       context: IContext
     ) => Promise<User>;
     updateUser: (
@@ -106,7 +119,7 @@ export type UserResolvers = {
     logout: (
       parent: unknown,
       args: unknown,
-      context: { user: AuthenticatedUser }
+      context: IContext
     ) => Promise<boolean>;
   };
   DateTime: GraphQLScalarType;

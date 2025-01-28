@@ -1,8 +1,8 @@
 import { verifyAccessToken } from "@/app/server/auth/auth";
 import { NextApiRequest, NextApiResponse } from "next";
 
-interface CustomApiRequest extends NextApiRequest {
-  user?: { id: number; email: string }; // Добавляем поле user с нужной структурой
+export interface CustomApiRequest extends NextApiRequest {
+  user?: { id: number; email: string; role: string }; // Добавляем поле user с нужной структурой
 }
 
 export const authMiddleware = (
