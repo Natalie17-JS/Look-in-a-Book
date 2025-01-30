@@ -18,6 +18,9 @@ model User {
   username  String?   @unique                      // Unique username
   email     String   @unique                      // Unique email
   password  String                                // Password (stored in encrypted form)
+  isVerified  Boolean @default(false)               // Is email verified?
+  verificationCode String?                           // Verifying code
+  codeExpiresAt DateTime?                            // Cod expires at
   role      Role     @default(USER)               // User role
   createdAt DateTime @default(now())              // Creation date
   updatedAt DateTime @updatedAt                   // Auto-updated modification date
