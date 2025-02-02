@@ -33,6 +33,7 @@ export type CreateUserArgs = {
   password: string;
   bio?: string;
   avatar?: string;
+  isVerified: boolean;
 };
 
 export type CreateAdminArgs = {
@@ -80,6 +81,12 @@ export interface IContext {
   user?: User | null; // user - это информация о текущем пользователе (если есть)
 }
 
+export type VerifyCodeArgs = {
+  email: string;
+  code: string;
+};
+
+
 export type UserResolvers = {
   Query: {
     getUser: (parent: unknown, args: GetUserArgs) => Promise<User | null>;
@@ -121,6 +128,11 @@ export type UserResolvers = {
       args: unknown,
       context: IContext
     ) => Promise<boolean>;
+    verifyCode: (
+      parent: unknown,
+      args: VerifyCodeArgs,
+      context: IContext
+    ) => Promise<string>; 
   };
   DateTime: GraphQLScalarType;
 };

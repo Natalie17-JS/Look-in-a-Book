@@ -13,6 +13,7 @@ type User {
   lastActive: DateTime 
   bio: String 
   avatar: String 
+  isVerified: Boolean!
 
   
   books: [Book!]! 
@@ -46,6 +47,8 @@ type Mutation {
     bio: String
     avatar: String
   ): User!
+
+  verifyCode(email: String!, code: String!): String!
 
   loginUser(email: String!, password: String!): LoginResponse!
 

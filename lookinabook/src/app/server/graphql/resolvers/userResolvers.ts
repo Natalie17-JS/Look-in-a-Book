@@ -4,6 +4,7 @@ import { UserResolvers } from "../resolversTypes/UserResolversTypes";
 import { DateTime } from "../resolversTypes/UserResolversTypes";
 import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
 import { Role } from "@prisma/client";
+import { sendVerificationEmail } from "../../sendemails/emailService";
 
 export const resolvers: UserResolvers = {
   DateTime,
@@ -80,21 +81,33 @@ export const resolvers: UserResolvers = {
     async registerUser(_, { username, email, password, bio, avatar }) {
       try {
         const hashedPassword = await argon2.hash(password);
-
-        return await prisma.user.create({
+    
+        // Генерируем 6-значный код подтверждения
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const codeExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // Код действует 24 часа
+    
+        const user = await prisma.user.create({
           data: {
             username,
             email,
             password: hashedPassword,
             bio,
             avatar,
+            isVerified: false,
+            verificationCode,
+            codeExpiresAt,
           },
         });
+    
+        // Отправляем код на почту
+        await sendVerificationEmail(email, verificationCode);
+        return user;
       } catch (error) {
         console.error("Error registering user:", error);
         throw new Error("Failed to register user");
       }
     },
+    
 
     async createAdmin(_, { username, email, password }, { req }) {
       try {
