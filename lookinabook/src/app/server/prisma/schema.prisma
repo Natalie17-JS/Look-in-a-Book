@@ -14,33 +14,35 @@ datasource db {
 }
 
 model User {
-  id                Int       @id @default(autoincrement()) // Unique identifier
-  username          String?   @unique                      // Unique username
-  email             String    @unique                      // Unique email
-  password          String                                // Password (stored in encrypted form)
-  isVerified        Boolean   @default(false)               // Is email verified?
-  verificationCode  String?                           // Verifying code
-  codeExpiresAt     DateTime?                            // Cod expires at
-  role              Role      @default(USER)               // User role
-  createdAt         DateTime  @default(now())              // Creation date
-  updatedAt         DateTime  @updatedAt                   // Auto-updated modification date
-  points            Int       @default(0)                 // User points
-  lastActive        DateTime?
-  isOnline          Boolean   @default(false)                             // Last active date (optional)
-  bio               String?
-  avatar            String?
+  id                      Int       @id @default(autoincrement()) // Unique identifier
+  username                String?   @unique                      // Unique username
+  email                   String    @unique                      // Unique email
+  password                String                                 // Stored in encrypted form
+  isVerified              Boolean   @default(false)              // Is email verified?
+  verificationCode        String?                                // Verification code
+  codeExpiresAt           DateTime?                              // Code expiration time
+  verificationAttempts    Int       @default(0)                  // Number of code requests per day
+  lastVerificationRequest DateTime?                              // Date of the last code request
+  role                    Role      @default(USER)               // User role
+  createdAt               DateTime  @default(now())              // Creation date
+  updatedAt               DateTime  @updatedAt                   // Last update date
+  points                  Int       @default(0)                  // User points
+  lastActive              DateTime?                              // Last activity date
+  isOnline                Boolean   @default(false)              // Online status
+  bio                     String?                                // Biography
+  avatar                  String?                                // User avatar
 
   // Relations
-  books             Book[] 
-  comments          Comment[] // User comments remain
-  likes             Like[]    // Likes remain
-  posts             Post[] // User
-  notifications     Notification[] // User
+  books                         Book[] 
+  comments                      Comment[] // User comments remain
+  likes                         Like[]    // Likes remain
+  posts                         Post[] // User
+  notifications                 Notification[] // User
   subscriptionsAsSubscriber     Subscription[] @relation("SubscriptionsAsSubscriber") // User subscriptions are deleted
   subscriptionsAsSubscribedTo   Subscription[] @relation("SubscriptionsAsSubscribedTo") // Subscriptions to the user are deleted
-  messagesSent      Message[] @relation("SentMessages") 
-  messagesReceived  Message[] @relation("ReceivedMessages")
-  pointsLogs  PointsLog[]
+  messagesSent                  Message[] @relation("SentMessages") 
+  messagesReceived              Message[] @relation("ReceivedMessages")
+  pointsLogs                    PointsLog[]
 }
 
 enum Role {

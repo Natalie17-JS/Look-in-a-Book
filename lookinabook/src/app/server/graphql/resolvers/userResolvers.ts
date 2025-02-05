@@ -5,6 +5,7 @@ import { DateTime } from "../resolversTypes/UserResolversTypes";
 import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
 import { Role } from "@prisma/client";
 import { sendVerificationEmail } from "../../sendemails/emailService";
+import { GraphQLError } from "graphql";
 
 export const resolvers: UserResolvers = {
   DateTime,
@@ -106,6 +107,94 @@ export const resolvers: UserResolvers = {
         console.error("Error registering user:", error);
         throw new Error("Failed to register user");
       }
+    },
+
+    verifyCode: async (_: unknown, { email, code }: { email: string; code: string }): Promise<string> => {
+      const user = await prisma.user.findUnique({ where: { email } });
+
+      if (!user) {
+        throw new GraphQLError("User not found.");
+      }
+
+      // Проверяем, совпадает ли код
+      if (!user.verificationCode || user.verificationCode !== code) {
+        throw new GraphQLError("Invalid verification code.");
+      }
+
+      // Проверяем срок действия кода
+      if (!user.codeExpiresAt || new Date() > user.codeExpiresAt) {
+        throw new GraphQLError("Verification code expired. Please request a new one.");
+      }
+
+      // Если код действителен, активируем пользователя
+      await prisma.user.update({
+        where: { email },
+        data: {
+          isVerified: true,
+          verificationCode: null,
+          codeExpiresAt: null,
+          verificationAttempts: 0, // Сбрасываем количество попыток
+          lastVerificationRequest: null,
+        },
+      });
+
+      return "Email verified successfully!";
+    },
+
+    // Запрос нового кода
+    requestVerificationCode: async (_: unknown, { email }: { email: string }): Promise<string> => {
+      const user = await prisma.user.findUnique({ where: { email } });
+
+      if (!user) {
+        throw new GraphQLError("User not found.");
+      }
+
+      const now = new Date();
+
+      // Проверяем, не превышен ли лимит 3 запроса в день
+      const lastRequestDate = user.lastVerificationRequest
+        ? new Date(user.lastVerificationRequest)
+        : null;
+
+      const isSameDay =
+        lastRequestDate &&
+        lastRequestDate.getUTCFullYear() === now.getUTCFullYear() &&
+        lastRequestDate.getUTCMonth() === now.getUTCMonth() &&
+        lastRequestDate.getUTCDate() === now.getUTCDate();
+
+      if (isSameDay && user.verificationAttempts >= 3) {
+        throw new GraphQLError(
+          "You have reached the daily limit for verification code requests. Please try again tomorrow."
+        );
+      }
+
+      // Проверяем, не запрашивал ли пользователь новый код слишком быстро (лимит 5 минут между запросами)
+      if (user.lastVerificationRequest && now.getTime() - user.lastVerificationRequest.getTime() < 5 * 60 * 1000) {
+        throw new GraphQLError("You can request a new verification code only once every 5 minutes.");
+      }
+
+      // Генерируем новый код и срок его действия
+      const newVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const newCodeExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // Код действует 24 часа
+
+      // Если день тот же, увеличиваем счётчик попыток, иначе сбрасываем
+      const newVerificationAttempts = isSameDay ? user.verificationAttempts + 1 : 1;
+
+      // Обновляем данные пользователя
+      await prisma.user.update({
+        where: { email },
+        data: {
+          verificationCode: newVerificationCode,
+          codeExpiresAt: newCodeExpiresAt,
+          verificationAttempts: newVerificationAttempts,
+          lastVerificationRequest: now, // Запоминаем время последнего запроса
+        },
+      });
+
+      // Отправляем новый код на email
+      await sendVerificationEmail(email, newVerificationCode);
+
+      return "A new verification code has been sent to your email.";
     },
     
 

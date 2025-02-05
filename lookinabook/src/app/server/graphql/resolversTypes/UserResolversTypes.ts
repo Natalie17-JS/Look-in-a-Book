@@ -1,6 +1,6 @@
 import { Role, User } from "@prisma/client";
 import { GraphQLScalarType, Kind, ValueNode } from "graphql";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { CustomApiRequest } from "../../auth/authMiddleware";
 import prisma from "../../prisma/prismaClient";
 
@@ -11,19 +11,19 @@ export const DateTime = new GraphQLScalarType({
     if (!(value instanceof Date)) {
       throw new TypeError("Value is not an instance of Date");
     }
-    return value.toISOString(); // Преобразование Date в строку ISO
+    return value.toISOString();
   },
   parseValue(value: unknown): Date {
     if (typeof value !== "string") {
       throw new TypeError("Value is not a valid ISO string");
     }
-    return new Date(value); // Преобразование строки ISO в Date
+    return new Date(value);
   },
   parseLiteral(ast: ValueNode): Date | null {
     if (ast.kind === Kind.STRING) {
-      return new Date(ast.value); // Преобразование строки ISO в Date
+      return new Date(ast.value);
     }
-    return null; // Некорректные данные
+    return null;
   },
 });
 
@@ -34,62 +34,31 @@ export type CreateUserArgs = {
   bio?: string;
   avatar?: string;
   isVerified: boolean;
+  verificationCode: string;
+  codeExpiresAt: Date;
+  verificationAttempts: number;
+  lastVerificationRequest: Date | null;
 };
-
-export type CreateAdminArgs = {
-  username: string;
-  email: string;
-  password: string;
-  role: Role;
-};
-
-export type UpdateUserArgs = {
-  id: number;
-  username?: string;
-  email?: string;
-  password?: string;
-  bio?: string;
-  avatar?: string;
-};
-
-export type DeleteUserArgs = {
-  id: number;
-};
-
-export type GetUserArgs = {
-  id: number;
-};
-
-export type LoginUserArgs = {
-  email: string;
-  password: string;
-};
-
-export type AuthenticatedUser = {
-  id: number;
-};
-
-export type LoginResponse = {
-  user: User;
-  accessToken: string;
-};
-
-export interface IContext {
-  req: CustomApiRequest;
-  res: NextApiResponse;
-  prisma: typeof prisma; // Используйте тип экземпляра prisma
-  user?: User | null; // user - это информация о текущем пользователе (если есть)
-}
 
 export type VerifyCodeArgs = {
   email: string;
   code: string;
 };
 
+export type RequestVerificationCodeArgs = {
+  email: string;
+};
+
+export interface IContext {
+  req: CustomApiRequest;
+  res: NextApiResponse;
+  prisma: typeof prisma;
+  user?: User | null;
+}
 
 export type UserResolvers = {
   Query: {
-    getUser: (parent: unknown, args: GetUserArgs) => Promise<User | null>;
+    getUser: (parent: unknown, args: { id: number }) => Promise<User | null>;
     getUsers: () => Promise<User[]>;
     getCurrentUser: (
       parent: unknown,
@@ -103,36 +72,16 @@ export type UserResolvers = {
       args: CreateUserArgs,
       context: IContext
     ) => Promise<User>;
-    createAdmin: (
+    requestVerificationCode: (
       parent: unknown,
-      args: CreateAdminArgs,
+      args: RequestVerificationCodeArgs,
       context: IContext
-    ) => Promise<User>;
-    updateUser: (
-      parent: unknown,
-      args: UpdateUserArgs,
-      context: IContext
-    ) => Promise<User>;
-    deleteUser: (
-      parent: unknown,
-      args: DeleteUserArgs,
-      context: IContext
-    ) => Promise<User>;
-    loginUser: (
-      parent: unknown,
-      args: LoginUserArgs,
-      context: IContext
-    ) => Promise<LoginResponse>;
-    logout: (
-      parent: unknown,
-      args: unknown,
-      context: IContext
-    ) => Promise<boolean>;
+    ) => Promise<string>;
     verifyCode: (
       parent: unknown,
       args: VerifyCodeArgs,
       context: IContext
-    ) => Promise<string>; 
+    ) => Promise<string>;
   };
   DateTime: GraphQLScalarType;
 };
