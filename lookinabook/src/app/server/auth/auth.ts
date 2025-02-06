@@ -40,3 +40,23 @@ export const verifyAccessToken = (token: string): UserPayload => {
 export const verifyRefreshToken = (token: string): JwtPayload | string => {
   return jwt.verify(token, REFRESH_TOKEN_SECRET);
 };
+
+export const refreshAccessToken = (refreshToken: string): string => {
+  try {
+    const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET) as JwtPayload;
+
+    if (!decoded || typeof decoded.id !== "number" || typeof decoded.email !== "string") {
+      throw new Error("Invalid refresh token payload");
+    }
+
+    // Генерируем новый accessToken
+    return generateAccessToken({
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role,
+    });
+  } catch (error) {
+    throw new Error("Invalid or expired refresh token");
+  }
+};
+

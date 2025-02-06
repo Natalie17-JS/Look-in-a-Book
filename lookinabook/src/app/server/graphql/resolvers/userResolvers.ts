@@ -6,6 +6,7 @@ import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
 import { Role } from "@prisma/client";
 import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
+import { refreshAccessToken } from "../../auth/auth";
 
 export const resolvers: UserResolvers = {
   DateTime,
@@ -309,6 +310,22 @@ export const resolvers: UserResolvers = {
       } catch (error) {
         console.error("Error during login:", error);
         throw new Error("Failed to login");
+      }
+    },
+
+    async refreshAccessTokenResolver(_, __, { req, res }) {
+      try {
+        // 1. Достать refresh token из cookies
+        const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) throw new Error("Refresh token not found");
+
+        // 2. Проверить refresh token и создать новый access token
+        const newAccessToken = refreshAccessToken(refreshToken);
+
+        return { accessToken: newAccessToken };
+      } catch (error) {
+        console.error("Error refreshing token:", error);
+        throw new Error("Failed to refresh token");
       }
     },
 
