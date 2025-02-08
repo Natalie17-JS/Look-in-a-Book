@@ -3,7 +3,7 @@ scalar DateTime
 
 type User {
   id: ID! 
-  username: String 
+  username: String! 
   email: String! 
   password: String! 
   role: Role! 
@@ -20,21 +20,26 @@ type User {
   lastVerificationRequest: DateTime!
 
   
-  books: [Book!]! 
-  comments: [Comment!]! 
-  likes: [Like!]! 
-  posts: [Post!]! 
-  notifications: [Notification!]! 
-  subscriptionsAsSubscriber: [Subscription!]! 
-  subscriptionsAsSubscribedTo: [Subscription!]! 
-  messagesSent: [Message!]! 
-  messagesReceived: [Message!]!
-  pointsLogs: [PointsLog!]! 
+  # books: [Book!] 
+  # comments: [Comment!] 
+  # likes: [Like!]
+  # posts: [Post!]
+  # notifications: [Notification!] 
+  # subscriptionsAsSubscriber: [Subscription!]
+  # subscriptionsAsSubscribedTo: [Subscription!]
+  # messagesSent: [Message!] 
+  # messagesReceived: [Message!]
+  # pointsLogs: [PointsLog!] 
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 type LoginResponse {
   accessToken: String!
-  refreshToken: String!
+  user: User!
 }
 
 type Query {
@@ -45,12 +50,20 @@ type Query {
 
 type Mutation {
   registerUser(
-    username: String
+    username: String!
     email: String!
     password: String!
     bio: String
     avatar: String
   ): User!
+
+  createAdmin (
+   username: String!
+    email: String!
+    password: String!
+    bio: String
+    avatar: String
+): User!
 
   verifyCode(email: String!, code: String!): String!
 
@@ -58,7 +71,8 @@ type Mutation {
 
   loginUser(email: String!, password: String!): LoginResponse!
 
-  refreshAccessToken: String!
+  refreshAccessTokenResolver: String!
+
 
   updateUser(
     id: ID!
@@ -74,3 +88,4 @@ type Mutation {
   logout: Boolean! 
 }
 `;
+export default userTypeDefs;

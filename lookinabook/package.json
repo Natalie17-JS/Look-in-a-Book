@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.12.11",
+    "@apollo/server": "^4.11.3",
+    "@as-integrations/next": "^3.2.0",
     "@prisma/client": "^6.3.0",
     "@types/jsonwebtoken": "^9.0.8",
     "apollo-server": "^3.13.0",

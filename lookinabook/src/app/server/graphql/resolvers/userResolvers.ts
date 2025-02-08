@@ -7,8 +7,9 @@ import { Role } from "@prisma/client";
 import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
 import { refreshAccessToken } from "../../auth/auth";
+import { NextResponse } from "next/server";
 
-export const resolvers: UserResolvers = {
+const userResolvers: UserResolvers = {
   DateTime,
 
   Query: {
@@ -17,7 +18,7 @@ export const resolvers: UserResolvers = {
       try {
         return await prisma.user.findUnique({
           where: { id },
-          include: {
+          /*include: {
             books: true,
             comments: true,
             likes: true,
@@ -28,7 +29,7 @@ export const resolvers: UserResolvers = {
             messagesSent: true,
             messagesReceived: true,
             pointsLogs: true,
-          },
+          },*/
         });
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -58,7 +59,7 @@ export const resolvers: UserResolvers = {
         // Ищем пользователя в базе данных
         return await prisma.user.findUnique({
           where: { id: user.id },
-          include: {
+          /*include: {
             books: true,
             comments: true,
             likes: true,
@@ -69,7 +70,7 @@ export const resolvers: UserResolvers = {
             messagesSent: true,
             messagesReceived: true,
             pointsLogs: true,
-          },
+          },*/
         });
       } catch (error) {
         console.error("Error fetching current user:", error);
@@ -298,10 +299,15 @@ export const resolvers: UserResolvers = {
           role: user.role,
         });
 
-        // Установить refreshToken в cookie
-        res.setHeader("Set-Cookie", [
-          `refreshToken=${refreshToken}; HttpOnly; Path=/; Max-Age=604800; Secure; SameSite=Strict`,
-        ]);
+       // ✅ Устанавливаем refreshToken в cookie
+       const res = new NextResponse();
+      res.cookies.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        path: "/",
+        maxAge: 604800, // 7 дней
+        secure: true,
+        sameSite: "strict",
+});
 
         return {
           user,
@@ -345,6 +351,8 @@ export const resolvers: UserResolvers = {
     },
   },
 };
+
+export default userResolvers;
 
 /*async logout(_, __, { res }) {
       try {

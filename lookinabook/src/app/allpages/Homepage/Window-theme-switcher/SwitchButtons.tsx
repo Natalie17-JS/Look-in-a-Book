@@ -48,6 +48,7 @@ const SwitchButtons: React.FC<SwitchButtonsProps> = ({ onSwitch }) => {
           src={sunSwitcher}
           alt="Sun"
           className={styles["switchbtn-image"]}
+          priority 
         />
       </button>
       <button
