@@ -2,7 +2,7 @@ import prisma from "@/app/server/prisma/prismaClient";
 import argon2 from "argon2";
 import { UserResolvers } from "../resolversTypes/UserResolversTypes";
 import { DateTime } from "../resolversTypes/UserResolversTypes";
-import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
+import { generateAccessToken, generateRefreshToken, verifyAccessToken } from "../../auth/auth";
 import { Role } from "@prisma/client";
 import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
@@ -48,35 +48,62 @@ const userResolvers: UserResolvers = {
     },
 
     // Получить текущего авторизованного пользователя
-    async getCurrentUser(_, __, { req, prisma }) {
+    async getCurrentUser(_, __, { req, res, prisma }) {
       try {
-        // Предполагается, что пользователь добавляется в req.user через middleware
-        const user = req.user;
-        if (!user) {
-          throw new Error("Not authenticated");
+        console.log("Request headers:", req.headers); // Логируем заголовки запроса
+    
+        const authHeader = req.headers.authorization;
+        if (!authHeader) throw new Error("Unauthorized");
+    
+        const accessToken = authHeader.split(" ")[1];
+    
+        let decodedUser;
+        try {
+          decodedUser = verifyAccessToken(accessToken); // Проверяем accessToken
+        } catch (error) {
+          console.log("Access token expired, trying to refresh...");
+    
+          // Получаем refreshToken из cookies
+          const refreshToken = req.cookies.refreshToken;
+          if (!refreshToken) throw new Error("Refresh token not found");
+    
+          try {
+            // Создаем новый accessToken
+            const newAccessToken = refreshAccessToken(refreshToken);
+    
+            // Обновляем accessToken в заголовке ответа (для фронта)
+            res.setHeader("Authorization", `Bearer ${newAccessToken}`);
+    
+            // Расшифровываем новый accessToken
+            decodedUser = verifyAccessToken(newAccessToken);
+          } catch (refreshError) {
+            throw new Error("Refresh token expired, please log in again");
+          }
         }
-
-        // Ищем пользователя в базе данных
-        return await prisma.user.findUnique({
-          where: { id: user.id },
-          /*include: {
-            books: true,
-            comments: true,
-            likes: true,
-            posts: true,
-            notifications: true,
-            subscriptionsAsSubscriber: true,
-            subscriptionsAsSubscribedTo: true,
-            messagesSent: true,
-            messagesReceived: true,
-            pointsLogs: true,
-          },*/
+    
+        console.log("Decoded User:", decodedUser);
+    
+        if (!decodedUser.id) {
+          throw new Error("User ID is missing from the token");
+        }
+    
+        const currentUser = await prisma.user.findUnique({
+          where: { id: decodedUser.id },
         });
+    
+        if (!currentUser) {
+          throw new Error("User not found");
+        }
+    
+        console.log("Current User:", currentUser);
+    
+        return currentUser;
       } catch (error) {
         console.error("Error fetching current user:", error);
         throw new Error("Failed to fetch current user");
       }
     },
+    
   },
 
   Mutation: {
@@ -228,35 +255,50 @@ const userResolvers: UserResolvers = {
     },
 
     // Обновление данных пользователя
-    async updateUser(_, { id, username, email, password, bio, avatar }) {
+    updateUser: async (_, { id, username, email, password, bio, avatar }) => {
       try {
+        // Проверка, что id передан и существует
+        if (!id) {
+          throw new Error("User ID is required.");
+        }
+
+        // Найдем пользователя, чтобы убедиться, что он существует
+        const existingUser = await prisma.user.findUnique({ where: { id } });
+        if (!existingUser) {
+          throw new Error("User not found.");
+        }
+
+        // Формируем объект с обновленными данными
         const updatedData: Partial<{
           username: string;
           email: string;
           password?: string;
           bio?: string;
           avatar?: string;
-        }> = {
-          username,
-          email,
-          bio,
-          avatar,
-        };
+        }> = {};
 
+        if (username) updatedData.username = username;
+        if (email) updatedData.email = email;
+        if (bio) updatedData.bio = bio;
+        if (avatar) updatedData.avatar = avatar;
+
+        // Если пароль был передан, хешируем его
         if (password) {
           updatedData.password = await argon2.hash(password);
         }
 
-        return await prisma.user.update({
+        // Обновляем пользователя в базе данных
+        const updatedUser = await prisma.user.update({
           where: { id },
           data: updatedData,
         });
+
+        return updatedUser;
       } catch (error) {
         console.error("Error updating user:", error);
         throw new Error("Failed to update user");
       }
     },
-
     // Удаление пользователя
     async deleteUser(_, { id }) {
       try {
@@ -305,13 +347,14 @@ const userResolvers: UserResolvers = {
         httpOnly: true,
         path: "/",
         maxAge: 604800, // 7 дней
-        secure: true,
+        //secure: true,
         sameSite: "strict",
 });
 
         return {
           user,
           accessToken,
+          refreshToken
         };
       } catch (error) {
         console.error("Error during login:", error);
@@ -339,9 +382,14 @@ const userResolvers: UserResolvers = {
     async logout(_, __, { res }) {
       try {
         // Установить заголовок Set-Cookie для удаления refreshToken
-        res.setHeader("Set-Cookie", [
-          `refreshToken=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=Strict`,
-        ]);
+        const res = new NextResponse();
+        res.cookies.set("refreshToken", "", {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+          path: "/",
+          maxAge: 0, // Удаляем куку
+        });
 
         return true;
       } catch (error) {

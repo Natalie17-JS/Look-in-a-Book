@@ -2,7 +2,7 @@ const userTypeDefs = `
 scalar DateTime
 
 type User {
-  id: ID! 
+  id: Int! 
   username: String! 
   email: String! 
   password: String! 
@@ -39,11 +39,12 @@ enum Role {
 
 type LoginResponse {
   accessToken: String!
+  refreshToken: String!
   user: User!
 }
 
 type Query {
-  getUser(id: ID!): User 
+  getUser(id: Int!): User 
   getUsers: [User!]! 
   getCurrentUser: User 
 }
@@ -75,7 +76,7 @@ type Mutation {
 
 
   updateUser(
-    id: ID!
+    id: Int!
     username: String
     email: String
     password: String
@@ -83,7 +84,7 @@ type Mutation {
     avatar: String
   ): User!
 
-  deleteUser(id: ID!): User! 
+  deleteUser(id: Int!): User! 
 
   logout: Boolean! 
 }

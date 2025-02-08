@@ -66,6 +66,7 @@ export type UpdateUserArgs = {
 export type LoginResponse = {
   user: User;
   accessToken: string;
+  refreshToken: string;
 };
 
 export type VerifyCodeArgs = {
@@ -79,6 +80,7 @@ export type RequestVerificationCodeArgs = {
 
 export type AuthResponse = {
   accessToken: string;
+ 
 };
 
 export interface IContext {

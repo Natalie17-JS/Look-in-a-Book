@@ -51,7 +51,6 @@ import { NextRequest, NextResponse } from "next/server";
 import userResolvers from '../../server/graphql/resolvers/userResolvers';
 import  userTypeDefs  from '../../server/graphql/typeDefs/userTypeDefs';
 import prisma from "../../server/prisma/prismaClient";
-import { verifyAccessToken } from "../../server/auth/auth"; // Импортируем функцию проверки токена
 
 // Уточняем тип для ApolloServer
 const apolloServer = new ApolloServer({
@@ -59,8 +58,6 @@ const apolloServer = new ApolloServer({
   resolvers: userResolvers,
 });
 
-// Кастинг ApolloServer для соответствия типу
-//const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer as any);
 
 const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer as any, {
   context: async (req ) => {
@@ -79,6 +76,7 @@ const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer as any
   });
 
 export { handler as GET, handler as POST };
+
 
 // Отключение bodyParser в Next.js
 export const config = {
