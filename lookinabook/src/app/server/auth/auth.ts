@@ -11,7 +11,7 @@ const REFRESH_TOKEN_SECRET =
   process.env.REFRESH_TOKEN_SECRET || "refresh_secret";
 
 export const generateAccessToken = (user: UserPayload): string => {
-  return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+  return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: "5m" });
 };
 
 export const generateRefreshToken = (user: UserPayload): string => {
@@ -43,6 +43,10 @@ export const verifyRefreshToken = (token: string): JwtPayload | string => {
 
 export const refreshAccessToken = (refreshToken: string): string => {
   try {
+    if (!refreshToken) {
+      throw new Error("No refresh token provided");
+    }
+    console.log("Received refreshToken:", refreshToken);
     const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET) as JwtPayload;
 
     if (!decoded || typeof decoded.id !== "number" || typeof decoded.email !== "string") {
@@ -55,6 +59,7 @@ export const refreshAccessToken = (refreshToken: string): string => {
       email: decoded.email,
       role: decoded.role,
     });
+    
   } catch (error) {
     throw new Error("Invalid or expired refresh token");
   }

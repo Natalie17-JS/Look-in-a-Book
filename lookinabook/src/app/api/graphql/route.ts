@@ -51,26 +51,29 @@ import { NextRequest, NextResponse } from "next/server";
 import userResolvers from '../../server/graphql/resolvers/userResolvers';
 import  userTypeDefs  from '../../server/graphql/typeDefs/userTypeDefs';
 import prisma from "../../server/prisma/prismaClient";
+import { CustomRequest } from "@/app/server/graphql/resolversTypes/UserResolversTypes";
 
 // Уточняем тип для ApolloServer
 const apolloServer = new ApolloServer({
-  typeDefs:userTypeDefs ,
+  typeDefs: userTypeDefs ,
   resolvers: userResolvers,
 });
 
 
-const handler = startServerAndCreateNextHandler<NextRequest>(apolloServer as any, {
+const handler = startServerAndCreateNextHandler<CustomRequest>(apolloServer as any, {
   context: async (req ) => {
     const res = new NextResponse(); // Создаём новый объект ответа
 
     return {
-      req: {
+      /*req: {
         headers: {
           authorization: req.headers.get("authorization") || "", // ✅ Передаём токен авторизации
         },
-      },
+      },*/
+      req,
       res, // ✅ Передаём res, чтобы можно было установить refreshToken
       prisma,
+     // cookies: req.cookies, // ✅ Передаем cookies
     };
   },
   });

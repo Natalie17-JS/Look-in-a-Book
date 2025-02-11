@@ -1,8 +1,12 @@
 import { Role, User } from "@prisma/client";
 import { GraphQLScalarType, Kind, ValueNode } from "graphql";
-import { NextApiResponse } from "next";
-import { CustomApiRequest } from "../../auth/authMiddleware";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "../../prisma/prismaClient";
+
+
+export interface CustomRequest extends NextRequest {
+  user: { id: number; email: string; role: string };
+}
 
 export const DateTime = new GraphQLScalarType({
   name: "DateTime",
@@ -60,11 +64,12 @@ export type UpdateUserArgs = {
   password?: string;
   bio?: string;
   avatar?: string;
+  isOnline?: boolean;
 };
 
 // Ответ при логине (с токенами)
 export type LoginResponse = {
-  user: User;
+  user: User & { isOnline: boolean };
   accessToken: string;
   refreshToken: string;
 };
@@ -84,10 +89,11 @@ export type AuthResponse = {
 };
 
 export interface IContext {
-  req: CustomApiRequest;
-  res: NextApiResponse;
+  req: CustomRequest;
+  //req: NextRequest;
+  res: NextResponse;
   prisma: typeof prisma;
-  user?: User | null;
+  user?: User;
 }
 
 export type UserResolvers = {
@@ -126,11 +132,11 @@ export type UserResolvers = {
       args: LoginUserArgs,
       context: IContext
     ) => Promise<LoginResponse>;
-    refreshAccessTokenResolver: (
+    /*refreshAccessTokenResolver: (
       parent: unknown, 
       args: unknown, 
       context: IContext
-    ) => Promise<AuthResponse>;
+    ) => Promise<AuthResponse>;*/
     updateUser: (
       parent: unknown,
       args: UpdateUserArgs,

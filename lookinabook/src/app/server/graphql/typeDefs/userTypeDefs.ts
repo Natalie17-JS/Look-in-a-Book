@@ -18,6 +18,7 @@ type User {
   codeExpiresAt: DateTime,
   verificationAttempts: Int!
   lastVerificationRequest: DateTime!
+  isOnline: Boolean!
 
   
   # books: [Book!] 

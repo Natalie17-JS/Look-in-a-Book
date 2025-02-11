@@ -6,8 +6,9 @@ import { generateAccessToken, generateRefreshToken, verifyAccessToken } from "..
 import { Role } from "@prisma/client";
 import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
-import { refreshAccessToken } from "../../auth/auth";
-import { NextResponse } from "next/server";
+//import { refreshAccessToken } from "../../auth/auth";
+import { getUserFromRequest } from "../../auth/authMiddleware";
+
 
 const userResolvers: UserResolvers = {
   DateTime,
@@ -48,34 +49,39 @@ const userResolvers: UserResolvers = {
     },
 
     // Получить текущего авторизованного пользователя
-    async getCurrentUser(_, __, { req, res, prisma }) {
+    /*async getCurrentUser(_, __, { req, res, prisma }) {
       try {
-        console.log("Request headers:", req.headers); // Логируем заголовки запроса
+        console.log("Request headers:", req.headers);
     
-        const authHeader = req.headers.authorization;
-        if (!authHeader) throw new Error("Unauthorized");
+       // Используем метод get() для получения заголовка
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader) throw new Error("Unauthorized");
     
         const accessToken = authHeader.split(" ")[1];
     
         let decodedUser;
         try {
           decodedUser = verifyAccessToken(accessToken); // Проверяем accessToken
+          req.user = decodedUser; // Сохраняем информацию о пользователе в req.user
         } catch (error) {
           console.log("Access token expired, trying to refresh...");
     
-          // Получаем refreshToken из cookies
-          const refreshToken = req.cookies.refreshToken;
-          if (!refreshToken) throw new Error("Refresh token not found");
+          const refreshToken = res.cookies.get("refreshToken")?.value;
+          if (!refreshToken) {
+            throw new Error("Refresh token not found");
+          }
     
           try {
             // Создаем новый accessToken
             const newAccessToken = refreshAccessToken(refreshToken);
+            console.log("New access token:", newAccessToken);
     
-            // Обновляем accessToken в заголовке ответа (для фронта)
-            res.setHeader("Authorization", `Bearer ${newAccessToken}`);
+            // Обновляем accessToken в заголовке ответа
+            res.headers.set("Authorization", `Bearer ${newAccessToken}`);
     
             // Расшифровываем новый accessToken
             decodedUser = verifyAccessToken(newAccessToken);
+            req.user = decodedUser; // Сохраняем пользователя в контексте
           } catch (refreshError) {
             throw new Error("Refresh token expired, please log in again");
           }
@@ -102,7 +108,25 @@ const userResolvers: UserResolvers = {
         console.error("Error fetching current user:", error);
         throw new Error("Failed to fetch current user");
       }
-    },
+    }*/
+      async getCurrentUser(_, __, { req, res, prisma }) {
+        try {
+          const user = await getUserFromRequest(req, res);
+          if (!user) throw new Error("Unauthorized");
+      
+          const currentUser = await prisma.user.findUnique({
+            where: { id: user.id },
+          });
+      
+          if (!currentUser) throw new Error("User not found");
+      
+          return currentUser;
+        } catch (error) {
+          console.error("Error fetching current user:", error);
+          throw new Error("Failed to fetch current user");
+        }
+      }
+    
     
   },
 
@@ -329,6 +353,12 @@ const userResolvers: UserResolvers = {
           throw new Error("Invalid credentials");
         }
 
+         // Обновляем статус isOnline на true
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { isOnline: true },
+      });
+
         // Создать токены
         const accessToken = generateAccessToken({
           id: user.id,
@@ -342,27 +372,30 @@ const userResolvers: UserResolvers = {
         });
 
        // ✅ Устанавливаем refreshToken в cookie
-       const res = new NextResponse();
+     
       res.cookies.set("refreshToken", refreshToken, {
         httpOnly: true,
         path: "/",
         maxAge: 604800, // 7 дней
         //secure: true,
-        sameSite: "strict",
+        sameSite: "lax",
 });
+        console.log(res.cookies)
+        console.log("Refresh token set:", refreshToken);
 
         return {
           user,
           accessToken,
           refreshToken
         };
+        
       } catch (error) {
         console.error("Error during login:", error);
         throw new Error("Failed to login");
       }
     },
 
-    async refreshAccessTokenResolver(_, __, { req, res }) {
+    /*async refreshAccessTokenResolver(_, __, { req, res }) {
       try {
         // 1. Достать refresh token из cookies
         const refreshToken = req.cookies.refreshToken;
@@ -376,28 +409,35 @@ const userResolvers: UserResolvers = {
         console.error("Error refreshing token:", error);
         throw new Error("Failed to refresh token");
       }
-    },
+    },*/
 
     // Выход из системы (удаление токена)
-    async logout(_, __, { res }) {
+    async logout(_, __, { req, res, prisma }) {
       try {
-        // Установить заголовок Set-Cookie для удаления refreshToken
-        const res = new NextResponse();
+        const user = await getUserFromRequest(req, res);
+        if (!user) throw new Error("Not authenticated");
+    
+        console.log("Logging out user:", user.id);
+    
         res.cookies.set("refreshToken", "", {
           httpOnly: true,
-          secure: true,
-          sameSite: "strict",
+          sameSite: "lax",
           path: "/",
-          maxAge: 0, // Удаляем куку
+          maxAge: 0,
         });
-
+    
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { isOnline: false },
+        });
+    
         return true;
       } catch (error) {
         console.error("Error during logout:", error);
         throw new Error("Failed to logout");
       }
-    },
-  },
+    }
+  }
 };
 
 export default userResolvers;

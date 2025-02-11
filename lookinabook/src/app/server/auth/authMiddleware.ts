@@ -1,28 +1,27 @@
-import { verifyAccessToken } from "@/app/server/auth/auth";
-import { NextApiRequest, NextApiResponse } from "next";
+import { verifyAccessToken, refreshAccessToken } from "./auth"
+import { NextRequest, NextResponse } from "next/server";
+import { CustomRequest } from "../graphql/resolversTypes/UserResolversTypes";
 
-export interface CustomApiRequest extends NextApiRequest {
-  user?: { id: number; email: string; role: string }; // Добавляем поле user с нужной структурой
-}
+export async function getUserFromRequest(req: CustomRequest, res: NextResponse) {
+  const authHeader = req.headers.get("authorization");
+  if (!authHeader) return null;
 
-export const authMiddleware = (
-  handler: (req: CustomApiRequest, res: NextApiResponse) => any
-) => {
-  return async (req: CustomApiRequest, res: NextApiResponse) => {
-    const authHeader = req.headers.authorization;
+  try {
+    const accessToken = authHeader.split(" ")[1];
+    return verifyAccessToken(accessToken);
+  } catch (error) {
+    console.log("Access token expired, trying to refresh...");
 
-    if (!authHeader) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const token = authHeader.split(" ")[1];
+    const refreshToken = res.cookies.get("refreshToken")?.value;
+    if (!refreshToken) return null;
 
     try {
-      const user = verifyAccessToken(token); // Расшифровываем токен
-      req.user = user; // Добавляем пользователя в запрос
-      return handler(req, res); // Передаем управление следующему обработчику
-    } catch (error) {
-      return res.status(403).json({ message: "Invalid or expired token" });
+      const newAccessToken = refreshAccessToken(refreshToken);
+      res.headers.set("Authorization", `Bearer ${newAccessToken}`);
+      return verifyAccessToken(newAccessToken);
+    } catch (refreshError) {
+      console.error("Refresh token expired, please log in again");
+      return null;
     }
-  };
-};
+  }
+}
