@@ -1,8 +1,8 @@
 import prisma from "@/app/server/prisma/prismaClient";
 import argon2 from "argon2";
 import { UserResolvers } from "../resolversTypes/UserResolversTypes";
-import { DateTime } from "../resolversTypes/UserResolversTypes";
-import { generateAccessToken, generateRefreshToken, verifyAccessToken } from "../../auth/auth";
+import { DateTime } from "@/app/server/graphql/resolversTypes/dateTime";
+import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
 import { Role } from "@prisma/client";
 import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
