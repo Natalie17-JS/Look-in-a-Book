@@ -52,13 +52,12 @@ import userResolvers from '../../server/graphql/resolvers/userResolvers';
 import  userTypeDefs  from '../../server/graphql/typeDefs/userTypeDefs';
 import prisma from "../../server/prisma/prismaClient";
 import { CustomRequest } from "@/app/server/graphql/resolversTypes/UserResolversTypes";
+import schema from "@/app/server/graphql/schema";
 
 // Уточняем тип для ApolloServer
 const apolloServer = new ApolloServer({
-  typeDefs: userTypeDefs ,
-  resolvers: userResolvers,
+  schema
 });
-
 
 const handler = startServerAndCreateNextHandler<CustomRequest>(apolloServer as any, {
   context: async (req ) => {
@@ -73,13 +72,11 @@ const handler = startServerAndCreateNextHandler<CustomRequest>(apolloServer as a
       req,
       res, // ✅ Передаём res, чтобы можно было установить refreshToken
       prisma,
-     // cookies: req.cookies, // ✅ Передаем cookies
     };
   },
   });
 
 export { handler as GET, handler as POST };
-
 
 // Отключение bodyParser в Next.js
 export const config = {
@@ -87,3 +84,4 @@ export const config = {
     bodyParser: false, // Отключаем bodyParser для Apollo Server
   },
 };
+

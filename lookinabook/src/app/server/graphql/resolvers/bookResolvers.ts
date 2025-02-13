@@ -1,4 +1,4 @@
-import { BookResolvers } from "../resolversTypes/bookresolversTypes";
+import { BookResolvers } from "../resolversTypes/bookResolversTypes"
 import { DateTime } from "../resolversTypes/dateTime";
 import prisma from "@/app/server/prisma/prismaClient";
 import slugify from "slugify"
@@ -11,6 +11,14 @@ Query: {
         try {
             const book = await prisma.book.findUnique({
                 where: { id },
+                include: {
+                  chapters: true,
+                  comments: true, 
+                  likes: true,    
+                  author: {        
+                      select: { id: true, username: true } 
+                  }
+              }
             });
             return book;
         } catch (error) {
@@ -20,7 +28,16 @@ Query: {
     },
     async getBooks() {
         try {
-            const books = await prisma.book.findMany();
+            const books = await prisma.book.findMany({
+              include: {
+                chapters: true,  
+                comments: true,   
+                likes: true,      
+                author: {         
+                    select: { id: true, username: true } 
+                }
+            }
+            });
             return books;
         } catch (error) {
             console.error("Error fetching books:", error);
@@ -106,4 +123,5 @@ Mutation: {
               }
         }
     },
-};
+}
+export default bookResolvers;
