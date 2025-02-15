@@ -63,8 +63,9 @@ export type RequestVerificationCodeArgs = {
 
 export type AuthResponse = {
   accessToken: string;
- 
 };
+
+
 
 export interface IContext {
   req: CustomRequest;
@@ -130,6 +131,7 @@ export type UserResolvers = {
       args: unknown,
       context: IContext
     ) => Promise<boolean>;
+    
   };
   DateTime: GraphQLScalarType;
 };

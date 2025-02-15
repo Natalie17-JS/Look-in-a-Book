@@ -48,6 +48,44 @@ const userResolvers: UserResolvers = {
       }
     },
 
+    getBannedUsers: async (_, __, { user }) => {
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+
+      // Проверяем, является ли текущий пользователь администратором
+      if (user.role !== "ADMIN") {
+        throw new Error("Unauthorized to view banned users");
+      }
+
+      try {
+        // Получаем пользователей с баном (полный бан или запрет публикаций)
+        const bannedUsers = await prisma.user.findMany({
+          where: {
+            OR: [
+              { isBanned: true },      // Полный бан
+              { publishBanned: true }  // Бан на публикацию контента
+            ]
+          },
+          select: {
+            id: true,
+            email: true,
+            username: true,
+            isBanned: true,
+            publishBanned: true,
+            createdAt: true,
+            updatedAt: true
+          }
+        });
+
+        return bannedUsers;
+      } catch (error) {
+        console.error("Error fetching banned users:", error);
+        throw new Error("Failed to fetch banned users");
+      }
+    }
+    
+
     // Получить текущего авторизованного пользователя
     /*async getCurrentUser(_, __, { req, res, prisma }) {
       try {
@@ -323,17 +361,44 @@ const userResolvers: UserResolvers = {
         throw new Error("Failed to update user");
       }
     },
+    
     // Удаление пользователя
-    async deleteUser(_, { id }) {
+    async deleteUser(_, { id }, { req, res, prisma, user }) {
       try {
-        return await prisma.user.delete({
+        if (!user) {
+          throw new Error("Not authenticated");
+        }
+    
+        // Если пользователь не админ и пытается удалить не свой аккаунт, запрещаем
+        if (user.role !== "ADMIN" && user.id !== id) {
+          throw new Error("Not authorized to delete this user");
+        }
+    
+        console.log(`User ${user.id} is deleting user ${id}`);
+    
+        // Удаляем пользователя
+        const deletedUser = await prisma.user.delete({
           where: { id },
         });
+    
+        // Если пользователь удаляет сам себя, удаляем refreshToken из куков (как в logout)
+        if (user.id === id) {
+          res.cookies.set("refreshToken", "", {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 0,
+          });
+        }
+    
+        return deletedUser;
       } catch (error) {
         console.error("Error deleting user:", error);
         throw new Error("Failed to delete user");
       }
     },
+    
+    
 
     // Вход в систему
     async loginUser(_, { email, password }, { res }) {
@@ -438,6 +503,7 @@ const userResolvers: UserResolvers = {
       }
     }
   }
+    
 };
 
 export default userResolvers;

@@ -31,6 +31,10 @@ model User {
   isOnline                Boolean   @default(false)              // Online status
   bio                     String?                                // Biography
   avatar                  String?                                // User avatar
+  isBanned                Boolean   @default(false)
+  banEndDate              DateTime?
+  publishBanned           Boolean   @default(false)
+  banCount  Int           @default(0)                            // Ban counts
 
   // Relations
   books                         Book[] 
@@ -183,6 +187,9 @@ enum NotificationType {
   COMMENT
   RECOMMENDATION
   POINT_CHANGE
+  COMPLAINT
+  BAN
+  ACCOUNT_DELETION
   CUSTOM
 }
 
@@ -204,5 +211,24 @@ model PointsLog {
   reason    String                                  // Reason for the point change
   createdAt DateTime @default(now())               // Date of the change
 }
+
+enum ComplaintStatus {
+  PENDING 
+  RESOLVED 
+}
+
+model Complaint {
+  id          Int             @id @default(autoincrement())
+  reason      String                                // Complaint reason
+  status      ComplaintStatus @default(PENDING)     // Status: PENDING, RESOLVED
+  reportedBy  Int                                    // Who complainted
+  reportedUser Int                                    // Complaint for
+  createdAt   DateTime        @default(now())         // complaint time
+  updatedAt   DateTime        @updatedAt               // Last update time
+
+  reportedByUser User @relation("ReportedBy", fields: [reportedBy], references: [id])
+  reportedUser   User @relation("ReportedUser", fields: [reportedUser], references: [id])
+}
+
 
 
