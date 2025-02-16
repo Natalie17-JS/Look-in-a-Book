@@ -3,7 +3,6 @@ import argon2 from "argon2";
 import { UserResolvers } from "../resolversTypes/UserResolversTypes";
 import { DateTime } from "@/app/server/graphql/resolversTypes/dateTime";
 import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
-import { Role } from "@prisma/client";
 import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
 //import { refreshAccessToken } from "../../auth/auth";
@@ -48,42 +47,7 @@ const userResolvers: UserResolvers = {
       }
     },
 
-    getBannedUsers: async (_, __, { user }) => {
-      if (!user) {
-        throw new Error("Not authenticated");
-      }
 
-      // Проверяем, является ли текущий пользователь администратором
-      if (user.role !== "ADMIN") {
-        throw new Error("Unauthorized to view banned users");
-      }
-
-      try {
-        // Получаем пользователей с баном (полный бан или запрет публикаций)
-        const bannedUsers = await prisma.user.findMany({
-          where: {
-            OR: [
-              { isBanned: true },      // Полный бан
-              { publishBanned: true }  // Бан на публикацию контента
-            ]
-          },
-          select: {
-            id: true,
-            email: true,
-            username: true,
-            isBanned: true,
-            publishBanned: true,
-            createdAt: true,
-            updatedAt: true
-          }
-        });
-
-        return bannedUsers;
-      } catch (error) {
-        console.error("Error fetching banned users:", error);
-        throw new Error("Failed to fetch banned users");
-      }
-    }
     
 
     // Получить текущего авторизованного пользователя
@@ -289,32 +253,7 @@ const userResolvers: UserResolvers = {
     },
     
 
-    async createAdmin(_, { username, email, password }, { req }) {
-      try {
-        // Проверка, имеет ли текущий пользователь права администратора
-        if (!req.user || req.user.role !== Role.ADMIN) {
-          throw new Error("Not authorized to create an admin");
-        }
-
-        // Хэшируем пароль
-        const hashedPassword = await argon2.hash(password);
-
-        // Создаём администратора
-        const admin = await prisma.user.create({
-          data: {
-            username,
-            email,
-            password: hashedPassword,
-            role: "ADMIN", // Устанавливаем роль ADMIN
-          },
-        });
-
-        return admin;
-      } catch (error) {
-        console.error("Error creating admin:", error);
-        throw new Error("Failed to create admin");
-      }
-    },
+    
 
     // Обновление данных пользователя
     updateUser: async (_, { id, username, email, password, bio, avatar }) => {

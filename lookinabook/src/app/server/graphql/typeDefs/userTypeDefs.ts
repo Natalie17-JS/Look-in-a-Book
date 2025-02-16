@@ -1,6 +1,7 @@
 const userTypeDefs = ` 
 scalar DateTime
 
+
 type User {
   id: Int! 
   username: String! 
@@ -37,6 +38,7 @@ type User {
   # pointsLogs: [PointsLog!] 
 }
 
+
 enum Role {
   USER
   ADMIN
@@ -52,6 +54,7 @@ type Query {
   getUser(id: Int!): User 
   getUsers: [User!]! 
   getCurrentUser: User 
+
 }
 
 type Mutation {
@@ -63,13 +66,7 @@ type Mutation {
     avatar: String
   ): User!
 
-  createAdmin (
-   username: String!
-    email: String!
-    password: String!
-    bio: String
-    avatar: String
-): User!
+ 
 
   verifyCode(email: String!, code: String!): String!
 

@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User, Complaint } from "@prisma/client";
 import { IContext } from "./UserResolversTypes";
 
 export type CreateComplaintArgs = {
@@ -9,20 +9,28 @@ export type CreateComplaintArgs = {
 export type ComplaintResponse = {
   id: number;
   reason: string;
-  status: string;        
-  reportedByUser: User;
-  reportedUser: User;
+  status: string;
+  reportedByUser: User;  // Теперь это User, а не id
+  reportedUser: User;    // Теперь это User, а не id
   createdAt: string;
   updatedAt: string;
 };
 
+
 export type ComplaintResolvers = {
+  Query: {
+    getComplaints: (
+      parent: unknown, 
+      args: unknown, 
+      context: IContext
+    ) => Promise<Complaint[]>;
+  };
   Mutation: {
     createComplaint: (
       parent: unknown,
       args: CreateComplaintArgs,
       context: IContext
-    ) => Promise<ComplaintResponse>;
+    ) => Promise<Complaint>;
     resolveComplaint: (
       parent: unknown,
       args: { complaintId: number },

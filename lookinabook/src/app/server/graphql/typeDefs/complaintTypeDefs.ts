@@ -5,7 +5,7 @@ enum ComplaintStatus {
 }
 
 type Mutation {
-  submitComplaint(reportedUserId: Int!, reason: String!): Complaint!
+  createComplaint(reportedUserId: Int!, reason: String!): Complaint!
   resolveComplaint(complaintId: Int!): Complaint!
 }
 
@@ -17,9 +17,10 @@ type Complaint {
   id: Int!
   reason: String!
   status: ComplaintStatus!
-  reportedByUser: User!
-  reportedUser: User!
+  reportedBy: Int!
+  reportedUserId: Int!
   createdAt: String!
+  updatedAt: String!
 }
 
 type User {

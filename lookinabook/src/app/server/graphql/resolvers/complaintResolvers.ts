@@ -17,7 +17,16 @@ const createComplaintNotification = async (complaint: {
 
 const complaintResolvers: ComplaintResolvers = {
     Query: {
-        getComplaints: async () => {
+        getComplaints: async (_, __,{user}) => {
+          if (!user) {
+            throw new Error("Not authenticated");
+          }
+    
+          // Проверяем, является ли текущий пользователь администратором
+          if (user.role !== "ADMIN") {
+            throw new Error("Unauthorized to view banned users");
+          }
+    
             try {
               const complaints = await prisma.complaint.findMany({
                 where: {
@@ -37,47 +46,53 @@ const complaintResolvers: ComplaintResolvers = {
           },
     },
     Mutation: {
-        createComplaint: async (_, { reportedUserId, reason }, { user }) => {
-            if (!user) {
-              throw new Error("Not authenticated");
-            }
-        
-            // Проверка, чтобы пользователь не мог пожаловаться сам на себя
-            if (user.id === reportedUserId) {
-              throw new Error("You cannot report yourself");
-            }
-        
-            try {
-              // Создаем жалобу в базе данных
-              const complaint = await prisma.complaint.create({
-                data: {
-                  reason,
-                  reportedBy: user.id,
-                  reportedUser: reportedUserId,
-                },
-              });
-
-              // Отправка уведомления админу
-        await createComplaintNotification({
-            reason: complaint.reason,
-            reportedUser: complaint.reportedUser.id,
+      createComplaint: async (_, { reportedUserId, reason }, { user }) => {
+        if (!user) {
+          throw new Error("Not authenticated");
+        }
+      
+        // Проверка, чтобы пользователь не мог пожаловаться сам на себя
+        if (user.id === reportedUserId) {
+          throw new Error("You cannot report yourself");
+        }
+      
+        try {
+          // Создаем жалобу с подключением пользователей
+          const complaint = await prisma.complaint.create({
+            data: {
+              reason,
+              /*reportedBy: user.id,  
+              reportedUserId  */
+              reportedByUser: { connect: { id: user.id } },  // Теперь это связь с User
+              reportedUser: { connect: { id: reportedUserId } },  // Теперь это связь с User
+            },
+            /*include: {
+              reportedByUser: true,  // Загружаем данные пользователя, который отправил жалобу
+              reportedUser: true, // Загружаем данные пользователя, на которого пожаловались
+            }*/
           });
-  
-        
-              return {
-                id: complaint.id,
-                reason: complaint.reason,
-                status: complaint.status,
-                reportedByUser: complaint.reportedByUser,
-                reportedUser: complaint.reportedUser,
-                createdAt: complaint.createdAt.toISOString(),
-                updatedAt: complaint.updatedAt.toISOString(),
-              };
-            } catch (error) {
-              console.error("Error submitting complaint:", error);
-              throw new Error("Failed to submit complaint");
-            }
-        },
+      
+          // Отправка уведомления админу
+          await createComplaintNotification({
+            reason: complaint.reason,
+            reportedUser: complaint.reportedUserId, 
+          });
+      
+          return {
+            id: complaint.id,
+            reason: complaint.reason,
+            status: complaint.status,
+            reportedBy: complaint.reportedBy,  // Просто ID
+            reportedUserId: complaint.reportedUserId,  // Просто ID
+            createdAt: complaint.createdAt,
+            updatedAt: complaint.updatedAt,
+          };
+        } catch (error) {
+          console.error("Error submitting complaint:", error);
+          throw new Error("Failed to submit complaint");
+        }
+      },
+      
         resolveComplaint: async (
             _: unknown,
             { complaintId },

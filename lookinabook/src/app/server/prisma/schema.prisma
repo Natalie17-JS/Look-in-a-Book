@@ -47,6 +47,8 @@ model User {
   messagesSent                  Message[] @relation("SentMessages") 
   messagesReceived              Message[] @relation("ReceivedMessages")
   pointsLogs                    PointsLog[]
+  complaintsFiled               Complaint[] @relation("ReportedBy")     // Complaints send by this user
+  complaintsReceived            Complaint[] @relation("ReportedUser")   // Complaints on this user
 }
 
 enum Role {
@@ -218,16 +220,16 @@ enum ComplaintStatus {
 }
 
 model Complaint {
-  id          Int             @id @default(autoincrement())
-  reason      String                                // Complaint reason
-  status      ComplaintStatus @default(PENDING)     // Status: PENDING, RESOLVED
-  reportedBy  Int                                    // Who complainted
-  reportedUser Int                                    // Complaint for
-  createdAt   DateTime        @default(now())         // complaint time
-  updatedAt   DateTime        @updatedAt               // Last update time
+  id              Int             @id @default(autoincrement())
+  reason          String                                // Complaint reason
+  status          ComplaintStatus @default(PENDING)     // Status: PENDING, RESOLVED
+  reportedBy      Int                                    // Who complainted
+  reportedUserId  Int                                    // Complaint for
+  createdAt       DateTime        @default(now())         // complaint time
+  updatedAt       DateTime        @updatedAt               // Last update time
 
   reportedByUser User @relation("ReportedBy", fields: [reportedBy], references: [id])
-  reportedUser   User @relation("ReportedUser", fields: [reportedUser], references: [id])
+  reportedUser   User @relation("ReportedUser", fields: [reportedUserId], references: [id])
 }
 
 

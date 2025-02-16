@@ -22,12 +22,7 @@ export type CreateUserArgs = {
   lastVerificationRequest: Date | null;
 };
 
-// Аргументы для создания администратора
-export type CreateAdminArgs = {
-  username: string;
-  email: string;
-  password: string;
-};
+
 
 // Аргументы для входа в систему
 export type LoginUserArgs = {
@@ -84,16 +79,11 @@ export type UserResolvers = {
       args: unknown,
       context: IContext
     ) => Promise<User | null>;
-  };
+  }
   Mutation: {
     registerUser: (
       parent: unknown,
       args: CreateUserArgs,
-      context: IContext
-    ) => Promise<User>;
-    createAdmin: (
-      parent: unknown,
-      args: CreateAdminArgs,
       context: IContext
     ) => Promise<User>;
     requestVerificationCode: (
