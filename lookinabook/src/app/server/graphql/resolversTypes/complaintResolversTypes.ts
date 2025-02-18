@@ -12,8 +12,6 @@ export type ComplaintResponse = {
   status: string;
   reportedByUser: User;  // Теперь это User, а не id
   reportedUser: User;    // Теперь это User, а не id
-  createdAt: string;
-  updatedAt: string;
 };
 
 
@@ -31,10 +29,10 @@ export type ComplaintResolvers = {
       args: CreateComplaintArgs,
       context: IContext
     ) => Promise<Complaint>;
-    resolveComplaint: (
+    /*resolveComplaint: (
       parent: unknown,
       args: { complaintId: number },
       context: IContext
-    ) => Promise<ComplaintResponse>;
+    ) => Promise<ComplaintResponse>;*/
   };
 };

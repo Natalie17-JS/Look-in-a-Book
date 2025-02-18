@@ -2,13 +2,13 @@ const adminTypeDefs = `
 scalar DateTime
 
 type BannedUser {
-    id: Int!;
+    id: Int!
     username: String
     email: String!
     isBanned: Boolean!
     publishBanned: Boolean!
-    createdAt: Date
-    updatedAt: Date
+    createdAt: DateTime
+    updatedAt: DateTime
 }
 
 type BanUserResponse {
@@ -16,12 +16,17 @@ type BanUserResponse {
   success: Boolean!
 }
 
+type UnbanUserResponse {
+  unbannedUser: BannedUser!
+  success: Boolean!
+}
 
 type Query {
   getBannedUsers: [BannedUser]
 }
   type Mutation {
    banUser(userId: Int!): BanUserResponse!
+   unbanUser(userId: Int!): UnbanUserResponse!
     createAdmin (
    username: String!
     email: String!
@@ -30,5 +35,5 @@ type Query {
     avatar: String
 ): User!
   }
-
-`
+  `
+  export default adminTypeDefs;

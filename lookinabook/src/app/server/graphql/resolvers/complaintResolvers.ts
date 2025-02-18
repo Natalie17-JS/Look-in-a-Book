@@ -93,7 +93,7 @@ const complaintResolvers: ComplaintResolvers = {
         }
       },
       
-        resolveComplaint: async (
+        /*resolveComplaint: async (
             _: unknown,
             { complaintId },
             { user }
@@ -131,7 +131,7 @@ const complaintResolvers: ComplaintResolvers = {
               createdAt: updatedComplaint.createdAt.toISOString(),
               updatedAt: updatedComplaint.updatedAt.toISOString(),
             };
-          },
+          },*/
         },
     }
 

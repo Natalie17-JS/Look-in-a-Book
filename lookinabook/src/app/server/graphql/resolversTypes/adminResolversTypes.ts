@@ -2,7 +2,12 @@ import { IContext } from "./UserResolversTypes";
 import { User } from "@prisma/client";
 
 export type BanResponse = {
-    bannedUser: User;
+    bannedUser: BannedUser;
+    success: boolean;
+  };
+
+  export type UnbanResponse = {
+    unbannedUser: BannedUser;
     success: boolean;
   };
 
@@ -22,6 +27,14 @@ export type CreateAdminArgs = {
   email: string;
   password: string;
 };
+
+export type createBanArgs = {
+  userId: number;
+  publishBanned: boolean;
+  isBanned: boolean;
+  banCount: number;
+banEndDate: Date;
+}
   
 
   export type AdminResolvers = {
@@ -38,13 +51,20 @@ export type CreateAdminArgs = {
                   args: CreateAdminArgs,
                   context: IContext
                 ) => Promise<User>;
-            banUser: (
+            /*banUser: (
               parent: unknown,
-              args: { userId: number },
+              args: createBanArgs,
               context: IContext
             ) => Promise<BanResponse>;
             };
+            unbanUser: (
+              parent: unknown,
+              args: { userId: number },
+              context: IContext
+            )=> Promise<UnbanResponse>;*/
             //DateTime: GraphQLScalarType;
           }
+        }
+        
     
   

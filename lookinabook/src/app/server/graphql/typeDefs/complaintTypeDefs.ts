@@ -1,4 +1,6 @@
 const complaintTypeDefs = `
+scalar DateTime
+
 enum ComplaintStatus {
   PENDING
   RESOLVED
@@ -19,8 +21,8 @@ type Complaint {
   status: ComplaintStatus!
   reportedBy: Int!
   reportedUserId: Int!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type User {
