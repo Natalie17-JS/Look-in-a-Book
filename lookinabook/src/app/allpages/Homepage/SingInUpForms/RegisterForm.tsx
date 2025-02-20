@@ -2,14 +2,10 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./SignInUpForm.module.css";
+import { useMutation } from "@apollo/client";
+import { REGISTER_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
+import { RegisterFormData, RegisterUserData } from "@/app/types/userTypes";
 
-// Типизация данных формы
-interface RegisterFormData {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 
 export default function RegisterForm() {
   const {
@@ -21,12 +17,30 @@ export default function RegisterForm() {
   } = useForm<RegisterFormData>({
     mode: "onChange",
   });
+  const [registerUser, { loading }] = useMutation<RegisterUserData>(REGISTER_USER);
 
   // Типизация обработчика отправки формы
-  const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
-    console.log(data);
-    reset();
+  const onSubmit: SubmitHandler<RegisterFormData> = async (formData) => {
+    try {
+      const { data } = await registerUser({
+        variables: {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          avatar: formData.avatar,
+          bio: formData.bio, 
+        },
+      });
+
+      if (data?.registerUser) {
+        alert("Registration is successfull!");
+        reset(); // Очистка формы
+      }
+    } catch (err) {
+      console.error("Regustration error:", err);
+    }
   };
+
 
   return (
     <>
@@ -43,6 +57,7 @@ export default function RegisterForm() {
             placeholder="Enter your name..."
             {...register("username", {
               required: "Name is required",
+              minLength: { value: 3, message: "Username must be at least 3 characters" }
             })}
           />
           {errors.username && (
@@ -85,7 +100,7 @@ export default function RegisterForm() {
               required: "Password is required",
               minLength: {
                 value: 6,
-                message: "Password must be at least 6 characters",
+                message: "Password must be at least 8 characters",
               },
             })}
           />
@@ -113,9 +128,21 @@ export default function RegisterForm() {
             <p className={styles.error}>{errors.confirmPassword.message}</p>
           )}
         </div>
+        
+        <div className={styles.formGroup}>
+          <label className={styles.label} htmlFor="bio">
+            Bio:
+          </label>
+          <textarea
+            className={styles.input}
+            id="bio"
+            placeholder="Tell us about yourself..."
+            {...register("bio")}
+          />
+        </div>
 
         <button type="submit" className={styles.submitButton}>
-          Register
+        {loading ? "Registering..." : "Register"}
         </button>
       </form>
     </>

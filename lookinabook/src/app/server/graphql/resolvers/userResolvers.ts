@@ -7,7 +7,7 @@ import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
 //import { refreshAccessToken } from "../../auth/auth";
 import { getUserFromRequest } from "../../auth/authMiddleware";
-
+import { userRegisterValidation } from "../../validation/userValidation";
 
 const userResolvers: UserResolvers = {
   DateTime,
@@ -136,11 +136,27 @@ const userResolvers: UserResolvers = {
     // Регистрация нового пользователя
     async registerUser(_, { username, email, password, bio, avatar }) {
       try {
+        // Проверяем входные данные
+      const validationResult = userRegisterValidation.safeParse({ username, email, password });
+
+      if (!validationResult.success) {
+        console.error("Validation errors:", validationResult.error.errors); // Логируем ошибки
+  
+        throw new GraphQLError("Validation error", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            errors: validationResult.error.errors.map(err => ({
+              field: err.path.join("."),
+              message: err.message
+            }))
+          }
+        });
+      }
         const hashedPassword = await argon2.hash(password);
     
         // Генерируем 6-значный код подтверждения
-        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-        const codeExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // Код действует 24 часа
+        //const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        //const codeExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // Код действует 24 часа
     
         const user = await prisma.user.create({
           data: {
@@ -150,18 +166,19 @@ const userResolvers: UserResolvers = {
             bio,
             avatar,
             isVerified: false,
-            verificationCode,
-            codeExpiresAt,
+            //verificationCode,
+           // codeExpiresAt,
           },
         });
     
         // Отправляем код на почту
-        await sendVerificationEmail(email, verificationCode);
+        //await sendVerificationEmail(email, verificationCode);
         return user;
       } catch (error) {
         console.error("Error registering user:", error);
         throw new Error("Failed to register user");
       }
+      
     },
 
     verifyCode: async (_: unknown, { email, code }: { email: string; code: string }): Promise<string> => {

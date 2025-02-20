@@ -2,44 +2,38 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useFetchUser } from "../hooks/useFetchUser"; // Используем новый хук
-
-interface User {
-  id: string;
-  username: string;
-  email: string;
-  role: "USER" | "ADMIN";
-}
+import { User } from "../types/userTypes";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (token: string) => void;
+  login: (accesstoken: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(null);
+  const [accesstoken, setAccesstoken] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
-    if (savedToken) setToken(savedToken);
+    if (savedToken) setAccesstoken(savedToken);
   }, []);
 
-  const { user, loading, refetch } = useFetchUser(token); // Загружаем пользователя
+  const { user, loading, refetch } = useFetchUser(accesstoken); // Загружаем пользователя
 
   const login = (token: string) => {
     localStorage.setItem("token", token);
-    setToken(token);
+    setAccesstoken(token);
     refetch(); // После логина обновляем пользователя
     router.push("/dashboard");
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    setToken(null);
+    setAccesstoken(null);
     router.push("/auth/login");
   };
 

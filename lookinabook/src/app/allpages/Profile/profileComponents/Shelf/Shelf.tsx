@@ -4,9 +4,14 @@ import Image from "next/image";
 import flowers from "@/app/images/flowers-on-shelf.svg";
 import styles from "./Shelf.module.css";
 import { useTheme } from "@/app/context/themeContext";
+import { useAuth } from "@/app/context/authContext";
 
 export default function Shelf() {
   const { theme } = useTheme();
+  const {user, loading} = useAuth();
+
+  if (loading) return <p>Loading...</p>;
+
 
   return (
     <div className={styles["shelf-container"]}>
@@ -24,7 +29,11 @@ export default function Shelf() {
             }`}
           >
             <p style={{ textAlign: "center", marginTop: "10px" }}>
-              Kassandra Nate
+            <strong>Author:</strong> {user?.username || "Unknown"}
+            </p>
+
+            <p style={{ textAlign: "center", marginTop: "10px" }}>
+            <strong>Bio:</strong> {user?.bio || "No bio available"}
             </p>
           </div>
 

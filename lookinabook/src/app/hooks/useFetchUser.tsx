@@ -1,14 +1,10 @@
 import { useQuery } from "@apollo/client";
-import { ME_QUERY } from "@/graphql/queries/me"; // Запрос на сервер
+import { GET_CURRENT_USER } from "../GraphqlOnClient/queries/userQueries";
 
-export function useFetchUser(token: string | null) {
-  const { data, loading, refetch } = useQuery(ME_QUERY, {
-    skip: !token, // Если нет токена, запрос не выполняется
+export function useFetchUser(accesstoken: string | null) {
+  const { data, loading, error, refetch } = useQuery(GET_CURRENT_USER, {
+    skip: !accesstoken, // Если нет токена, запрос не выполняется
   });
 
-  return {
-    user: data?.me || null,
-    loading,
-    refetch, // Для обновления данных
-  };
+  return { user: data?.getCurrentUser || null, loading, error, refetch };
 }

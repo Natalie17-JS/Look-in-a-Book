@@ -1,14 +1,12 @@
 "use client";
 
-import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useMutation } from "@apollo/client";
+import { useAuth } from "@/app/context/authContext"; // Используем контекст
+import { LOGIN_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
+import { SignInFormData, SignInUserData } from "@/app/types/userTypes";
 import styles from "./SignInUpForm.module.css";
 import { useTheme } from "@/app/context/themeContext";
-
-// Типизация данных формы
-interface SignInFormData {
-  email: string;
-  password: string;
-}
 
 export default function SignInForm() {
   const {
@@ -16,10 +14,10 @@ export default function SignInForm() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<SignInFormData>({
-    mode: "onChange",
-  });
+  } = useForm<SignInFormData>({ mode: "onChange" });
 
+  const [loginUser, { loading, error }] = useMutation<SignInUserData>(LOGIN_USER);
+  const { login } = useAuth(); // Берем `login` из контекста
   const { theme } = useTheme();
 
   const themeInput =
@@ -29,9 +27,17 @@ export default function SignInForm() {
       ? styles.gray
       : styles.light;
 
-  // Типизация обработчика отправки формы
-  const onSubmit: SubmitHandler<SignInFormData> = (data) => {
-    console.log("Form submitted:", data);
+  const onSubmit: SubmitHandler<SignInFormData> = async (formData) => {
+    try {
+      const { data } = await loginUser({ variables: formData });
+
+      if (data?.loginUser?.accessToken) {
+        login(data.loginUser.accessToken); // Передаем токен в контекст
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+    }
+
     reset();
   };
 
@@ -55,9 +61,7 @@ export default function SignInForm() {
               },
             })}
           />
-          {errors.email && (
-            <p className={styles.error}>{errors.email.message}</p>
-          )}
+          {errors.email && <p className={styles.error}>{errors.email.message}</p>}
         </div>
 
         <div className={styles.formGroup}>
@@ -76,14 +80,14 @@ export default function SignInForm() {
               },
             })}
           />
-          {errors.password && (
-            <p className={styles.error}>{errors.password.message}</p>
-          )}
+          {errors.password && <p className={styles.error}>{errors.password.message}</p>}
         </div>
 
-        <button type="submit" className={styles.submitButton}>
-          Sign In
+        <button type="submit" className={styles.submitButton} disabled={loading}>
+          {loading ? "Signing in..." : "Sign In"}
         </button>
+
+        {error && <p className={styles.error}>Login failed. Please try again.</p>}
       </form>
     </>
   );

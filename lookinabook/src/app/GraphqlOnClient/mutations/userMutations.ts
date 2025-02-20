@@ -20,6 +20,9 @@ export const REGISTER_USER = gql`
       email
       bio
       avatar
+      role
+      isVerified
+      createdAt
     }
   }
 `;
