@@ -1,5 +1,5 @@
 export interface User {
-    id: string;
+    id: number;
     username: string;
     email: string;
     bio?: string;    
@@ -24,7 +24,7 @@ export interface RegisterFormData {
 // Тип для данных, возвращаемых с сервера
 export interface RegisterUserData {
   registerUser: {
-    id: string;
+    id: number;
     username: string;
     email: string;
     bio?: string;     // Опционально, если пользователь не ввел
@@ -46,4 +46,13 @@ export interface SignInUserData {
     refreshToken: string;
     user: User;
   };
+}
+
+export interface CurrentUser {
+    id: number;
+    username: string;
+    email: string;
+    bio?: string;    
+    avatar?: string;  
+    role:  "USER" | "ADMIN";
 }

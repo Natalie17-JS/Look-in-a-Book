@@ -433,7 +433,7 @@ const userResolvers: UserResolvers = {
     },*/
 
     // Выход из системы (удаление токена)
-    async logout(_, __, { req, res, prisma }) {
+    async logoutUser(_, __, { req, res, prisma }) {
       try {
         const user = await getUserFromRequest(req, res);
         if (!user) throw new Error("Not authenticated");

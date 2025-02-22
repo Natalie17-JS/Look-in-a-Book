@@ -6,6 +6,7 @@ import notebooknight from "@/app/images/notebook-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./Notebook.module.css";
 import Link from "next/link";
+import LogoutButton from "../logout/LogoutButton";
 
 export default function Notebook() {
   const { theme } = useTheme();
@@ -30,7 +31,7 @@ export default function Notebook() {
       />
 
       <div className={styles.buttons}>
-        <button className={styles["signout-btn"]}>Sign out</button>
+      <LogoutButton className={styles["signout-btn"]} />
         <Link href="/allpages/profile/edit-profile">
           <button className={styles["settings-btn"]}>Edit profile</button>
         </Link>

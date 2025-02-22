@@ -88,7 +88,7 @@ type Mutation {
 
   deleteUser(id: Int!): User! 
 
-  logout: Boolean! 
+  logoutUser: Boolean! 
 }
 `;
 export default userTypeDefs;

@@ -7,6 +7,7 @@ import { LOGIN_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
 import { SignInFormData, SignInUserData } from "@/app/types/userTypes";
 import styles from "./SignInUpForm.module.css";
 import { useTheme } from "@/app/context/themeContext";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
   const {
@@ -19,6 +20,7 @@ export default function SignInForm() {
   const [loginUser, { loading, error }] = useMutation<SignInUserData>(LOGIN_USER);
   const { login } = useAuth(); // Берем `login` из контекста
   const { theme } = useTheme();
+  const router = useRouter(); 
 
   const themeInput =
     theme === "dark"
@@ -33,6 +35,8 @@ export default function SignInForm() {
 
       if (data?.loginUser?.accessToken) {
         login(data.loginUser.accessToken); // Передаем токен в контекст
+        router.push("/allpages/profile");
+        console.log("User signed in:", data.loginUser) // После логина обновляем пользователя
       }
     } catch (err) {
       console.error("Login error:", err);

@@ -9,6 +9,7 @@ import { useAuth } from "@/app/context/authContext";
 export default function Shelf() {
   const { theme } = useTheme();
   const {user, loading} = useAuth();
+  console.log("Current user:", user)
 
   if (loading) return <p>Loading...</p>;
 

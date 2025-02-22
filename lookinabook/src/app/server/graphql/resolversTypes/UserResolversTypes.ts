@@ -116,7 +116,7 @@ export type UserResolvers = {
       args: { id: number },
       context: IContext
     ) => Promise<User>;
-    logout: (
+    logoutUser: (
       parent: unknown,
       args: unknown,
       context: IContext
