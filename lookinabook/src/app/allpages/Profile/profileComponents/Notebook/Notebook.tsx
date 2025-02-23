@@ -6,7 +6,7 @@ import notebooknight from "@/app/images/notebook-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./Notebook.module.css";
 import Link from "next/link";
-import LogoutButton from "../logout/LogoutButton";
+import LogoutButton from "../Logout/LogoutButton";
 
 export default function Notebook() {
   const { theme } = useTheme();

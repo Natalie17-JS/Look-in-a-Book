@@ -4,11 +4,11 @@ import Image from "next/image";
 import flowers from "@/app/images/flowers-on-shelf.svg";
 import styles from "./Shelf.module.css";
 import { useTheme } from "@/app/context/themeContext";
-import { useAuth } from "@/app/context/authContext";
+import { useUser } from "@/app/context/authContext";
 
 export default function Shelf() {
   const { theme } = useTheme();
-  const {user, loading} = useAuth();
+  const {user, loading} = useUser();
   console.log("Current user:", user)
 
   if (loading) return <p>Loading...</p>;

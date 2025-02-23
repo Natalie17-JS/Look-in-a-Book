@@ -2,12 +2,12 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@apollo/client";
-import { useAuth } from "@/app/context/authContext"; // Используем контекст
 import { LOGIN_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
 import { SignInFormData, SignInUserData } from "@/app/types/userTypes";
 import styles from "./SignInUpForm.module.css";
 import { useTheme } from "@/app/context/themeContext";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/app/context/authContext";
 
 export default function SignInForm() {
   const {
@@ -18,8 +18,8 @@ export default function SignInForm() {
   } = useForm<SignInFormData>({ mode: "onChange" });
 
   const [loginUser, { loading, error }] = useMutation<SignInUserData>(LOGIN_USER);
-  const { login } = useAuth(); // Берем `login` из контекста
   const { theme } = useTheme();
+  const {setUser} = useUser()
   const router = useRouter(); 
 
   const themeInput =
@@ -34,7 +34,8 @@ export default function SignInForm() {
       const { data } = await loginUser({ variables: formData });
 
       if (data?.loginUser?.accessToken) {
-        login(data.loginUser.accessToken); // Передаем токен в контекст
+        const token = localStorage.setItem('token', data?.loginUser?.accessToken);
+        setUser(data.loginUser.user);
         router.push("/allpages/profile");
         console.log("User signed in:", data.loginUser) // После логина обновляем пользователя
       }

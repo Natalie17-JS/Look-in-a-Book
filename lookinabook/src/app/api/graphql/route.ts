@@ -48,8 +48,6 @@ const apolloServerOptions: ApolloServerOptions = {
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { NextRequest, NextResponse } from "next/server";
-import userResolvers from '../../server/graphql/resolvers/userResolvers';
-import  userTypeDefs  from '../../server/graphql/typeDefs/userTypeDefs';
 import prisma from "../../server/prisma/prismaClient";
 import { CustomRequest } from "@/app/server/graphql/resolversTypes/UserResolversTypes";
 import schema from "@/app/server/graphql/schema";
@@ -62,7 +60,7 @@ const apolloServer = new ApolloServer({
 const handler = startServerAndCreateNextHandler<CustomRequest>(apolloServer as any, {
   context: async (req ) => {
     const res = new NextResponse(); // Создаём новый объект ответа
-
+    
     return {
       /*req: {
         headers: {

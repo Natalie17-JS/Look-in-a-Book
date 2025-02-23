@@ -3,14 +3,14 @@
 import { ThemeProvider } from "@/app/context/themeContext";
 import { ApolloProvider } from "@apollo/client";
 import client from "../apolloclient/client";
-import { AuthProvider } from "../context/authContext";
+import { UserProvider } from "../context/authContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ApolloProvider client={client}>
-      <AuthProvider>
+      <UserProvider>
       <ThemeProvider>{children}</ThemeProvider>
-      </AuthProvider>
+      </UserProvider>
     </ApolloProvider>
   );
 }

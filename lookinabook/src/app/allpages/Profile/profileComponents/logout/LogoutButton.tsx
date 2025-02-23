@@ -2,7 +2,7 @@
 
 import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
-import { useAuth } from "@/app/context/authContext";
+import { useUser } from "@/app/context/authContext";
 import { useRouter } from "next/navigation";
 
 interface LogoutButtonProps {
@@ -10,16 +10,20 @@ interface LogoutButtonProps {
   }
 
 export default function LogoutButton({ className }: LogoutButtonProps) {
-  const { user, logout } = useAuth(); // Берем функцию выхода из контекста
+  const { user, setUser } = useUser(); // Берем функцию выхода из контекста
   const router = useRouter();
 
-if (!user) return <p>You are not autenticated</p>
+//if (!user) return <p>You are not autenticated</p>
 
   const [logoutUser, { loading }] = useMutation(LOGOUT_USER, {
     fetchPolicy: "no-cache", // Отключаем кеширование, чтобы запрос выполнялся всегда
+    context: {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`, // Передаем токен в заголовке
+      },
+    },
     onCompleted: () => {
-      logout(); // Вызываем логику выхода из контекста
-      router.push("/");
+      console.log("Logged out successfully");
     },
     onError: (error) => {
       console.error("Error signing out:", error);
@@ -28,11 +32,21 @@ if (!user) return <p>You are not autenticated</p>
 
   const handleLogout = async () => {
     try {
-      await logoutUser(); // Запускаем мутацию
+      // Если ты вызываешь мутацию для выхода, то она будет делать свои действия на сервере
+      await logoutUser(); 
+
+      // Удаляем токены с клиентской стороны (например, из localStorage или cookies)
+      localStorage.removeItem("token");  // Удаляем токен из localStorage
+    
+      // Очищаем пользователя в контексте
+      setUser(null); 
+      router.push("/");
+      console.log("User signed out successfully");
     } catch (error) {
       console.error("Error signing out:", error);
     }
   };
+
 
   return (
     <button onClick={handleLogout} disabled={loading} className={className}>

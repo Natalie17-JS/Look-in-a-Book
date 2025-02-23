@@ -6,6 +6,7 @@ import { generateAccessToken, generateRefreshToken } from "../../auth/auth";
 import { sendVerificationEmail } from "../../sendemails/emailService";
 import { GraphQLError } from "graphql";
 //import { refreshAccessToken } from "../../auth/auth";
+import { cookies } from "next/headers";
 import { getUserFromRequest } from "../../auth/authMiddleware";
 import { userRegisterValidation } from "../../validation/userValidation";
 
@@ -339,11 +340,12 @@ const userResolvers: UserResolvers = {
     
         // Если пользователь удаляет сам себя, удаляем refreshToken из куков (как в logout)
         if (user.id === id) {
-          res.cookies.set("refreshToken", "", {
+          const cookieStore = await cookies();
+          cookieStore.set("refreshToken", "", {
             httpOnly: true,
             sameSite: "lax",
             path: "/",
-            maxAge: 0,
+            maxAge: 0,  // Устанавливаем maxAge в 0, чтобы удалить токен
           });
         }
     
@@ -392,17 +394,17 @@ const userResolvers: UserResolvers = {
           role: user.role,
         });
 
-       // ✅ Устанавливаем refreshToken в cookie
-     
-      res.cookies.set("refreshToken", refreshToken, {
-        httpOnly: true,
-        path: "/",
-        maxAge: 604800, // 7 дней
-        //secure: true,
-        sameSite: "lax",
-});
-        console.log(res.cookies)
-        console.log("Refresh token set:", refreshToken);
+      // ✅ Устанавливаем refreshToken в cookie с использованием cookies() из next/headers
+    const cookieStore = await cookies();
+    cookieStore.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      path: "/",
+      maxAge: 604800, // 7 дней
+      // secure: true, // Включать только на продакшн, если нужен https
+      sameSite: "lax",
+    });
+
+    console.log("Refresh token set:", refreshToken);
 
         return {
           user,
@@ -440,13 +442,14 @@ const userResolvers: UserResolvers = {
     
         console.log("Logging out user:", user.id);
     
-        res.cookies.set("refreshToken", "", {
-          httpOnly: true,
-          sameSite: "lax",
-          path: "/",
-          maxAge: 0,
-        });
-    
+        // Используем cookies() для удаления refreshToken
+    const cookieStore = await cookies();
+    cookieStore.set("refreshToken", "", {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,  // Устанавливаем maxAge в 0, чтобы удалить токен
+    });
         await prisma.user.update({
           where: { id: user.id },
           data: { isOnline: false },
@@ -463,18 +466,3 @@ const userResolvers: UserResolvers = {
 };
 
 export default userResolvers;
-
-/*async logout(_, __, { res }) {
-      try {
-        // Удаление refreshToken из cookie
-        res.setHeader("Set-Cookie", [
-          "refreshToken=; HttpOnly; Path=/; Max-Age=0; Secure; SameSite=Strict",
-        ]);
-
-        return true;
-      } catch (error) {
-        console.error("Error during logout:", error);
-        throw new Error("Failed to logout");
-      }
-    },
-  },*/

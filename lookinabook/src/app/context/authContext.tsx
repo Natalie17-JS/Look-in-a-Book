@@ -1,55 +1,42 @@
 "use client";
+
 import { useState, useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useFetchUser } from "../hooks/useFetchUser"; // Загружаем пользователя
-import { User, CurrentUser } from "../types/userTypes";
+import { CurrentUser } from "../types/userTypes";
 
-interface AuthContextType {
+interface UserContextType {
   user: CurrentUser | null;
+  setUser: React.Dispatch<React.SetStateAction<CurrentUser | null>>;
   loading: boolean;
-  login: (accessToken: string) => void;
-  logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | null>(null);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const router = useRouter();
+export function UserProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<CurrentUser | null>(null);
+  const { user: fetchedUser, loading, refetch } = useFetchUser();
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    if (savedToken) {
-      setAccessToken(savedToken);
+    const token = localStorage.getItem("token");
+    if (token) refetch(); // Загружаем пользователя, если есть токен
+  }, [refetch]);
+
+  useEffect(() => {
+    if (fetchedUser) {
+      setUser(fetchedUser); // Устанавливаем пользователя в контекст
     }
-  }, []);
-
-  // Обновляем пользователя при изменении `accessToken`
-  const { user, loading, refetch } = useFetchUser(accessToken);
-
-  const login = (newAccessToken: string) => {
-    localStorage.setItem("token", newAccessToken);
-    setAccessToken(newAccessToken);
-    console.log("Access token", newAccessToken);
-    refetch(); // Загружаем пользователя заново
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setAccessToken(null);
-    console.log("User signed out successfully");
-    router.push("/"); // Перенаправляем на главную
-  };
+  }, [fetchedUser]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <UserContext.Provider value={{ user, setUser, loading }}>
       {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
+export function useUser() {
+  const context = useContext(UserContext);
+  if (!context) throw new Error("useUser must be used within UserProvider");
   return context;
 }

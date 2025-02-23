@@ -1,6 +1,7 @@
 import { verifyAccessToken, refreshAccessToken } from "./auth"
 import { NextRequest, NextResponse } from "next/server";
 import { CustomRequest } from "../graphql/resolversTypes/UserResolversTypes";
+import { cookies } from "next/headers";
 
 export async function getUserFromRequest(req: CustomRequest, res: NextResponse) {
   const authHeader = req.headers.get("authorization");
@@ -12,7 +13,10 @@ export async function getUserFromRequest(req: CustomRequest, res: NextResponse) 
   } catch (error) {
     console.log("Access token expired, trying to refresh...");
 
-    const refreshToken = res.cookies.get("refreshToken")?.value;
+    // Используем cookies() для доступа к кукис
+    const cookieStore = await cookies();
+    const refreshToken = cookieStore.get("refreshToken")?.value;
+    console.log("Refresh token set in cookies:", refreshToken);
     if (!refreshToken) return null;
 
     try {
