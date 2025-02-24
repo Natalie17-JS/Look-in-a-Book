@@ -135,7 +135,7 @@ const userResolvers: UserResolvers = {
 
   Mutation: {
     // Регистрация нового пользователя
-    async registerUser(_, { username, email, password, bio, avatar }) {
+    async registerUser(_, { username, email, password, bio, avatar}) {
       try {
         // Проверяем входные данные
       const validationResult = userRegisterValidation.safeParse({ username, email, password });
@@ -156,24 +156,24 @@ const userResolvers: UserResolvers = {
         const hashedPassword = await argon2.hash(password);
     
         // Генерируем 6-значный код подтверждения
-        //const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-        //const codeExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // Код действует 24 часа
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const codeExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // Код действует 24 часа
     
         const user = await prisma.user.create({
           data: {
             username,
             email,
             password: hashedPassword,
-            bio,
-            avatar,
+            bio: bio || null,
+            avatar: avatar || null,
             isVerified: false,
-            //verificationCode,
-           // codeExpiresAt,
+            verificationCode,
+            codeExpiresAt,
           },
         });
     
         // Отправляем код на почту
-        //await sendVerificationEmail(email, verificationCode);
+        await sendVerificationEmail(email, verificationCode);
         return user;
       } catch (error) {
         console.error("Error registering user:", error);
@@ -322,9 +322,9 @@ const userResolvers: UserResolvers = {
     // Удаление пользователя
     async deleteUser(_, { id }, { req, res, prisma, user }) {
       try {
-        if (!user) {
-          throw new Error("Not authenticated");
-        }
+        const user = await getUserFromRequest(req, res);
+        if (!user) throw new Error("Not authenticated");
+        
     
         // Если пользователь не админ и пытается удалить не свой аккаунт, запрещаем
         if (user.role !== "ADMIN" && user.id !== id) {

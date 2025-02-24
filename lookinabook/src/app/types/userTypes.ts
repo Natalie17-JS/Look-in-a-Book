@@ -28,10 +28,9 @@ export interface RegisterUserData {
     username: string;
     email: string;
     bio?: string;     // Опционально, если пользователь не ввел
-    avatar?: string;  // Опционально, если не загрузил фото
-    role: string;     // Например, "USER"
-    isVerified: boolean; // Подтвердил email или нет
-    createdAt: string; // Дата регистрации
+    avatar?: string;  // Опционально, если не загрузил фото    
+    /*isVerified: boolean; // Подтвердил email или нет
+    createdAt: string; // Дата регистрации*/
   };
 }
 // Типизация данных формы

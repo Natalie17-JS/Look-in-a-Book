@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./SignInUpForm.module.css";
 import { useMutation } from "@apollo/client";
@@ -7,37 +8,34 @@ import { REGISTER_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
 import { RegisterFormData, RegisterUserData } from "@/app/types/userTypes";
 
 
-export default function RegisterForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    watch,
-  } = useForm<RegisterFormData>({
+export default function RegisterForm({ onSuccess }: { onSuccess: (email: string) => void }) {
+  const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<RegisterFormData>({
     mode: "onChange",
   });
-  const [registerUser, { loading }] = useMutation<RegisterUserData>(REGISTER_USER);
 
-  // Типизация обработчика отправки формы
+  const [registerUser, { loading }] = useMutation<RegisterUserData>(REGISTER_USER);
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const onSubmit: SubmitHandler<RegisterFormData> = async (formData) => {
+    setServerError(null);
     try {
       const { data } = await registerUser({
         variables: {
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          avatar: formData.avatar,
-          bio: formData.bio, 
+          bio: formData.bio || null, // 👈 передаём null, если bio нет
+          avatar: formData.avatar || null, // 👈 передаём null, если avatar нет
         },
       });
 
       if (data?.registerUser) {
-        alert("Registration is successfull!");
-        reset(); // Очистка формы
+        reset(); 
+        onSuccess(formData.email); // Передаём email в родительский компонент
       }
-    } catch (err) {
-      console.error("Regustration error:", err);
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      setServerError(err.message || "Something went wrong!");
     }
   };
 
@@ -99,7 +97,7 @@ export default function RegisterForm() {
             {...register("password", {
               required: "Password is required",
               minLength: {
-                value: 6,
+                value: 8,
                 message: "Password must be at least 8 characters",
               },
             })}

@@ -15,7 +15,7 @@ export type CreateUserArgs = {
   password: string;
   bio?: string;
   avatar?: string;
-  isVerified: boolean;
+  isVerified?: boolean;
   verificationCode: string;
   codeExpiresAt: Date;
   verificationAttempts: number;
