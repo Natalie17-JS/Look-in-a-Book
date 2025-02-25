@@ -1,11 +1,25 @@
-import React from "react";
+"use client"
 
-const EditProfile = () => {
+import { useTheme } from "@/app/context/themeContext";
+import EditProfile from "./components/EditProfile";
+import styles from "./MainPage.module.css"
+
+const EditProfilePage = () => {
+  const {theme} = useTheme()
+
+  const themeClass =
+    theme === "dark"
+      ? styles["dark"]
+      : theme === "gray"
+      ? styles["gray"]
+      : styles["light"];
+
+
   return (
-    <div>
-      <p>Edit your profile</p>
-    </div>
+    <div className={`${styles["edit-profile-container"]} ${themeClass}`}>
+   <EditProfile/>
+   </div>
   );
 };
 
-export default EditProfile;
+export default EditProfilePage;

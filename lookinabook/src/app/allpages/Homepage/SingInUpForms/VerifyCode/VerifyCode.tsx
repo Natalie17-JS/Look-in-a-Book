@@ -1,11 +1,14 @@
+"use client"
+
 import { useState, useRef } from "react";
 import { useMutation } from "@apollo/client";
 import { VERIFY_CODE } from "@/app/GraphqlOnClient/mutations/verifyCodeMutation";
 import { useRouter } from "next/navigation";
+import styles from "./VerifyCode.module.css"
 
 const CODE_LENGTH = 6;
 
-export default function VerifyCodeForm({ email }: { email: string }) {
+export default function VerifyCodeForm({ email, onSuccess }: { email: string; onSuccess: () => void }) {
   const [code, setCode] = useState<string[]>(Array(CODE_LENGTH).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>(new Array(CODE_LENGTH).fill(null));
   const [verifyCode, { loading, error }] = useMutation(VERIFY_CODE);
@@ -39,7 +42,7 @@ export default function VerifyCodeForm({ email }: { email: string }) {
     try {
       const { data } = await verifyCode({ variables: { email, code: fullCode } });
       alert(data.verifyCode); // Выводим сообщение об успешном подтверждении
-      router.push("/"); // Перенаправляем пользователя
+      onSuccess();
     } catch (err) {
       console.error("Verification error:", err);
     }
@@ -48,9 +51,11 @@ export default function VerifyCodeForm({ email }: { email: string }) {
   return (
     <div>
       <h2>Enter the verification code</h2>
-      <div style={{display: "flex", gap: "5px"}}>
+      <p>It was send to your email</p>
+      <div className={styles["code-container"]}>
         {code.map((num, index) => (
           <input
+          className={styles["code-input"]}
             key={index}
             ref={(el) => {
                 inputRefs.current[index] = el;

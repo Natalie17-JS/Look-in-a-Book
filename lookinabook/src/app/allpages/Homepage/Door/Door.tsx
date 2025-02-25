@@ -6,9 +6,14 @@ import { useTheme } from "@/app/context/themeContext";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Door.module.css";
+import { useUser } from "@/app/context/authContext";
+import SignInModal from "../Signin-modal-window/SignInModal";
+import { useState } from "react";
 
 export default function Door() {
   const { theme } = useTheme();
+  const {user} = useUser();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   let doorImage;
   switch (theme) {
@@ -22,24 +27,32 @@ export default function Door() {
       doorImage = doorday;
   }
 
+  const handleClick = () => {
+    if (!user) {
+      setIsModalOpen(true); // Открываем модальное окно, если пользователь не авторизован
+    }
+  };
+
   return (
-    <Link href="/allpages/profile">
-      <div className={styles["door-container"]}>
-        <div className={styles.door}>
-          <Image src={doorImage} alt="door" className={styles["door-image"]} />
-
-          {/*<div className="room-text-container">
-    <p className="door-text">My room</p>
-    </div>*/}
-
-          {/*<div className="welcome-text-container">
-            <p className="door-text">Hello, writer!</p>
-            <p className="door-text">
-              Welcome to our community where you can create wonderful things
-            </p>
-          </div>*/}
+    <>
+      {user ? (
+        <Link href="/allpages/profile">
+          <div className={styles["door-container"]}>
+            <div className={styles.door}>
+              <Image src={doorImage} alt="door" className={styles["door-image"]} />
+            </div>
+          </div>
+        </Link>
+      ) : (
+        <div onClick={handleClick} className={styles["door-container"]}>
+          <div className={styles.door}>
+            <Image src={doorImage} alt="door" className={styles["door-image"]} />
+          </div>
         </div>
-      </div>
-    </Link>
+      )}
+
+      {/* Окно логина */}
+      <SignInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   );
 }

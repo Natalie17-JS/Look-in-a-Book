@@ -1,0 +1,12 @@
+.code-container {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+}
+.code-input {
+    width: 100px;
+    height: 100px;
+    font-size: 50px;
+    text-align: center;
+    background-color: rgb(211, 211, 211);
+}

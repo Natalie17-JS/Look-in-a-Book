@@ -32,7 +32,7 @@ interface ThemeProviderProps {
 
 // Создаем провайдер контекста
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>("light"); // Начальная тема — 'light'
+  const [theme, setTheme] = useState<Theme>("dark"); // Начальная тема — 'light'
 
   const toggleTheme = (newTheme: Theme) => {
     setTheme(newTheme);

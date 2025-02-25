@@ -46,3 +46,22 @@ export const LOGOUT_USER = gql`
     logoutUser
   }
 `;
+
+export const UPDATE_USER = gql`
+ mutation UpdateUser($id: Int!, $username: String, $email: String, $password: String, $bio: String) {
+    updateUser(id: $id, username: $username, email: $email, password: $password, bio: $bio) {
+      id
+      username
+      email
+      bio
+    }
+  }
+    `
+
+  export const DELETE_USER = gql `
+    mutation DeleteUser($id: Int!) {
+    deleteUser(id: $id) {
+      id
+    }
+  }
+  `

@@ -55,3 +55,10 @@ export interface CurrentUser {
     avatar?: string;  
     role:  "USER" | "ADMIN";
 }
+
+export interface EditFormData {
+  username: string;
+  email: string;
+  password?: string;
+  bio?: string;
+}

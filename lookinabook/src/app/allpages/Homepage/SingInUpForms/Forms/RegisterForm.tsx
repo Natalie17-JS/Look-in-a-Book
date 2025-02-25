@@ -100,6 +100,11 @@ export default function RegisterForm({ onSuccess }: { onSuccess: (email: string)
                 value: 8,
                 message: "Password must be at least 8 characters",
               },
+              pattern: {
+                value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
+                message:
+                  "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+              },
             })}
           />
           {errors.password && (
