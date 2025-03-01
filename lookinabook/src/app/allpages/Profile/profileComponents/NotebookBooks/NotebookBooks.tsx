@@ -5,6 +5,7 @@ import { useState } from "react";
 import AuthorsBooksPile from "../AuthorsBooks/AuthorsBooks";
 import AuthorsBooksCarousel from "../AuthorBooksList/BooksCarousel";
 import styles from "./NotebookBooks.module.css";
+import Link from "next/link";
 
 export default function NotebookBooks() {
   // Состояние для переключения между отображением <Notebook /> и <AuthorsBooks /> или <BooksList />
@@ -20,7 +21,9 @@ export default function NotebookBooks() {
       {showBooksList ? (
         // Показать <BooksList /> если showBooksList = true
         <div className={styles["books-list-container"]}>
+          <Link href="/allpages/profile/new-book">
           <button className={styles["add-book-btn"]}>Add book</button>
+          </Link>
           <AuthorsBooksCarousel />
         </div>
       ) : (

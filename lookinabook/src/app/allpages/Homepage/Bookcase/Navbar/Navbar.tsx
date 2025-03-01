@@ -1,4 +1,5 @@
 import styles from "./Navbar.module.css";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -8,10 +9,14 @@ const Navbar = () => {
           <div className={styles.tag}></div>
           <p>About us</p>
         </div>
+
+        <Link href="/allpages/books">
         <div className={styles.menubox}>
           <div className={styles.tag}></div>
           <p>Books</p>
         </div>
+        </Link>
+
         <div className={styles.menubox}>
           <div className={styles.tag}></div>
           <p>Authors</p>

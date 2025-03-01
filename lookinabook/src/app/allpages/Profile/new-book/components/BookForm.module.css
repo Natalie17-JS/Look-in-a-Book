@@ -1,0 +1,43 @@
+.create-book-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    margin: 0 auto;
+    width: 60%;
+    padding: 20px;
+}
+
+.book-cover {
+    width: 150px;
+    height: 200px;
+    background-color: rgb(252, 190, 167);
+    border-radius: 10px;
+    border: 1px solid rgb(78, 42, 16);
+}
+.create-book-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.create-book-input,
+.textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .textarea {
+    height: 100px;
+  }
+  .create-book-btn {
+    margin-top: 15px;
+    padding: 10px;
+    background: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
