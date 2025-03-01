@@ -4,14 +4,12 @@ import { IContext } from "./UserResolversTypes";
 
 export type CreateBookArgs = {
   title: string;
-  annotation: string;
-  authorId: number;
+  annotation?: string;
   cover?: string;
 };
 
 export type UpdateBookArgs = {
     id: number;
-    authorId: number;
     title?: string;
     annotation?: string;
     cover?: string;
@@ -19,7 +17,6 @@ export type UpdateBookArgs = {
 
 export type DeleteBookArgs = {
     id: number; 
-    authorId: number;
   };
 
   export type BookResolvers = {
