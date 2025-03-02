@@ -17,7 +17,8 @@ type Book {
     updatedAt: DateTime!
 }
     type Query {
-    getBook(id: Int!): Book
+    getBookById(id: Int!): Book
+    getBookBySlug(slug: String!): Book
     getBooks: [Book!]
 }
 

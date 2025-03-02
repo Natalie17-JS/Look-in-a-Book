@@ -1,0 +1,35 @@
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    font-size: 18px;
+    color: red;
+  }
+  
+  .bookList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .bookCard {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f9f9f9;
+  }
+  
+  .bookCard h2 {
+    margin: 0 0 10px;
+    font-size: 20px;
+  }
+  
+  .annotation {
+    font-style: italic;
+    color: #555;
+  }
+  

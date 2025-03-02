@@ -30,13 +30,16 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
     if (book) {
       setValue("title", book.title);
       setValue("annotation", book.annotation || "");
+      setValue("cover", book.cover || "");
     }
   }, [book, setValue]);
 
   const [createBook] = useMutation<CreateBookData>(CREATE_BOOK);
   const [updateBook] = useMutation<EditBookData>(UPDATE_BOOK);
 
-  const onSubmit = async (data: { title: string; annotation?: string }) => {
+
+  const onSubmit = async (data: { title: string; annotation?: string; cover?: string }) => {
+   
     if (!user) {
       setErrorMessage("You must be logged in.");
       return;
@@ -46,7 +49,12 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
       if (isEditing) {
         await updateBook({ variables: { id: book?.id, ...data } });
       } else {
-        await createBook({ variables: data });
+        await createBook({ variables: {
+          title: data.title,
+          annotation: data.annotation || null,
+          cover: data.cover || null,
+          //userId: user.id, 
+        }, });
         reset();
       }
     } catch (error) {

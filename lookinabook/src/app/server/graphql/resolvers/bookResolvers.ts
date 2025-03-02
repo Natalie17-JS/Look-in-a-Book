@@ -8,18 +8,15 @@ const bookResolvers: BookResolvers = {
 DateTime,
 
 Query: {
-    async getBook (_, { id }) {
+    async getBookById (_, { id }) {
         try {
             const book = await prisma.book.findUnique({
                 where: { id },
-                /*include: {
-                  chapters: true,
-                  comments: true, 
-                  likes: true,    
+                include: {
                   author: {        
                       select: { id: true, username: true } 
                   }
-              }*/
+              }
             });
             return book;
         } catch (error) {
@@ -27,6 +24,28 @@ Query: {
             throw new Error("Failed to fetch book");
           }
     },
+    async getBookBySlug(_, { slug }) {
+      try {
+          const book = await prisma.book.findUnique({
+              where: { slug }, // Поиск по slug вместо id
+              include: {
+                  author: {        
+                      select: { id: true, username: true } 
+                  }
+              }
+          });
+  
+          if (!book) {
+              throw new Error("Book not found");
+          }
+  
+          return book;
+      } catch (error) {
+          console.error("Error fetching book by slug:", error);
+          throw new Error("Failed to fetch book");
+      }
+  },
+  
     async getBooks() {
         try {
             const books = await prisma.book.findMany({

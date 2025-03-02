@@ -1,11 +1,15 @@
-import GetBooks from "./components/AllBooks"
+import Books from "./components/AllBooks"
+import Link from "next/link"
 
-export default function Books() {
+export default function BooksPage() {
 
     return (  
     <div>
-        <h1>All Books</h1>
-        <GetBooks />
+       
+        <Books />
+        <Link href="/">
+        <button>Back to homepage</button>
+        </Link>
     </div>
     ) 
 }

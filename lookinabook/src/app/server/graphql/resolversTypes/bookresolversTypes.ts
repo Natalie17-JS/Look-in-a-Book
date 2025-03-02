@@ -21,7 +21,8 @@ export type DeleteBookArgs = {
 
   export type BookResolvers = {
     Query: {
-      getBook: (parent: unknown, args: { id: number }) => Promise<Book | null>;
+      getBookById: (parent: unknown, args: { id: number }) => Promise<Book | null>;
+      getBookBySlug: (parent: unknown, args: { slug: string }) => Promise<Book | null>;
       getBooks: () => Promise<Book[]>;
     };
     Mutation: {

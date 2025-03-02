@@ -19,8 +19,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) refetch(); // Загружаем пользователя, если есть токен
-  }, [refetch]);
+    if (token && !user) {
+      refetch();
+    }
+  }, [user, refetch]);
 
   useEffect(() => {
     if (fetchedUser) {
