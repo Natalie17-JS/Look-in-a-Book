@@ -67,7 +67,7 @@ Query: {
 },
 
 Mutation: {
-  async createBook(_, { title, annotation, cover }, { req, res, prisma }) {
+  async createBook(_, { title, annotation, cover, category, genre }, { req, res, prisma }) {
     try {
       // Получаем текущего пользователя из запроса
       const user = await getUserFromRequest(req, res);
@@ -82,9 +82,11 @@ Mutation: {
       const newBook = await prisma.book.create({
         data: {
           title,
-          annotation: annotation || null,  // Обработка null значений
+          annotation: annotation || null, // Обработка null значений
           cover: cover || null,            // Обработка null значений
           slug,
+          category, // Добавляем категорию
+          genre,    // Добавляем жанр
           author: { connect: { id: user.id } }, // Используем id текущего пользователя
         },
         include: {
@@ -100,7 +102,6 @@ Mutation: {
       throw new Error("Failed to create book");
     }
   },
-  
 
   async updateBook(_, { id, title, annotation, cover }, { req, res, user }) {
     try {

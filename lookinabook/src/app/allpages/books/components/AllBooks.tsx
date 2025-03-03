@@ -21,7 +21,8 @@ export default function Books() {
           <Link href={`/allpages/books/${book.slug}`}>
             <h2>{book.title}</h2>
             </Link>
-            <p className={styles.annotation}>{book.annotation || "No annotation"}</p>
+            <p>{book.slug}</p>
+            <p className={styles.annotation}>{book?.annotation || "No annotation"}</p>
             <p><strong>Author:</strong> {book?.author.username}</p>
             <p><small>{new Date(book.createdAt).toLocaleDateString()}</small></p>
           </div>

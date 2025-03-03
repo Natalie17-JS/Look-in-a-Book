@@ -6,6 +6,7 @@ export const GET_BOOKS = gql `
             id
             title
             annotation
+            slug
             author {
                 username
             }

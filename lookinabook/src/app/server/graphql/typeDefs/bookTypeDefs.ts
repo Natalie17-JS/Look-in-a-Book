@@ -1,6 +1,25 @@
 const bookTypeDefs = `
 scalar DateTime
 
+enum Category {
+  FICTION
+  NON_FICTION
+}
+
+enum Genre {
+  DRAMA
+  ADVENTURE
+  SCIENCE_FICTION
+  POST_APOCALYPSE
+  APOCALYPSE
+  HUMOR
+  HISTORY
+  SHORT_STORY
+  POETRY
+  DETECTIVE
+  THRILLER
+}
+
 type Book {
     id: Int!
     title: String!
@@ -8,6 +27,8 @@ type Book {
     slug: String!
     cover: String
     author: User!
+    category: Category!
+    genre: Genre!
 
     #chapters: [Chapter!]
     #comments: [Comment!]

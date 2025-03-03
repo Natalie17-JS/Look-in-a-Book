@@ -62,6 +62,8 @@ model Book {
   annotation  String?                                // Annotation (optional)
   slug        String   @unique                      // Unique slug for the book
   cover       String?                               // URL of the book cover
+  category    Category
+  genre       Genre
   createdAt   DateTime @default(now())              // Creation date
   updatedAt   DateTime @updatedAt                   // Modification date
 
@@ -71,6 +73,24 @@ model Book {
   chapters    Chapter[]
   comments    Comment[]
   likes       Like[]
+}
+enum Category {
+  FICTION
+  NON_FICTION
+}
+
+enum Genre {
+  DRAMA
+  ADVENTURE
+  SCIENCE_FICTION
+  POST_APOCALYPSE
+  APOCALYPSE
+  HUMOR
+  HISTORY
+  SHORT_STORY
+  POETRY
+  DETECTIVE
+  THRILLER
 }
 
 model Chapter {
