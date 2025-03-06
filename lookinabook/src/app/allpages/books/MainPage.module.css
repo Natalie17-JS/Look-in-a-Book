@@ -1,0 +1,15 @@
+.books-container.light {
+    background-color: white;
+  }
+  .books-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .books-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .books-container {
+    width: auto;
+    height: 100%;
+  }

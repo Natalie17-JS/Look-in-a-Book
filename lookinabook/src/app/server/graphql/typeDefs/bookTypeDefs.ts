@@ -48,7 +48,7 @@ type DeleteResponse {
 }
 
 type Mutation {
-    createBook(title: String!, annotation: String, cover: String): Book!
+    createBook(title: String!, annotation: String, cover: String, category: Category!, genre: Genre!): Book!
     updateBook(id: Int!, title: String, annotation: String, slug: String, cover: String): Book!
     deleteBook(id: Int!): DeleteResponse!
 }

@@ -1,3 +1,4 @@
+import { Category, Genre } from "@prisma/client";
 import { getUserFromRequest } from "../../auth/authMiddleware";
 import { BookResolvers } from "../resolversTypes/bookResolversTypes"
 import { DateTime } from "../resolversTypes/dateTime";
@@ -103,7 +104,7 @@ Mutation: {
     }
   },
 
-  async updateBook(_, { id, title, annotation, cover }, { req, res, user }) {
+  async updateBook(_, { id, title, annotation, cover, category, genre }, { req, res, user }) {
     try {
       const user = await getUserFromRequest(req, res);
       if (!user) {
@@ -121,7 +122,7 @@ Mutation: {
         throw new Error("You are not allowed to update this book");
       }
   
-      let updatedFields: { title?: string; annotation?: string; cover?: string; slug?: string } = {};
+      let updatedFields: { title?: string; annotation?: string; cover?: string; slug?: string, category?: Category, genre?: Genre } = {};
         
   
       if (title) {
@@ -130,6 +131,8 @@ Mutation: {
       }
       if (annotation) updatedFields.annotation = annotation;
       if (cover) updatedFields.cover = cover;
+      if (category) updatedFields.category = category;
+      if (genre) updatedFields.genre = genre;
   
       const updatedBook = await prisma.book.update({
         where: { id },

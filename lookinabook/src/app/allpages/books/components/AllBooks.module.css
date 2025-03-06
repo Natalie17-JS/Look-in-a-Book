@@ -1,7 +1,21 @@
+.book-composition {
+  display: flex;
+  gap: 20px;
+}
+
+.cover {
+  width: 150px;
+  height: 200px;
+  background-color: rgb(222, 222, 222);
+  /*background: url('book-cover.jpg') no-repeat center;
+  background-size: cover;*/
+}
 .container {
-    padding: 20px;
+    padding-block: 20px;
     max-width: 800px;
     margin: auto;
+    border: 20px solid rgb(118, 61, 26);
+    margin-top: 100px;
   }
   
   .loading, .error {
@@ -13,14 +27,14 @@
   .bookList {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    /*gap: 15px;*/
   }
   
   .bookCard {
-    border: 1px solid #ddd;
+    border-block: 10px solid  rgb(118, 61, 26);
     padding: 15px;
-    border-radius: 8px;
-    background: #f9f9f9;
+    /*border-radius: 8px;*/
+    /*background: #f9f9f9;*/
   }
   
   .bookCard h2 {

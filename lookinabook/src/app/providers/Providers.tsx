@@ -10,9 +10,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ApolloProvider client={client}>
       <UserProvider>
-        <BookProvider>
+      
       <ThemeProvider>{children}</ThemeProvider>
-      </BookProvider>
+  
       </UserProvider>
     </ApolloProvider>
   );
