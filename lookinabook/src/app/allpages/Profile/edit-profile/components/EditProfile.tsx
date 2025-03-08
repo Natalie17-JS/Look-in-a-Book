@@ -12,7 +12,6 @@ import DeleteAccount from "./DeleteProfile";
 import toast from 'react-hot-toast';
 import { useTheme } from "@/app/context/themeContext";
 
-
 export default function EditProfile() {
   const {theme} = useTheme();
   const { user } = useUser();
@@ -66,6 +65,8 @@ export default function EditProfile() {
   };
 
   return (
+  
+     
     <div className={styles.container}>
       <h2 className={styles["header-text"]}>Edit profile</h2>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -97,5 +98,8 @@ export default function EditProfile() {
       {error && <p className={styles.error}>Error: {error.message}</p>}
       {data && <p className={styles.success}>Profile is updated!</p>}
     </div>
+
+   
+ 
   );
 }

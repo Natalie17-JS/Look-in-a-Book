@@ -41,7 +41,11 @@ const userResolvers: UserResolvers = {
     // Получить список всех пользователей
     async getUsers() {
       try {
-        return await prisma.user.findMany();
+        return await prisma.user.findMany({
+          include:{
+            books: true
+          }
+        });
       } catch (error) {
         console.error("Error fetching users:", error);
         throw new Error("Failed to fetch users");

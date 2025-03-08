@@ -1,8 +1,8 @@
 .create-book-form-container {
-    display: flex;
+    /*display: flex;
     flex-direction: column;
     gap: 15px;
-    justify-content: center;
+    justify-content: center;*/
     margin: 0 auto;
     width: 60%;
     padding: 20px;

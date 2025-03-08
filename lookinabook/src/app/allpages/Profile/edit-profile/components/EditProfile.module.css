@@ -1,6 +1,7 @@
 .container {
-    max-width: 800px;
-    margin: 0 auto;
+    /*max-width: 800px;*/
+    width: 50%;
+    /*margin: 0 auto;*/
     padding: 20px;
     /*background: #f9f9f9;*/
     border-radius: 8px;
@@ -73,5 +74,9 @@
   .success {
     color: green;
     text-align: center;
+  }
+
+  .edit-profile-container {
+    display: flex;
   }
   

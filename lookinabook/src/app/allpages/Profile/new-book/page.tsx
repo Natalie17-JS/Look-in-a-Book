@@ -3,6 +3,7 @@
 import BookForm from "./components/BookForm";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./MainPage.module.css"
+import SideShelf from "../profileComponents/SideShelf/SideShelf";
 
 export default function CreateBookPage() {
     const {theme} = useTheme()
@@ -18,6 +19,7 @@ export default function CreateBookPage() {
         <div className={`${styles["create-book-container"]} ${themeClass}`}>
             
             <BookForm isEditing={false} />
+            <SideShelf/>
            
         </div>
     );

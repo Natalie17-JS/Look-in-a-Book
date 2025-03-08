@@ -17,10 +17,13 @@ const Navbar = () => {
         </div>
         </Link>
 
+        <Link href="/allpages/authors">
         <div className={styles.menubox}>
           <div className={styles.tag}></div>
           <p>Authors</p>
         </div>
+        </Link>
+        
         <div className={styles.menubox}>
           <div className={styles.tag}></div>
           <p>Blog</p>

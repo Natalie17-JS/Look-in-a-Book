@@ -1,5 +1,5 @@
 .sidewindow {
-  flex-basis: 15%; /* Боковое окно занимает ровно 50% пространства */
+  flex-basis: 20%; /* Боковое окно занимает ровно 50% пространства */
   flex-shrink: 0; /* Не даём уменьшаться */
   display: flex;
   justify-content: center;

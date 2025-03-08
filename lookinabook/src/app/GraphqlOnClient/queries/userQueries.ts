@@ -12,3 +12,13 @@ export const GET_CURRENT_USER = gql`
     }
   }
 `;
+
+export const GET_USERS = gql`
+  query GetUsers {
+    getUsers {
+      id
+      username
+      
+    }
+  }
+`

@@ -62,3 +62,8 @@ export interface EditFormData {
   password?: string;
   bio?: string;
 }
+
+export interface UsersData {
+  id: number;
+  username: string;
+}
