@@ -3,6 +3,9 @@
 import { useParams } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { GET_BOOK_BY_SLUG } from "@/app/GraphqlOnClient/queries/bookQueries";
+import Image from "next/image";
+import window from "@/app/images/small-window.svg"
+import flowers from "@/app/images/flowers-on-shelf-1.svg"
 //import { Book } from "@/app/types/bookTypes";
 import styles from "./GetBook.module.css"
 
@@ -37,12 +40,34 @@ export default function Book() {
       <h1>Title: {title}</h1>
       <p>{annotation || "No annotation available"}</p>
       <p>Author: {author?.username || "Unknown"}</p>
+<div className={styles["table-outer-container"]}>
 
       <div className={styles["table-container"]}>
+        
+        <div className={styles["things-on-table"]}>
+          
+          <div className={styles["shelf-and-cover"]}>
+            <div className={styles["small-shelf"]}>
+              <Image src={flowers} alt="flowers" className={styles["flowers-image"]} />
+            </div>
+          <div className={styles.cover}></div>
+          </div>
+          
+            <Image src={window} alt="Small window" className={styles["window-image"]}/>
+       
+          <div className={styles["book-info"]}>
+
+          </div>
+        </div>
+
       <div className={styles.table}>
+        <div className={styles["table-shelf"]}></div>
+        <div className={styles["table-shelf"]}></div>
+      </div>
 
       </div>
-      </div>
+
+    </div>
 
     </div>
   );

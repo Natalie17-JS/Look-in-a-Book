@@ -1,18 +1,86 @@
-.table-container {
-    width: 70vw;
-    height: 80vh;
-    border: 1px solid red;
+.table-outer-container {
     display: flex;
     align-items: flex-end;
+   width: 70vw;
+    height: 100%;
+    border: 1px solid red;
+    margin: 0 auto;
+}
+
+.table-container {
+   width: 100%;
+   height: 40%;
+   /* display: flex;
+    align-items: flex-end;*/
+    
 }
 
 .table {
-   width: 80%;
-   height: 40%;
+   width: 95%;
+   height: 150px;
     background-color: rgb(93, 62, 32);
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+ 
     justify-content: center;
     
+    
+}
+
+.table-shelf {
+    width: 50%;
+    height: auto;
+    border: 35px solid rgb(132, 89, 46);
+}
+
+.things-on-table {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+    /*border: 1px solid black;*/
+    margin: 0 auto;
+}
+
+.cover {
+    width: 220px;
+    height: 300px;
+    background-color: chocolate;
+    border: 1px solid rgb(86, 45, 16);
+    border-radius: 8px;
+}
+.window {
+    width:100%;
+    border: 1px solid orange;
+    display: flex;
+    justify-content: center;
+
+}
+.window-image {
+    width: 35%;
+    height: auto;
+    /*border: 1px solid purple;*/
+}
+
+.book-info {
+    width: 30%;
+    height: 450px;
+    border: 15px solid rgb(132, 89, 46);
+    background-color: rgb(93, 62, 32);
+}
+.shelf-and-cover {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.flowers-image {
+    width: 60%;
+    height: auto;
+}
+
+.small-shelf {
+    width: 80%;
+    height: 200px;
+    border-bottom: 15px solid brown;
 }
