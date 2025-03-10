@@ -1,6 +1,17 @@
 const bookTypeDefs = `
 scalar DateTime
 
+enum PStatus {
+  DRAFT
+  PUBLISHED
+  
+}
+
+enum WStatus {
+  ONGOING
+  COMPLETED
+}
+
 enum Category {
   FICTION
   NON_FICTION
@@ -29,6 +40,8 @@ type Book {
     author: User!
     category: Category!
     genre: Genre!
+    publishStatus: PStatus!
+    writingStatus: WStatus!
 
     #chapters: [Chapter!]
     #comments: [Comment!]
@@ -41,6 +54,7 @@ type Book {
     getBookById(id: Int!): Book
     getBookBySlug(slug: String!): Book
     getBooks: [Book!]
+    getMyBooks: [Book!]
 }
 
 type DeleteResponse {
@@ -48,8 +62,30 @@ type DeleteResponse {
 }
 
 type Mutation {
-    createBook(title: String!, annotation: String, cover: String, category: Category!, genre: Genre!): Book!
-    updateBook(id: Int!, title: String, annotation: String, slug: String, cover: String): Book!
+    createBook(
+    title: String!, 
+    annotation: String, 
+    cover: String, 
+    category: Category!, 
+    genre: Genre!, 
+    publishStatus: PStatus!,
+    writingStatus: WStatus!
+     ): Book!
+
+    updateBook(
+    id: Int!, 
+    title: String, 
+    annotation: String, 
+    slug: String, 
+    cover: String,
+    category: Category, 
+    genre: Genre, 
+    publishStatus: PStatus,
+    writingStatus: WStatus!
+    ): Book!
+
+    publishBook(slug: String!): Book
+
     deleteBook(id: Int!): DeleteResponse!
 }
 `

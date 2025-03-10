@@ -27,7 +27,19 @@ export type CreateBookArgs = {
   cover?: string;
   genre: Genre;
   category: Category;
+  publishStatus: PublishStatus;
+  writingStatus: WritingStatus;
 };
+
+export enum PublishStatus {
+  PUBLISHED = "PUBLISHED",
+  DRAFT = "DRAFT",
+}
+
+export enum WritingStatus {
+  ONGOING = "ONGOING",
+  COMPLETED = "COMPLETED",
+}
 
 export type UpdateBookArgs = {
     id: number;
@@ -36,6 +48,8 @@ export type UpdateBookArgs = {
     cover?: string;
     genre?: Genre;
     category?: Category;
+    publishStatus?: PublishStatus;
+    writingStatus?: WritingStatus;
 }
 
 export type DeleteBookArgs = {
@@ -47,6 +61,7 @@ export type DeleteBookArgs = {
       getBookById: (parent: unknown, args: { id: number }) => Promise<Book | null>;
       getBookBySlug: (parent: unknown, args: { slug: string }) => Promise<Book | null>;
       getBooks: () => Promise<Book[]>;
+      getMyBooks: (parent: unknown, args: unknown, context: IContext) => Promise<Book[]>;
     };
     Mutation: {
       createBook: (
@@ -58,6 +73,12 @@ export type DeleteBookArgs = {
       updateBook: (
         parent: unknown, 
         args: UpdateBookArgs, 
+        context: IContext
+      ) => Promise<Book>;
+
+      publishBook: (
+        parent: unknown, 
+        args: { slug: string }, 
         context: IContext
       ) => Promise<Book>;
   

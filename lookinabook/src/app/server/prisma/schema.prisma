@@ -57,15 +57,17 @@ enum Role {
 }
 
 model Book {
-  id          Int      @id @default(autoincrement()) // Unique book identifier
-  title       String                                 // Book title
-  annotation  String?                                // Annotation (optional)
-  slug        String   @unique                      // Unique slug for the book
-  cover       String?                               // URL of the book cover
-  category    Category
-  genre       Genre
-  createdAt   DateTime @default(now())              // Creation date
-  updatedAt   DateTime @updatedAt                   // Modification date
+  id              Int      @id @default(autoincrement()) // Unique book identifier
+  title           String                                 // Book title
+  annotation      String?                                // Annotation (optional)
+  slug            String   @unique                      // Unique slug for the book
+  cover           String?                               // URL of the book cover
+  category        Category
+  genre           Genre
+  createdAt       DateTime @default(now())              // Creation date
+  updatedAt       DateTime @updatedAt                   // Modification date
+  publishStatus   PStatus  @default(DRAFT)
+  writingStatus   WStatus  @default(ONGOING)
 
   // Relations
   authorId    Int                                   // Author ID
@@ -74,6 +76,17 @@ model Book {
   comments    Comment[]
   likes       Like[]
 }
+
+enum PStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum WStatus {
+  ONGOING
+  COMPLETED
+}
+
 enum Category {
   FICTION
   NON_FICTION

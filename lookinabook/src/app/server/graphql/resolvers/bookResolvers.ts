@@ -1,4 +1,4 @@
-import { Category, Genre } from "@prisma/client";
+import { Category, Genre, PStatus, WStatus } from "@prisma/client";
 import { getUserFromRequest } from "../../auth/authMiddleware";
 import { BookResolvers } from "../resolversTypes/bookResolversTypes"
 import { DateTime } from "../resolversTypes/dateTime";
@@ -39,7 +39,7 @@ Query: {
           if (!book) {
               throw new Error("Book not found");
           }
-  
+
           return book;
       } catch (error) {
           console.error("Error fetching book by slug:", error);
@@ -50,6 +50,9 @@ Query: {
     async getBooks() {
         try {
             const books = await prisma.book.findMany({
+              where: {
+                publishStatus: "PUBLISHED",
+              },
               include: {
                 /*chapters: true,  
                 comments: true,   
@@ -64,11 +67,23 @@ Query: {
             console.error("Error fetching books:", error);
             throw new Error("Failed to fetch books");
         }
-    }
+    },
+    getMyBooks: async (_, __, { prisma, req, res,}) => {
+      const user = await getUserFromRequest(req, res);
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+
+      return await prisma.book.findMany({
+        where: {
+          authorId: user.id, // Только книги текущего пользователя
+        },
+      });
+    },
 },
 
 Mutation: {
-  async createBook(_, { title, annotation, cover, category, genre }, { req, res, prisma }) {
+  async createBook(_, { title, annotation, cover, category, genre, publishStatus, writingStatus }, { req, res, prisma }) {
     try {
       // Получаем текущего пользователя из запроса
       const user = await getUserFromRequest(req, res);
@@ -88,6 +103,8 @@ Mutation: {
           slug,
           category, // Добавляем категорию
           genre,    // Добавляем жанр
+          publishStatus,
+          writingStatus,
           author: { connect: { id: user.id } }, // Используем id текущего пользователя
         },
         include: {
@@ -104,7 +121,7 @@ Mutation: {
     }
   },
 
-  async updateBook(_, { id, title, annotation, cover, category, genre }, { req, res, user }) {
+  async updateBook(_, { id, title, annotation, cover, category, genre, publishStatus, writingStatus }, { req, res, user }) {
     try {
       const user = await getUserFromRequest(req, res);
       if (!user) {
@@ -122,7 +139,16 @@ Mutation: {
         throw new Error("You are not allowed to update this book");
       }
   
-      let updatedFields: { title?: string; annotation?: string; cover?: string; slug?: string, category?: Category, genre?: Genre } = {};
+      let updatedFields: { 
+        title?: string; 
+        annotation?: string; 
+        cover?: string; 
+        slug?: string, 
+        category?: Category, 
+        genre?: Genre,
+        publishStatus?: PStatus;
+        writingStatus?: WStatus;
+      } = {};
         
   
       if (title) {
@@ -133,6 +159,8 @@ Mutation: {
       if (cover) updatedFields.cover = cover;
       if (category) updatedFields.category = category;
       if (genre) updatedFields.genre = genre;
+      if (publishStatus) updatedFields.publishStatus = publishStatus;
+      if (writingStatus) updatedFields.writingStatus = writingStatus;
   
       const updatedBook = await prisma.book.update({
         where: { id },
@@ -146,6 +174,44 @@ Mutation: {
       throw new Error("Failed to update book");
     }
   },
+  
+  async publishBook(_, { slug }, { req, res }) {
+    try {
+      const user = await getUserFromRequest(req, res);
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+
+      const book = await prisma.book.findUnique({ where: { slug } });
+
+      if (!book) {
+        throw new Error("Book not found");
+      }
+
+      // Проверяем, является ли пользователь автором книги
+      if (user.id !== book.authorId) {
+        throw new Error("You are not allowed to publish this book");
+      }
+
+      // Проверяем, что книга находится в статусе "DRAFT"
+      if (book.publishStatus === "PUBLISHED") {
+        throw new Error("This book is already published");
+      }
+
+      // Обновляем статус на "PUBLISHED"
+      const updatedBook = await prisma.book.update({
+        where: { slug },
+        data: { publishStatus: "PUBLISHED" },
+        include: { author: true }, // Возвращаем автора книги
+      });
+
+      return updatedBook;
+    } catch (error) {
+      console.error("Error publishing book:", error);
+      throw new Error("Failed to publish book");
+    }
+  },
+
   
         
           async deleteBook(_, { id }, { user, req, res, prisma }) {

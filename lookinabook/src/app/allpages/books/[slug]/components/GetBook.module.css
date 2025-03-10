@@ -2,14 +2,14 @@
     display: flex;
     align-items: flex-end;
    width: 70vw;
-    height: 100%;
-    border: 1px solid red;
+    height: 100vh;
+    /*border: 1px solid red;*/
     margin: 0 auto;
 }
 
 .table-container {
    width: 100%;
-   height: 40%;
+   height: auto;
    /* display: flex;
     align-items: flex-end;*/
     
@@ -46,7 +46,7 @@
 .cover {
     width: 220px;
     height: 300px;
-    background-color: chocolate;
+    background-color: rgb(232, 175, 134);
     border: 1px solid rgb(86, 45, 16);
     border-radius: 8px;
 }
@@ -55,19 +55,61 @@
     border: 1px solid orange;
     display: flex;
     justify-content: center;
-
+    
 }
 .window-image {
     width: 35%;
     height: auto;
     /*border: 1px solid purple;*/
+    flex-shrink: 0;
 }
 
 .book-info {
-    width: 30%;
+    width: 35%;
     height: 450px;
-    border: 15px solid rgb(132, 89, 46);
+    border-inline: 15px solid rgb(132, 89, 46);
+    border-top: 15px solid rgb(132, 89, 46);
     background-color: rgb(93, 62, 32);
+    display: flex;
+    flex-direction: column;
+}
+.book-title {
+    width: 100%;
+    height: 15%;
+    border-bottom: 15px solid rgb(132, 89, 46);
+}
+.title{
+    text-align: center;
+}
+.uzor-image {
+    width: 100%;
+    height: auto;
+    /*border: 1px solid green;*/
+    margin-top: -50px;
+}
+.book-main-info {
+    width: 100%;
+    height: 25%;
+    border-bottom: 15px solid rgb(132, 89, 46);
+}
+.book-annotation {
+    width: 100%;
+    height: 60%;
+    border-bottom: 15px solid rgb(132, 89, 46);
+    position: relative;
+}
+.plakat-image {
+    width: 100%;
+    height: auto;
+   
+    /*border: 1px solid blue;*/
+}
+.annotation {
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 20%;
+    left: 10%;
 }
 .shelf-and-cover {
     display: flex;
@@ -82,5 +124,9 @@
 .small-shelf {
     width: 80%;
     height: 200px;
-    border-bottom: 15px solid brown;
+    border-bottom: 15px solid rgb(132, 89, 46);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
 }

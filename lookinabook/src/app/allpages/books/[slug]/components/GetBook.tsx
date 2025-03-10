@@ -6,12 +6,14 @@ import { GET_BOOK_BY_SLUG } from "@/app/GraphqlOnClient/queries/bookQueries";
 import Image from "next/image";
 import window from "@/app/images/small-window.svg"
 import flowers from "@/app/images/flowers-on-shelf-1.svg"
+import uzor from "@/app/images/zavitushka.svg"
+import plakat from "@/app/images/annot-plakat-night.svg"
 //import { Book } from "@/app/types/bookTypes";
 import styles from "./GetBook.module.css"
 
 export default function Book() {
   const params = useParams(); // Получаем slug
-  console.log("Params:", params); // Проверь в консоли
+  console.log("Params:", params); 
 
   const slug = params?.slug; // Достаем slug
   if (!slug) return <p>Loading...</p>; // Защита от undefined
@@ -36,10 +38,7 @@ export default function Book() {
   const { title, annotation, author } = data.getBookBySlug;
 
   return (
-    <div>
-      <h1>Title: {title}</h1>
-      <p>{annotation || "No annotation available"}</p>
-      <p>Author: {author?.username || "Unknown"}</p>
+   
 <div className={styles["table-outer-container"]}>
 
       <div className={styles["table-container"]}>
@@ -56,7 +55,17 @@ export default function Book() {
             <Image src={window} alt="Small window" className={styles["window-image"]}/>
        
           <div className={styles["book-info"]}>
-
+            <div className={styles["book-title"]}>
+            <h1 className={styles.title}>{title}</h1>
+            <Image src={uzor} alt="uzor" className={styles["uzor-image"]}/>
+            </div>
+            <div className={styles["book-main-info"]}>
+            <p>Author: {author?.username || "Unknown"}</p>
+            </div>
+            <div className={styles["book-annotation"]}>
+            <Image src={plakat} alt="plakat" className={styles["plakat-image"]}/>
+            <p className={styles.annotation}>{annotation || "No annotation available"}</p>
+            </div>
           </div>
         </div>
 
@@ -69,7 +78,7 @@ export default function Book() {
 
     </div>
 
-    </div>
+   
   );
 }
 
