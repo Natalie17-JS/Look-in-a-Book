@@ -62,6 +62,7 @@ export type DeleteBookArgs = {
       getBookBySlug: (parent: unknown, args: { slug: string }) => Promise<Book | null>;
       getBooks: () => Promise<Book[]>;
       getMyBooks: (parent: unknown, args: unknown, context: IContext) => Promise<Book[]>;
+      getBookDrafts: (parent: unknown, args: unknown, context: IContext) => Promise<Book[]>
     };
     Mutation: {
       createBook: (

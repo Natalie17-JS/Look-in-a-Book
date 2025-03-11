@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { useUser } from "@/app/context/authContext";
 import { CREATE_BOOK, UPDATE_BOOK } from "@/app/GraphqlOnClient/mutations/bookMutations";
-import { CreateBookFormData, CreateBookData, EditBookData, Book, Category, Genre } from "@/app/types/bookTypes";
+import { CreateBookFormData, EditBookData, Book, Category, Genre, WStatus, PStatus } from "@/app/types/bookTypes";
 import styles from "./BookForm.module.css"
 import Link from "next/link";
 
@@ -27,6 +27,8 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
       annotation: book?.annotation || "",
       category: book?.category as Category,
       genre: book?.genre as Genre,
+      writingStatus: book?.writingStatus,
+      publishStatus: book?.publishStatus,
     },
   });
 
@@ -37,6 +39,8 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
       setValue("cover", book.cover || "");
       setValue("category", book.category);
       setValue("genre", book.genre);
+      setValue("writingStatus", book.writingStatus);
+      setValue("publishStatus", book.publishStatus);
     }
   }, [book, setValue]);
 
@@ -59,6 +63,8 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
      cover?: string;
      category: Category;
      genre: Genre; 
+     writingStatus: WStatus;
+     publishStatus: PStatus;
     }) => {
    
     if (!user) {
@@ -76,6 +82,9 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
           cover: data.cover || null,
           category: data.category,
           genre: data.genre,
+          writingStatus: data.writingStatus,
+          publishStatus: data.publishStatus,
+          //author: user,  // Uncomment if you want to associate the book with the logged-in user
         });
         const newBook = await createBook({ variables: {
           title: data.title,
@@ -83,6 +92,8 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
           cover: data.cover || null,
           category: data.category,
           genre: data.genre,
+          writingStatus: data.writingStatus,
+          publishStatus: data.publishStatus,
           //category: Category[data.category as keyof typeof Category], 
           //genre: Genre[data.genre as keyof typeof Genre], 
           //author: user, 
@@ -142,6 +153,32 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
             ))}
           </select>
           {errors.genre && <p>{errors.genre.message}</p>}
+        </div>
+
+        {/* Выбор статуса написания */}
+        <div>
+          <label>Status:</label>
+          <select {...register("writingStatus", { required: "Status is required" })} className={styles["create-book-select"]}>
+            {Object.values(WStatus).map((ws) => (
+              <option key={ws} value={ws}>
+                {ws}
+              </option>
+            ))}
+          </select>
+          {errors.genre && <p>{errors.writingStatus?.message}</p>}
+        </div>
+
+          {/* Выбор статуса написания */}
+          <div>
+          <label>Publish status:</label>
+          <select {...register("publishStatus", { required: "Publish status is required" })} className={styles["create-book-select"]}>
+            {Object.values(PStatus).map((ps) => (
+              <option key={ps} value={ps}>
+                {ps}
+              </option>
+            ))}
+          </select>
+          {errors.genre && <p>{errors.publishStatus?.message}</p>}
         </div>
 
         {/* Стандартная обложка 

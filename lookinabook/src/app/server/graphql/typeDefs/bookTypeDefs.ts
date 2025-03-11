@@ -55,6 +55,7 @@ type Book {
     getBookBySlug(slug: String!): Book
     getBooks: [Book!]
     getMyBooks: [Book!]
+    getBookDrafts: [Book!]
 }
 
 type DeleteResponse {

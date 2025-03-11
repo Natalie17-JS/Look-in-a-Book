@@ -68,6 +68,34 @@ Query: {
             throw new Error("Failed to fetch books");
         }
     },
+
+    async getBookDrafts(_, __, { req, res, prisma }) {
+      try {
+        const user = await getUserFromRequest(req, res);
+        if (!user) {
+          throw new Error("Not authenticated");
+        }
+    
+        // Получаем все книги пользователя со статусом "DRAFT"
+        const bookDrafts = await prisma.book.findMany({
+          where: {
+            publishStatus: "DRAFT",
+            authorId: user.id, // Условие, что книги принадлежат текущему пользователю
+          },
+          include: {
+            author: {
+              select: { id: true, username: true },
+            },
+          },
+        });
+    
+        return bookDrafts;
+      } catch (error) {
+        console.error("Error fetching book drafts:", error);
+        throw new Error("Failed to fetch book drafts");
+      }
+    },
+    
     getMyBooks: async (_, __, { prisma, req, res,}) => {
       const user = await getUserFromRequest(req, res);
       if (!user) {

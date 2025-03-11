@@ -23,6 +23,9 @@ export const GET_BOOK_BY_SLUG = gql`
       annotation
       cover
       slug
+      genre
+      category
+      writingStatus
       author {
         id
         username
@@ -30,3 +33,22 @@ export const GET_BOOK_BY_SLUG = gql`
     }
   }
 `;
+
+export const GET_BOOK_DRAFTS = gql`
+  query GetBookDrafts {
+    getBookDrafts {
+      id
+      title
+      annotation
+      cover
+      slug
+      genre
+      category
+      writingStatus
+      author {
+        id
+        username
+      }
+    }
+  }
+`
