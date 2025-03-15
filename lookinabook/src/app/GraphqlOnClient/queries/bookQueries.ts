@@ -7,12 +7,28 @@ export const GET_BOOKS = gql `
             title
             annotation
             slug
+            writingStatus
             author {
                 username
             }
             createdAt
         }
     }
+`
+
+export const GET_MY_BOOKS = gql `
+  query GetMyBooks {
+    getMyBooks {
+      id
+      title
+      annotation
+      slug
+      genre
+      category
+      writingStatus
+      createdAt
+    }
+  }
 `
 
 export const GET_BOOK_BY_SLUG = gql`
@@ -26,6 +42,7 @@ export const GET_BOOK_BY_SLUG = gql`
       genre
       category
       writingStatus
+      publishStatus
       author {
         id
         username

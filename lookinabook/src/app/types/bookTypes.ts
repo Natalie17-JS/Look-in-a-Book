@@ -1,33 +1,33 @@
 import { User } from "./userTypes";
 
 export enum Category {
-    FICTION = "Fiction",
-    NON_FICTION = "Non-fiction",
+    FICTION = "FICTION",
+    NON_FICTION = "NON_FICTION",
   }
   
   export enum Genre {
-    DRAMA = "Drama",
-    ADVENTURE = "Adventure",
-    SCIENCE_FICTION = "Science fiction",
-    POST_APOCALYPSE = "Post apocalypse",
-    APOCALYPSE = "Apocalypse",
-    HUMOR = "Humor",
-    HISTORY = "History",
-    SHORT_STORY = "Short story",
-    POETRY = "Poetry",
-    DETECTIVE = "Detective",
-    THRILLER = "Thriller",
+    DRAMA = "DRAMA",
+    ADVENTURE = "ADVENTURE",
+    SCIENCE_FICTION = "SCIENCE_FICTION",
+    POST_APOCALYPSE = "POST_APOCALYPSE",
+    APOCALYPSE = "APOCALYPSE",
+    HUMOR = "HUMOR",
+    HISTORY = "HISTORY",
+    SHORT_STORY = "SHORT_STORY",
+    POETRY = "POETRY",
+    DETECTIVE = "DETECTIVE",
+    THRILLER = "THRILLER",
   }
 
   export enum WStatus {
-    ONGOING = "Ongoing",
-    COMPLETED = "Completed",
+    ONGOING = "ONGOING",
+    COMPLETED = "COMPLETED",
     
   }
   
   export enum PStatus {
-    DRAFT = "Draft",
-    PUBLISHED = "Published",
+    DRAFT = "DRAFT",
+    PUBLISHED = "PUBLISHED",
   }
 
   export interface SearchBookParams {

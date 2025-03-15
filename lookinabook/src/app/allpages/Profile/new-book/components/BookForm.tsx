@@ -27,8 +27,8 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
       annotation: book?.annotation || "",
       category: book?.category as Category,
       genre: book?.genre as Genre,
-      writingStatus: book?.writingStatus,
-      publishStatus: book?.publishStatus,
+      writingStatus: book?.writingStatus as WStatus,
+      publishStatus: book?.publishStatus as PStatus,
     },
   });
 
@@ -84,7 +84,6 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
           genre: data.genre,
           writingStatus: data.writingStatus,
           publishStatus: data.publishStatus,
-          //author: user,  // Uncomment if you want to associate the book with the logged-in user
         });
         const newBook = await createBook({ variables: {
           title: data.title,
@@ -93,10 +92,7 @@ export default function BookForm({ book = null, isEditing = false }: { book?: Bo
           category: data.category,
           genre: data.genre,
           writingStatus: data.writingStatus,
-          publishStatus: data.publishStatus,
-          //category: Category[data.category as keyof typeof Category], 
-          //genre: Genre[data.genre as keyof typeof Genre], 
-          //author: user, 
+          publishStatus: data.publishStatus, 
         }, });
         reset();
         console.log("Created book:", newBook)

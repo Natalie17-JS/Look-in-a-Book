@@ -1,0 +1,18 @@
+.edit-book-container.light {
+    background-color: white;
+  }
+  .edit-book-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .edit-book-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .edit-book-container {
+    width: auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    /*border: 1px solid red;*/
+  }

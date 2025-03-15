@@ -1,9 +1,11 @@
+"use client"
+
 import { useQuery } from "@apollo/client";
 import { GET_CURRENT_USER } from "../GraphqlOnClient/queries/userQueries";
 
 export function useFetchUser() {
   // Токен теперь будем получать из localStorage или контекста
-  const accessToken = localStorage.getItem("token");
+  const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const { data, loading, error, refetch } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: "network-only",

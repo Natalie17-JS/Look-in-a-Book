@@ -104,6 +104,7 @@ Query: {
 
       return await prisma.book.findMany({
         where: {
+          publishStatus: "PUBLISHED",
           authorId: user.id, // Только книги текущего пользователя
         },
       });

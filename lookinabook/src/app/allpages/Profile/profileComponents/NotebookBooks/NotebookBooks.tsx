@@ -6,6 +6,7 @@ import AuthorsBooksPile from "../AuthorsBooks/AuthorsBooks";
 import AuthorsBooksCarousel from "../AuthorBooksList/BooksCarousel";
 import styles from "./NotebookBooks.module.css";
 import Link from "next/link";
+import MyBooks from "../my-books/MyBooks";
 
 export default function NotebookBooks() {
   // Состояние для переключения между отображением <Notebook /> и <AuthorsBooks /> или <BooksList />
@@ -24,7 +25,8 @@ export default function NotebookBooks() {
           <Link href="/allpages/profile/new-book">
           <button className={styles["add-book-btn"]}>Add book</button>
           </Link>
-          <AuthorsBooksCarousel />
+          <MyBooks />
+          {/*<AuthorsBooksCarousel />*/}
         </div>
       ) : (
         // Показать <Notebook /> и <AuthorsBooks /> если showBooksList = false

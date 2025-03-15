@@ -7,8 +7,8 @@ export const CREATE_BOOK = gql`
   $cover: String, 
   $category: Category!, 
   $genre: Genre! 
-  $publishStatus: PublishStatus!,
-  $writingStatus: WritingStatus!
+  $publishStatus: PStatus!,
+  $writingStatus: WStatus!
   ) {
     createBook(
     title: $title, 
@@ -41,7 +41,7 @@ export const UPDATE_BOOK = gql`
   $title: String!, 
   $annotation: String, 
   $cover: String,
-  $writingStatus: WritingStatus
+  $writingStatus: WStatus
   ) {
     updateBook(
     id: $id, 

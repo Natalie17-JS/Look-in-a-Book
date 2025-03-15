@@ -10,8 +10,11 @@ import uzor from "@/app/images/zavitushka.svg"
 import plakat from "@/app/images/annot-plakat-night.svg"
 //import { Book } from "@/app/types/bookTypes";
 import styles from "./GetBook.module.css"
+import { useUser } from "@/app/context/authContext";
+import Link from "next/link";
 
 export default function Book() {
+  const {user} =useUser()
   const params = useParams(); // Получаем slug
   console.log("Params:", params); 
 
@@ -28,17 +31,21 @@ export default function Book() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading book.</p>;
 
-  console.log("Final data:", data); // 🔍 Проверяем, что приходит в data
+  console.log("Final data:", data); 
 
   // Проверяем, что data не undefined
   if (!data) {
     return <p>Book not found.</p>;
   }
 
-  const { title, annotation, author } = data.getBookBySlug;
+  const { title, annotation, genre, writingStatus, publishStatus, author } = data.getBookBySlug;
+
+  // Определяем, принадлежит ли книга текущему пользователю
+  const isAuthor = user?.id === author?.id;
+  // Проверяем, является ли книга черновиком
+  const isDraft = publishStatus === "DRAFT";
 
   return (
-   
 <div className={styles["table-outer-container"]}>
 
       <div className={styles["table-container"]}>
@@ -61,6 +68,8 @@ export default function Book() {
             </div>
             <div className={styles["book-main-info"]}>
             <p>Author: {author?.username || "Unknown"}</p>
+            <p>Genre: {genre}</p>
+            <p>Status: {writingStatus}</p>
             </div>
             <div className={styles["book-annotation"]}>
             <Image src={plakat} alt="plakat" className={styles["plakat-image"]}/>
@@ -71,7 +80,16 @@ export default function Book() {
 
       <div className={styles.table}>
         <div className={styles["table-shelf"]}></div>
-        <div className={styles["table-shelf"]}></div>
+        <div className={styles["table-shelf"]}>
+        <div className={styles["book-actions"]}>
+        {isAuthor && (
+            <Link href={`/allpages/profile/edit-book/${slug}`} className={styles["edit-button"]}>
+              Edit book
+            </Link>
+          )}
+          {isDraft && isAuthor && <button className={styles["publish-button"]}>Publish</button>}
+        </div>
+        </div>
       </div>
 
       </div>
