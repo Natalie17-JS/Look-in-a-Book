@@ -1,6 +1,6 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { Book } from "@/app/types/bookTypes";
+import { Book, CreateBookData } from "@/app/types/bookTypes";
 
 interface BookContextType {
   book: Book | null;

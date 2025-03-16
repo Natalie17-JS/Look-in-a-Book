@@ -1,12 +1,15 @@
 "use client"
 
-import BookForm from "../../new-book/components/BookForm";
+import EditBookForm from "./components/EditBookForm"
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./MainPage.module.css"
 import SideShelf from "../../profileComponents/SideShelf/SideShelf";
 
+
 export default function EditBookPage() {
     const {theme} = useTheme()
+  
+
 
     const themeClass =
       theme === "dark"
@@ -18,7 +21,7 @@ export default function EditBookPage() {
     return (
         <div className={`${styles["edit-book-container"]} ${themeClass}`}>
             
-            <BookForm isEditing={true} />
+            <EditBookForm/>
             <SideShelf/>
            
         </div>

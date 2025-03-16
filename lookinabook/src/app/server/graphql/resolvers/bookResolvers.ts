@@ -150,7 +150,7 @@ Mutation: {
     }
   },
 
-  async updateBook(_, { id, title, annotation, cover, category, genre, publishStatus, writingStatus }, { req, res, user }) {
+  async updateBook(_, { id, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
     try {
       const user = await getUserFromRequest(req, res);
       if (!user) {
@@ -175,7 +175,7 @@ Mutation: {
         slug?: string, 
         category?: Category, 
         genre?: Genre,
-        publishStatus?: PStatus;
+        publishStatus?: PStatus,
         writingStatus?: WStatus;
       } = {};
         

@@ -1,6 +1,6 @@
 "use client"
 
-import BookForm from "./components/BookForm";
+import CreateBookForm from "./components/CreateBookForm";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./MainPage.module.css"
 import SideShelf from "../profileComponents/SideShelf/SideShelf";
@@ -18,7 +18,7 @@ export default function CreateBookPage() {
     return (
         <div className={`${styles["create-book-container"]} ${themeClass}`}>
             
-            <BookForm isEditing={false} />
+            <CreateBookForm />
             <SideShelf/>
            
         </div>

@@ -82,16 +82,20 @@ export interface CreateBookData {
     annotation?: string;
     author: User;
     slug: string;
-    cover?: string;
     genre: Genre;
     category: Category; 
+    cover?: string;
     writingStatus: WStatus;
     publishStatus: PStatus;
+    createdAt: Date;
+    
 }
 
-export interface EditBookData extends Partial<CreateBookFormData> {
-    id: number;
+export interface EditBookData extends Partial<Book> {
+  id: number; // ID остается обязательным
+
 }
+
 
 export interface BookDraft {
     id: number;

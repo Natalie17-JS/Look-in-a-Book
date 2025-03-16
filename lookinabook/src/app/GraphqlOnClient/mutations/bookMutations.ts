@@ -41,20 +41,38 @@ export const UPDATE_BOOK = gql`
   $title: String!, 
   $annotation: String, 
   $cover: String,
+  $category: Category, 
+  $genre: Genre,
+  $publishStatus: PStatus!,
   $writingStatus: WStatus
   ) {
     updateBook(
     id: $id, 
     title: $title, 
-    annotation: $annotation
+    annotation: $annotation,
     cover: $cover,
+    category: $category, 
+    genre: $genre,
+    publishStatus: $publishStatus,
     writingStatus: $writingStatus,
     ) {
       id
       title
       annotation
       cover
+      category
+      genre
+      publishStatus
       writingStatus
+      updatedAt
     }
   }
 `;
+
+export const DELETE_BOOK = gql`
+  mutation DeleteBook($id: String!) {
+  deleteBook(id: $id) {
+    message
+  }
+}
+`
