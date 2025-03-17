@@ -13,7 +13,7 @@ import { useBook } from "@/app/context/bookContext";
 export default function CreateBookForm() {
   const { user } = useUser();
   const [errorMessage, setErrorMessage] = useState("");
-  const { setBook } = useBook();
+  const { books, setBooks } = useBook();
   
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<CreateBookFormData>({
     defaultValues: {
@@ -57,7 +57,7 @@ export default function CreateBookForm() {
       });
 
       if (newBook.data?.createBook) {
-        setBook(newBook.data.createBook)
+        setBooks([...books, newBook.data.createBook]);
         console.log("Created book:", newBook.data.createBook);
         reset();
       }
@@ -117,7 +117,7 @@ export default function CreateBookForm() {
           {isSubmitting ? "Creating..." : "Create Book"}
         </button>
       </form>
-      <Link href="/profile">
+      <Link href="/allpages/profile">
         <button>Back to Profile</button>
       </Link>
     </div>

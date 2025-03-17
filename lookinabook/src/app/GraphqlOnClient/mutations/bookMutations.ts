@@ -69,6 +69,41 @@ export const UPDATE_BOOK = gql`
   }
 `;
 
+export const UPDATE_BOOK_BY_SLUG = gql`
+  mutation UpdateBook(
+  $slug: String!, 
+  $title: String!, 
+  $annotation: String, 
+  $cover: String,
+  $category: Category, 
+  $genre: Genre,
+  $publishStatus: PStatus!,
+  $writingStatus: WStatus
+  ) {
+    updateBook(
+    slug: $slug, 
+    title: $title, 
+    annotation: $annotation,
+    cover: $cover,
+    category: $category, 
+    genre: $genre,
+    publishStatus: $publishStatus,
+    writingStatus: $writingStatus,
+    ) {
+      id
+      title
+      slug
+      annotation
+      cover
+      category
+      genre
+      publishStatus
+      writingStatus
+      updatedAt
+    }
+  }
+`;
+
 export const DELETE_BOOK = gql`
   mutation DeleteBook($id: String!) {
   deleteBook(id: $id) {

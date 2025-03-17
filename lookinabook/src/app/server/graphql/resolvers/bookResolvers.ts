@@ -150,7 +150,7 @@ Mutation: {
     }
   },
 
-  async updateBook(_, { id, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
+ /* async updateBookById(_, { id, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
     try {
       const user = await getUserFromRequest(req, res);
       if (!user) {
@@ -202,7 +202,61 @@ Mutation: {
       console.error("Error updating book:", error);
       throw new Error("Failed to update book");
     }
+  },*/
+
+  async updateBookBySlug(_, { slug, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
+    try {
+      const user = await getUserFromRequest(req, res);
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+  
+      const book = await prisma.book.findUnique({ where: { slug } });
+  
+      if (!book) {
+        throw new Error("Book not found");
+      }
+  
+      // Только автор книги или админ могут редактировать книгу
+      if (user.id !== book.authorId && user.role !== "ADMIN") {
+        throw new Error("You are not allowed to update this book");
+      }
+  
+      let updatedFields: { 
+        title?: string; 
+        annotation?: string; 
+        cover?: string; 
+        slug?: string;
+        category?: Category; 
+        genre?: Genre;
+        publishStatus?: PStatus;
+        writingStatus?: WStatus;
+      } = {};
+  
+      if (title) {
+        updatedFields.title = title;
+        updatedFields.slug = slugify(title, { lower: true, strict: true });
+      }
+      if (annotation) updatedFields.annotation = annotation;
+      if (cover) updatedFields.cover = cover;
+      if (category) updatedFields.category = category;
+      if (genre) updatedFields.genre = genre;
+      if (publishStatus) updatedFields.publishStatus = publishStatus;
+      if (writingStatus) updatedFields.writingStatus = writingStatus;
+  
+      const updatedBook = await prisma.book.update({
+        where: { slug },
+        data: updatedFields,
+        include: { author: true }, // Включаем автора в ответ
+      });
+  
+      return updatedBook;
+    } catch (error) {
+      console.error("Error updating book:", error);
+      throw new Error("Failed to update book");
+    }
   },
+  
   
   async publishBook(_, { slug }, { req, res }) {
     try {
@@ -243,7 +297,7 @@ Mutation: {
 
   
         
-          async deleteBook(_, { id }, { user, req, res, prisma }) {
+          async deleteBookById(_, { id }, { user, req, res, prisma }) {
             try {
               const user = await getUserFromRequest(req, res);
       if (!user) {
@@ -270,7 +324,37 @@ Mutation: {
               console.error("Error deleting book:", error);
               throw new Error("Failed to delete book");
             }
+          },
+
+          async deleteBookBySlug(_, { slug }, { user, req, res, prisma }) {
+            try {
+              const user = await getUserFromRequest(req, res);
+              if (!user) {
+                throw new Error("Not authenticated");
+              }
+          
+              // Находим книгу по slug
+              const book = await prisma.book.findUnique({ where: { slug } });
+          
+              if (!book) {
+                throw new Error("Book not found");
+              }
+          
+              // Проверяем, является ли пользователь автором книги или админом
+              if (user.id !== book.authorId && user.role !== "ADMIN") {
+                throw new Error("You are not allowed to delete this book");
+              }
+          
+              // Удаляем книгу
+              await prisma.book.delete({ where: { slug } });
+          
+              return { message: "Book deleted successfully" };
+            } catch (error) {
+              console.error("Error deleting book:", error);
+              throw new Error("Failed to delete book");
+            }
           }
+          
           
     },
 }

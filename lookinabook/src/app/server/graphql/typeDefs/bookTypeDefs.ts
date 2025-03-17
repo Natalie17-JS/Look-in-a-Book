@@ -73,11 +73,22 @@ type Mutation {
     writingStatus: WStatus!
      ): Book!
 
-    updateBook(
-    id: Int!, 
+    # updateBookById(
+    # id: Int!, 
+    # title: String, 
+    # annotation: String, 
+    # slug: String, 
+    # cover: String,
+    # category: Category, 
+    # genre: Genre, 
+    # publishStatus: PStatus,
+    # writingStatus: WStatus!
+    # ): Book!
+
+    updateBookBySlug(
+    slug: String!, 
     title: String, 
-    annotation: String, 
-    slug: String, 
+    annotation: String,  
     cover: String,
     category: Category, 
     genre: Genre, 
@@ -85,9 +96,12 @@ type Mutation {
     writingStatus: WStatus!
     ): Book!
 
+
     publishBook(slug: String!): Book
 
-    deleteBook(id: Int!): DeleteResponse!
+    deleteBookById(id: Int!): DeleteResponse!
+
+    deleteBookBySlug(slug: String!): DeleteResponse!
 }
 `
 export default bookTypeDefs;

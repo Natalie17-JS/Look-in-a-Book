@@ -41,7 +41,7 @@ export enum WritingStatus {
   COMPLETED = "COMPLETED",
 }
 
-export type UpdateBookArgs = {
+export type UpdateBookByIdArgs = {
     id: number;
     title?: string;
     annotation?: string;
@@ -52,8 +52,23 @@ export type UpdateBookArgs = {
     writingStatus?: WritingStatus;
 }
 
-export type DeleteBookArgs = {
+export type UpdateBookBySlugArgs = {
+  slug: string;
+  title?: string;
+  annotation?: string;
+  cover?: string;
+  genre?: Genre;
+  category?: Category;
+  publishStatus?: PublishStatus;
+  writingStatus?: WritingStatus;
+}
+
+export type DeleteBookByIdArgs = {
     id: number; 
+  };
+
+  export type DeleteBookBySlugArgs = {
+    slug: string; 
   };
 
   export type BookResolvers = {
@@ -71,9 +86,15 @@ export type DeleteBookArgs = {
         context: IContext
       ) => Promise<Book>;
   
-      updateBook: (
+      /*updateBookById: (
         parent: unknown, 
-        args: UpdateBookArgs, 
+        args: UpdateBookByIdArgs, 
+        context: IContext
+      ) => Promise<Book>;*/
+
+      updateBookBySlug: (
+        parent: unknown, 
+        args: UpdateBookBySlugArgs, 
         context: IContext
       ) => Promise<Book>;
 
@@ -83,9 +104,15 @@ export type DeleteBookArgs = {
         context: IContext
       ) => Promise<Book>;
   
-      deleteBook: (
+      deleteBookById: (
         parent: unknown, 
-        args: DeleteBookArgs, 
+        args: DeleteBookByIdArgs, 
+        context: IContext
+      ) => Promise<{ message: string; }>;
+
+      deleteBookBySlug: (
+        parent: unknown, 
+        args: DeleteBookBySlugArgs, 
         context: IContext
       ) => Promise<{ message: string; }>;
     };

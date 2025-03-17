@@ -3,8 +3,8 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { Book, CreateBookData } from "@/app/types/bookTypes";
 
 interface BookContextType {
-  book: Book | null;
-  setBook: (book: Book | null) => void;
+  books: Book[];
+  setBooks: (books: Book[]) => void;
 }
 
 const BookContext = createContext<BookContextType | undefined>(undefined);
@@ -22,10 +22,10 @@ interface BookProviderProps {
 }
 
 export const BookProvider = ({ children }: BookProviderProps) => {
-  const [book, setBook] = useState<Book | null>(null);
+  const [books, setBooks] = useState<Book[]>([]);
 
   return (
-    <BookContext.Provider value={{ book, setBook }}>
+    <BookContext.Provider value={{ books, setBooks }}>
       {children}
     </BookContext.Provider>
   );

@@ -12,6 +12,7 @@ import plakat from "@/app/images/annot-plakat-night.svg"
 import styles from "./GetBook.module.css"
 import { useUser } from "@/app/context/authContext";
 import Link from "next/link";
+import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
 
 export default function Book() {
   const {user} =useUser()
@@ -83,9 +84,12 @@ export default function Book() {
         <div className={styles["table-shelf"]}>
         <div className={styles["book-actions"]}>
         {isAuthor && (
+          <>
             <Link href={`/allpages/profile/edit-book/${slug}`} className={styles["edit-button"]}>
               Edit book
             </Link>
+            <DeleteBookButton />
+            </>
           )}
           {isDraft && isAuthor && <button className={styles["publish-button"]}>Publish</button>}
         </div>

@@ -3,92 +3,79 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
-import { UPDATE_BOOK } from "@/app/GraphqlOnClient/mutations/bookMutations";
+import { UPDATE_BOOK_BY_SLUG } from "@/app/GraphqlOnClient/mutations/bookMutations";
 import { EditBookData, Book, Category, Genre, WStatus, PStatus } from "@/app/types/bookTypes";
 import styles from "@/app/allpages/profile/new-book/components/BookForm.module.css"
 import { useBook } from "@/app/context/bookContext";
 import DeleteBookButton from "./DeleteBookBtn";
 
 
-export default function EditBookForm() {
-    const { book, setBook } = useBook(); // Используем контекст для получения текущей книги
-    const [errorMessage, setErrorMessage] = useState("");
-  
-    // Если книги нет в контексте, можно отобразить ошибку или редирект
-    if (!book) {
-      return <p>Book not found or not selected for editing.</p>;
-    }
-  
-    // Хук формы для редактирования книги
-    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<EditBookData>(
-      /*{
-      defaultValues: {
-        title: book?.title || "",
-        annotation: book?.annotation || "",
-        category: book?.category,
-        genre: book?.genre,
-        //cover: book?.cover || "",
-       // slug: book?.slug || "",
-        writingStatus: book?.writingStatus,
-        publishStatus: book?.publishStatus,
-       // createdAt: book?.createdAt
+
+export default function EditBookForm({ bookSlug }: { bookSlug: string }) {
+  const { books, setBooks } = useBook();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Находим редактируемую книгу в массиве книг
+  const book = books ? books.find((b) => b.slug === bookSlug) : null;
+
+
+  if (!book) {
+    return <p>Book not found or not selected for editing.</p>;
+  }
+
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<EditBookData>();
+
+  const accessToken = localStorage.getItem("token");
+
+  const [updateBook] = useMutation<{ updateBook: Book }>(UPDATE_BOOK_BY_SLUG, {
+    context: {
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : "",
       },
-    }*/
-  );
-    const accessToken = localStorage.getItem("token");
-    // Мутация для обновления книги
-    const [updateBook] = useMutation<{ updateBook: EditBookData }>(UPDATE_BOOK,
-        {
-            context: {
-              headers: {
-                Authorization: accessToken ? `Bearer ${accessToken}` : "", 
-              },
-            },
-          }
-    );
-  
-    useEffect(() => {
-      reset({
-        title: book?.title || "",
-        annotation: book?.annotation || "",
-        category: book?.category || "FICTION",
-        //cover: book?.cover || "",
-        slug: book?.slug || "",
-        genre: book?.genre || "DRAMA",
-        writingStatus: book?.writingStatus || "ONGOING",
-        publishStatus: book?.publishStatus || "DRAFT",
+    },
+  });
+
+  useEffect(() => {
+    reset({
+      title: book.title,
+      annotation: book.annotation,
+      category: book.category,
+      genre: book.genre,
+      writingStatus: book.writingStatus,
+      publishStatus: book.publishStatus,
+    });
+  }, [book, reset]);
+
+  const onSubmit = async (data: EditBookData) => {
+    try {
+      const updatedBook = await updateBook({
+        variables: {
+          //id: book.id,
+          slug: book.slug,
+          title: data.title,
+          annotation: data.annotation || null,
+          category: data.category,
+          genre: data.genre,
+          writingStatus: data.writingStatus,
+          publishStatus: data.publishStatus,
+        },
       });
-    }, [book, reset]);
-  
-    // Обработчик отправки формы
-    const onSubmit = async (data: EditBookData) => {
-        try {
-          const updatedBook = await updateBook({
-            variables: { 
-              id: book.id, 
-              title: data.title,
-              annotation: data.annotation || null, // null если поле пустое
-              category: data.category,
-              //cover: data.cover || null,
-              genre: data.genre,
-              //slug: data.slug,
-              writingStatus: data.writingStatus,
-              publishStatus: data.publishStatus,
-              //createdAt: book.createdAt,
-              //updatedAt: new Date()
-            },
-          });
-      
-          if (updatedBook.data?.updateBook) {
-            //setBook(updatedBook.data.updateBook);
-            console.log("Updated book:", updatedBook.data.updateBook);
-          }
-        } catch (error) {
-          setErrorMessage("Something went wrong.");
-          console.error("Error:", error);
-        }
-      };
-      
+
+      if (updatedBook.data?.updateBook) {
+        // Обновляем книгу в массиве
+        //setBooks(books.map((b) => (b.id === book.id ? updatedBook.data.updateBook : b)));
+        //setBooks(books.map((b) => (b.slug === book.slug ? updatedBook.data.updateBook : b)));
+        //setBooks(books.map((b) => (b.slug === book.slug ? updatedBook.data.updateBook ?? b : b)));
+        setBooks(books.map((b) => (b.slug === book.slug ? updatedBook.data!.updateBook : b)));
+
+        console.log("Updated book:", updatedBook.data.updateBook);
+      }
+    } catch (error) {
+      setErrorMessage("Something went wrong.");
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className={styles["create-book-form-container"]}>
       <h2>Edit Book</h2>
