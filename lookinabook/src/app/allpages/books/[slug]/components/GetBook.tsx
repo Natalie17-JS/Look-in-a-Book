@@ -13,8 +13,10 @@ import styles from "./GetBook.module.css"
 import { useUser } from "@/app/context/authContext";
 import Link from "next/link";
 import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
+import { useBook } from "@/app/context/bookContext";
 
 export default function Book() {
+  const {setCurrentBook} = useBook()
   const {user} =useUser()
   const params = useParams(); // Получаем slug
   console.log("Params:", params); 
@@ -25,7 +27,12 @@ export default function Book() {
   const { data, loading, error } = useQuery(GET_BOOK_BY_SLUG, {
     skip: !slug, // Не делаем запрос, если slug нет
     variables: { slug },
-    onCompleted: (data) => console.log("Book data:", data), // ✅ Логируем ответ
+    onCompleted: (data) => {
+      console.log("Book data:", data);
+      if (data?.getBookBySlug && user?.id === data.getBookBySlug.author?.id) {
+        setCurrentBook(data.getBookBySlug); // Кладем в контекст только если автор
+      }
+    },
   onError: (err) => console.error("GraphQL Error:", err), // ✅ Логируем ошибку
   });
 

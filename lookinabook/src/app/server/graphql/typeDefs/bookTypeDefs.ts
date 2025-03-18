@@ -73,17 +73,17 @@ type Mutation {
     writingStatus: WStatus!
      ): Book!
 
-    # updateBookById(
-    # id: Int!, 
-    # title: String, 
-    # annotation: String, 
-    # slug: String, 
-    # cover: String,
-    # category: Category, 
-    # genre: Genre, 
-    # publishStatus: PStatus,
-    # writingStatus: WStatus!
-    # ): Book!
+    updateBookById(
+    id: Int!, 
+    title: String, 
+    annotation: String, 
+    slug: String, 
+    cover: String,
+    category: Category, 
+    genre: Genre, 
+    publishStatus: PStatus,
+    writingStatus: WStatus!
+    ): Book!
 
     updateBookBySlug(
     slug: String!, 

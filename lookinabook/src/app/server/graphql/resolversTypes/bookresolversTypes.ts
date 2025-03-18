@@ -86,11 +86,11 @@ export type DeleteBookByIdArgs = {
         context: IContext
       ) => Promise<Book>;
   
-      /*updateBookById: (
+      updateBookById: (
         parent: unknown, 
         args: UpdateBookByIdArgs, 
         context: IContext
-      ) => Promise<Book>;*/
+      ) => Promise<Book>;
 
       updateBookBySlug: (
         parent: unknown, 

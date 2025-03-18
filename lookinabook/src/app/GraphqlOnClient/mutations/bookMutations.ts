@@ -104,9 +104,16 @@ export const UPDATE_BOOK_BY_SLUG = gql`
   }
 `;
 
-export const DELETE_BOOK = gql`
-  mutation DeleteBook($id: String!) {
-  deleteBook(id: $id) {
+export const DELETE_BOOK_BY_ID = gql`
+  mutation DeleteBook($id: Int!) {
+  deleteBookById(id: $id) {
+    message
+  }
+}
+`
+export const DELETE_BOOK_BY_SLUG = gql`
+  mutation DeleteBook($slug: String!) {
+  deleteBookBySlug(slug: $slug) {
     message
   }
 }

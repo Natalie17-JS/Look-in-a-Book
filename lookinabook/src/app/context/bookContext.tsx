@@ -1,10 +1,9 @@
-
 import { createContext, useContext, useState, ReactNode } from "react";
-import { Book, CreateBookData } from "@/app/types/bookTypes";
+import { Book } from "@/app/types/bookTypes";
 
 interface BookContextType {
-  books: Book[];
-  setBooks: (books: Book[]) => void;
+  currentBook: Book | null;
+  setCurrentBook: React.Dispatch<React.SetStateAction<Book | null>>;
 }
 
 const BookContext = createContext<BookContextType | undefined>(undefined);
@@ -22,10 +21,10 @@ interface BookProviderProps {
 }
 
 export const BookProvider = ({ children }: BookProviderProps) => {
-  const [books, setBooks] = useState<Book[]>([]);
+  const [currentBook, setCurrentBook] = useState<Book | null>(null);
 
   return (
-    <BookContext.Provider value={{ books, setBooks }}>
+    <BookContext.Provider value={{ currentBook, setCurrentBook }}>
       {children}
     </BookContext.Provider>
   );

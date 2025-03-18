@@ -8,20 +8,31 @@ import { EditBookData, Book, Category, Genre, WStatus, PStatus } from "@/app/typ
 import styles from "@/app/allpages/profile/new-book/components/BookForm.module.css"
 import { useBook } from "@/app/context/bookContext";
 import DeleteBookButton from "./DeleteBookBtn";
+import { useParams } from "next/navigation";
 
 
-
-export default function EditBookForm({ bookSlug }: { bookSlug: string }) {
-  const { books, setBooks } = useBook();
+export default function EditBookForm() {
+  const params = useParams(); // Получаем slug
+  console.log("Params:", params); 
+  const { currentBook, setCurrentBook } = useBook();
   const [errorMessage, setErrorMessage] = useState("");
 
+  const bookSlug = params?.slug;
+  console.log("Book in context:", currentBook);
+  console.log("Looking for book with slug:", bookSlug);
   // Находим редактируемую книгу в массиве книг
-  const book = books ? books.find((b) => b.slug === bookSlug) : null;
+  
 
-
-  if (!book) {
+  if (!currentBook) {
     return <p>Book not found or not selected for editing.</p>;
   }
+
+  useEffect(() => {
+    if (!currentBook || currentBook.slug !== bookSlug) {
+      console.log("Book in context does not match the slug. Possible missing data.");
+    }
+  }, [bookSlug, currentBook]);
+  
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<EditBookData>();
 
@@ -37,21 +48,21 @@ export default function EditBookForm({ bookSlug }: { bookSlug: string }) {
 
   useEffect(() => {
     reset({
-      title: book.title,
-      annotation: book.annotation,
-      category: book.category,
-      genre: book.genre,
-      writingStatus: book.writingStatus,
-      publishStatus: book.publishStatus,
+      title: currentBook.title,
+      annotation: currentBook.annotation,
+      category: currentBook.category,
+      genre: currentBook.genre,
+      writingStatus: currentBook.writingStatus,
+      publishStatus: currentBook.publishStatus,
     });
-  }, [book, reset]);
+  }, [currentBook, reset]);
 
   const onSubmit = async (data: EditBookData) => {
     try {
       const updatedBook = await updateBook({
         variables: {
           //id: book.id,
-          slug: book.slug,
+          slug: currentBook.slug,
           title: data.title,
           annotation: data.annotation || null,
           category: data.category,
@@ -62,11 +73,12 @@ export default function EditBookForm({ bookSlug }: { bookSlug: string }) {
       });
 
       if (updatedBook.data?.updateBook) {
-        // Обновляем книгу в массиве
+        // Обновляем книг
+        setCurrentBook(updatedBook.data.updateBook); // Обновляем контекст
         //setBooks(books.map((b) => (b.id === book.id ? updatedBook.data.updateBook : b)));
         //setBooks(books.map((b) => (b.slug === book.slug ? updatedBook.data.updateBook : b)));
         //setBooks(books.map((b) => (b.slug === book.slug ? updatedBook.data.updateBook ?? b : b)));
-        setBooks(books.map((b) => (b.slug === book.slug ? updatedBook.data!.updateBook : b)));
+    
 
         console.log("Updated book:", updatedBook.data.updateBook);
       }

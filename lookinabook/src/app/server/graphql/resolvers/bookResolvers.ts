@@ -150,7 +150,7 @@ Mutation: {
     }
   },
 
- /* async updateBookById(_, { id, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
+ async updateBookById(_, { id, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
     try {
       const user = await getUserFromRequest(req, res);
       if (!user) {
@@ -202,7 +202,7 @@ Mutation: {
       console.error("Error updating book:", error);
       throw new Error("Failed to update book");
     }
-  },*/
+  },
 
   async updateBookBySlug(_, { slug, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
     try {

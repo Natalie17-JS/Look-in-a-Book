@@ -8,13 +8,13 @@ import { CreateBookFormData, CreateBookData, Category, Genre, WStatus, PStatus, 
 import styles from "./BookForm.module.css";
 import Link from "next/link";
 import { useUser } from "@/app/context/authContext";
-import { useBook } from "@/app/context/bookContext";
+
 
 export default function CreateBookForm() {
   const { user } = useUser();
   const [errorMessage, setErrorMessage] = useState("");
-  const { books, setBooks } = useBook();
   
+
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<CreateBookFormData>({
     defaultValues: {
       title: "",
@@ -52,12 +52,11 @@ export default function CreateBookForm() {
           writingStatus: data.writingStatus,
           publishStatus: data.publishStatus,
           createdAt: new Date(),
-          //updatedAt: new Date(),
         },
       });
 
       if (newBook.data?.createBook) {
-        setBooks([...books, newBook.data.createBook]);
+
         console.log("Created book:", newBook.data.createBook);
         reset();
       }
@@ -75,7 +74,7 @@ export default function CreateBookForm() {
         <div>
           <label>Title:</label>
           <input type="text" {...register("title", { required: "Title is required" })} className={styles["create-book-input"]} />
-          {errors.title && <p>{errors.title.message}</p>}
+          {errors.title && <p className={styles.errormessage}>{errors.title.message}</p>}
         </div>
         <div>
           <label>Annotation:</label>
@@ -113,7 +112,10 @@ export default function CreateBookForm() {
             ))}
           </select>
         </div>
-        <button type="submit" disabled={isSubmitting}>
+        <button 
+          className={styles["create-book-btn"]}
+        type="submit" 
+        disabled={isSubmitting}>
           {isSubmitting ? "Creating..." : "Create Book"}
         </button>
       </form>
