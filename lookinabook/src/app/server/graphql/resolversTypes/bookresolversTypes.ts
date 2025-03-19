@@ -1,4 +1,4 @@
-import {Book, User} from "@prisma/client"
+import {Book} from "@prisma/client"
 import { GraphQLScalarType } from "graphql";
 import { IContext } from "./UserResolversTypes";
 

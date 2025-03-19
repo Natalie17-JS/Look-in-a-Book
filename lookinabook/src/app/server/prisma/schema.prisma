@@ -107,11 +107,12 @@ enum Genre {
 }
 
 model Chapter {
-  id         Int      @id @default(autoincrement()) // Unique chapter identifier
-  title      String                                // Chapter title
-  content    String                                // Chapter content
-  createdAt  DateTime @default(now())             // Creation date
-  updatedAt  DateTime @updatedAt                  // Modification date
+  id              String      @id @default(cuid())          // Unique chapter identifier
+  title           String                                // Chapter title
+  content         String                                // Chapter content
+  createdAt       DateTime @default(now())             // Creation date
+  updatedAt       DateTime @updatedAt                  // Modification date
+  publishStatus   PStatus  @default(DRAFT)
 
   // Relation with the book
   bookId     Int                                 // Book ID
@@ -134,7 +135,7 @@ model Comment {
   bookId     Int?                                  // Book ID (if the comment is on a book)
   book       Book?    @relation(fields: [bookId], references: [id], onDelete: Cascade) // Relation with the book
 
-  chapterId  Int?                                  // Chapter ID (if the comment is on a chapter)
+  chapterId  String?                                  // Chapter ID (if the comment is on a chapter)
   chapter    Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade) // Relation with the chapter
 
   postId     Int?                                  // Post ID (if the comment is on a post)
@@ -142,12 +143,13 @@ model Comment {
 }
 
 model Post {
-  id         Int      @id @default(autoincrement())
-  title      String
-  content    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  image      String?
+  id              Int      @id @default(autoincrement())
+  title           String
+  content         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  image           String?
+  publishStatus   PStatus  @default(DRAFT)
 
   authorId   Int
   author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // Post author
