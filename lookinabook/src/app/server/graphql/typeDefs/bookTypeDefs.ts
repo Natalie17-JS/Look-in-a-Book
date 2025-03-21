@@ -4,7 +4,6 @@ scalar DateTime
 enum PStatus {
   DRAFT
   PUBLISHED
-  
 }
 
 enum WStatus {
@@ -42,8 +41,8 @@ type Book {
     genre: Genre!
     publishStatus: PStatus!
     writingStatus: WStatus!
+    chapters: [Chapter!]
 
-    #chapters: [Chapter!]
     #comments: [Comment!]
     #likes: [Like!]
 
@@ -82,7 +81,7 @@ type Mutation {
     category: Category, 
     genre: Genre, 
     publishStatus: PStatus,
-    writingStatus: WStatus!
+    writingStatus: WStatus
     ): Book!
 
     updateBookBySlug(
@@ -93,7 +92,7 @@ type Mutation {
     category: Category, 
     genre: Genre, 
     publishStatus: PStatus,
-    writingStatus: WStatus!
+    writingStatus: WStatus
     ): Book!
 
 

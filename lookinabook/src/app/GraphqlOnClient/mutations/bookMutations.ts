@@ -35,7 +35,7 @@ export const CREATE_BOOK = gql`
 `;
 
 
-export const UPDATE_BOOK = gql`
+export const UPDATE_BOOK_BY_ID = gql`
   mutation UpdateBook(
   $id: ID!, 
   $title: String!, 
@@ -43,7 +43,7 @@ export const UPDATE_BOOK = gql`
   $cover: String,
   $category: Category, 
   $genre: Genre,
-  $publishStatus: PStatus!,
+  $publishStatus: PStatus,
   $writingStatus: WStatus
   ) {
     updateBook(
@@ -71,13 +71,13 @@ export const UPDATE_BOOK = gql`
 
 export const UPDATE_BOOK_BY_SLUG = gql`
   mutation UpdateBook(
-  $slug: String!, 
-  $title: String!, 
+  $slug: String, 
+  $title: String, 
   $annotation: String, 
   $cover: String,
   $category: Category, 
   $genre: Genre,
-  $publishStatus: PStatus!,
+  $publishStatus: PStatus,
   $writingStatus: WStatus
   ) {
     updateBook(
@@ -115,6 +115,16 @@ export const DELETE_BOOK_BY_SLUG = gql`
   mutation DeleteBook($slug: String!) {
   deleteBookBySlug(slug: $slug) {
     message
+  }
+}
+`
+
+export const PUBLISH_BOOK = gql`
+  mutation PublishBook($slug: String!) {
+  publishBook(slug: $slug) {
+    id
+    title
+    publishStatus
   }
 }
 `

@@ -42,7 +42,7 @@ async getChapters(_, { bookId }) {
     const chapters = await prisma.chapter.findMany({
       where: {
         bookId: book.id,
-        publishStatus: "PUBLISHED",
+        /*publishStatus: "PUBLISHED",*/
       },
       include: { book: true, comments: true },
     });
@@ -122,7 +122,7 @@ async getChapterDrafts(_, { bookId }, { req, res, prisma }) {
 
 },
 Mutation: {
-    async createChapter(_, { title, content, bookId }, { req, res, prisma }) {
+    async createChapter(_, { title, content,publishStatus, bookId }, { req, res, prisma }) {
         try {
           const user = await getUserFromRequest(req, res);
           if (!user) {
@@ -145,6 +145,7 @@ Mutation: {
               title: title,
               content: content,
               bookId: bookId,
+              publishStatus: publishStatus
             },
           });
       
@@ -154,6 +155,7 @@ Mutation: {
           throw new Error("Failed to create chapter");
         }
       },
+
       async editChapter(_, { id, title, content, bookId }, { req, res, prisma }) {
         try {
           // Получаем текущего пользователя
@@ -193,6 +195,49 @@ Mutation: {
           throw new Error("Failed to edit chapter");
         }
       },
+
+      async publishChapter(_, { id }, { req, res, prisma }) {
+        try {
+          // Получаем текущего пользователя
+          const user = await getUserFromRequest(req, res);
+          if (!user) {
+            throw new Error("Not authenticated");
+          }
+      
+          // Находим главу
+          const chapter = await prisma.chapter.findUnique({
+            where: { id },
+            include: { book: true }, // Включаем книгу для проверки авторства
+          });
+      
+          if (!chapter) {
+            throw new Error("Chapter not found");
+          }
+      
+          // Проверяем, принадлежит ли глава книге, автором которой является текущий пользователь
+          if (chapter.book.authorId !== user.id) {
+            throw new Error("You are not allowed to publish this chapter");
+          }
+      
+          // Проверяем, что глава находится в статусе "DRAFT"
+          if (chapter.publishStatus === "PUBLISHED") {
+            throw new Error("This chapter is already published");
+          }
+      
+          // Обновляем статус главы на "PUBLISHED"
+          const updatedChapter = await prisma.chapter.update({
+            where: { id },
+            data: { publishStatus: "PUBLISHED" },
+            include: { book: true }, // Можно включить доп. инфу о книге
+          });
+      
+          return updatedChapter;
+        } catch (error) {
+          console.error("Error publishing chapter:", error);
+          throw new Error("Failed to publish chapter");
+        }
+      },
+      
   
       // Резолвер для удаления главы
       async deleteChapterById(_, { id }, { req, res, prisma }) {
@@ -223,7 +268,7 @@ Mutation: {
             where: { id },
           });
   
-          return true; // Успешно удалено
+          return { message: "Chapter deleted successfully" };
         } catch (error) {
           console.error("Error deleting chapter:", error);
           throw new Error("Failed to delete chapter");

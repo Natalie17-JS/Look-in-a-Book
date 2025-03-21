@@ -2,7 +2,7 @@ import {Chapter} from "@prisma/client"
 import { GraphQLScalarType } from "graphql";
 import { IContext } from "./UserResolversTypes";
 
-export enum PublishStatus {
+export enum PStatus {
     PUBLISHED = "PUBLISHED",
     DRAFT = "DRAFT",
   }
@@ -11,12 +11,14 @@ export type createChapterArgs = {
     title: string;
     content: string;
     bookId: number;
+    publishStatus: PStatus;
 }
 export type editChapterArgs = {
     id: string;
     title?: string;
     content?: string;
     bookId: number;
+    publishStatus?: PStatus;
 }
 export type deleteChapterByIdArgs = {
     id: string;
@@ -30,9 +32,26 @@ export type ChapterResolvers = {
       getAuthorBookChapters: (parent: unknown, args: { bookId: number }, context: IContext)=> Promise<Chapter[]>
     },
     Mutation: {
-        createChapter: (parent: unknown, args: createChapterArgs, context: IContext) => Promise<Chapter>;
-        editChapter: (parent: unknown, args: editChapterArgs, context: IContext) => Promise<Chapter | null>;
-        deleteChapterById: (parent: unknown, args: deleteChapterByIdArgs, context: IContext) => Promise<boolean>;
+        createChapter: (
+            parent: unknown, 
+            args: createChapterArgs, 
+            context: IContext
+        ) => Promise<Chapter>;
+        editChapter: (
+            parent: unknown, 
+            args: editChapterArgs, 
+            context: IContext
+        ) => Promise<Chapter | null>;
+        publishChapter: (
+            parent: unknown, 
+            args: { id: string }, 
+            context: IContext
+            ) => Promise<Chapter>;
+        deleteChapterById: (
+            parent: unknown, 
+            args: deleteChapterByIdArgs, 
+            context: IContext
+        ) => Promise<{ message: string; }>;
     }
     DateTime: GraphQLScalarType;
     };

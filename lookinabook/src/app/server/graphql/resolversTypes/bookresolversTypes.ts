@@ -27,16 +27,16 @@ export type CreateBookArgs = {
   cover?: string;
   genre: Genre;
   category: Category;
-  publishStatus: PublishStatus;
-  writingStatus: WritingStatus;
+  publishStatus: PStatus;
+  writingStatus: WStatus;
 };
 
-export enum PublishStatus {
+export enum PStatus {
   PUBLISHED = "PUBLISHED",
   DRAFT = "DRAFT",
 }
 
-export enum WritingStatus {
+export enum WStatus {
   ONGOING = "ONGOING",
   COMPLETED = "COMPLETED",
 }
@@ -48,8 +48,8 @@ export type UpdateBookByIdArgs = {
     cover?: string;
     genre?: Genre;
     category?: Category;
-    publishStatus?: PublishStatus;
-    writingStatus?: WritingStatus;
+    publishStatus?: PStatus;
+    writingStatus?: WStatus;
 }
 
 export type UpdateBookBySlugArgs = {
@@ -59,8 +59,8 @@ export type UpdateBookBySlugArgs = {
   cover?: string;
   genre?: Genre;
   category?: Category;
-  publishStatus?: PublishStatus;
-  writingStatus?: WritingStatus;
+  publishStatus?: PStatus;
+  writingStatus?: WStatus;
 }
 
 export type DeleteBookByIdArgs = {

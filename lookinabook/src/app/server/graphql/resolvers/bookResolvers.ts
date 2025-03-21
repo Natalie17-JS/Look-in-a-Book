@@ -14,6 +14,7 @@ Query: {
             const book = await prisma.book.findUnique({
                 where: { id },
                 include: {
+                  chapters: true, 
                   author: {        
                       select: { id: true, username: true } 
                   }
@@ -30,6 +31,7 @@ Query: {
           const book = await prisma.book.findUnique({
               where: { slug }, // Поиск по slug вместо id
               include: {
+                chapters: true, 
                   author: {        
                       select: { id: true, username: true } 
                   }
@@ -54,8 +56,8 @@ Query: {
                 publishStatus: "PUBLISHED",
               },
               include: {
-                /*chapters: true,  
-                comments: true,   
+                chapters: true,  
+                /*comments: true,   
                 likes: true, */     
                 author: {         
                     select: { id: true, username: true } 
@@ -83,6 +85,7 @@ Query: {
             authorId: user.id, // Условие, что книги принадлежат текущему пользователю
           },
           include: {
+            chapters: true, 
             author: {
               select: { id: true, username: true },
             },
@@ -107,6 +110,9 @@ Query: {
           publishStatus: "PUBLISHED",
           authorId: user.id, // Только книги текущего пользователя
         },
+        include: {
+          chapters: true, 
+        }
       });
     },
 },

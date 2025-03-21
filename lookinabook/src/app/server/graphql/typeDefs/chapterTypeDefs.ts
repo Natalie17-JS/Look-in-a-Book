@@ -1,7 +1,7 @@
 export const chapterTypeDefs = `
   scalar DateTime
 
-  enum PublishStatus {
+  enum PStatus {
     PUBLISHED
     DRAFT
   }
@@ -11,7 +11,7 @@ export const chapterTypeDefs = `
     title: String!
     content: String!
     bookId: Int!
-    publishStatus: PublishStatus!
+    publishStatus: PStatus!
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -22,10 +22,14 @@ export const chapterTypeDefs = `
     getChapterDrafts(bookId: Int!): [Chapter]
     getAuthorBookChapters(bookId: Int!): [Chapter]
   }
+type DeleteResponse {
+  message: String!
+}
 
   type Mutation {
-    createChapter(title: String!, content: String!, bookId: Int!): Chapter
+    createChapter(title: String!, content: String!, publishStatus: PStatus!, bookId: Int!): Chapter!
     editChapter(id: String!, title: String, content: String, bookId: Int!): Chapter
-    deleteChapterById(id: String!): Boolean
+    publishChapter(id: String!): Chapter!
+    deleteChapterById(id: String!): DeleteResponse!
   }
 `;

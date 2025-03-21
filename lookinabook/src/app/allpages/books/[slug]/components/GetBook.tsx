@@ -14,6 +14,8 @@ import { useUser } from "@/app/context/authContext";
 import Link from "next/link";
 import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
 import { useBook } from "@/app/context/bookContext";
+import PublishBookButton from "@/app/allpages/profile/edit-book/[slug]/components/PublishBook";
+
 
 export default function Book() {
   const {setCurrentBook} = useBook()
@@ -98,7 +100,15 @@ export default function Book() {
             <DeleteBookButton />
             </>
           )}
-          {isDraft && isAuthor && <button className={styles["publish-button"]}>Publish</button>}
+          {isDraft && isAuthor && 
+          <PublishBookButton/>
+            }
+            <div className={styles["chapters-button"]}>
+              <Link href={`/allpages/books/${slug}/chapters`} className={styles["chapters-link"]}>
+                Chapters
+              </Link>
+              
+            </div>
         </div>
         </div>
       </div>
