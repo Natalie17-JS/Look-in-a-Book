@@ -22,7 +22,7 @@ Query: {
     }
 },
 
-async getChapters(_, { bookId }) {
+async getChaptersByBookId(_, { bookId }) {
   try {
     if (!bookId) {
       throw new Error("Book ID is required");
@@ -53,6 +53,39 @@ async getChapters(_, { bookId }) {
     throw new Error("Failed to fetch chapters");
   }
 },
+
+async getChaptersByBookSlug(_, { slug }) {
+  try {
+    if (!slug) {
+      throw new Error("Book slug is required");
+    }
+
+    // Проверяем, существует ли книга с таким slug
+    const book = await prisma.book.findUnique({
+      where: { slug },
+      select: { id: true }, // Берем только ID
+    });
+
+    if (!book) {
+      throw new Error("Book not found");
+    }
+
+    // Получаем главы книги
+    const chapters = await prisma.chapter.findMany({
+      where: {
+        bookId: book.id,
+        /*publishStatus: "PUBLISHED",*/
+      },
+      include: { book: true, comments: true },
+    });
+
+    return chapters;
+  } catch (error) {
+    console.error("Error fetching chapters:", error);
+    throw new Error("Failed to fetch chapters");
+  }
+},
+
 
 async getAuthorBookChapters(_, { bookId }, { req, res, prisma }) {
   try {
@@ -122,7 +155,7 @@ async getChapterDrafts(_, { bookId }, { req, res, prisma }) {
 
 },
 Mutation: {
-    async createChapter(_, { title, content,publishStatus, bookId }, { req, res, prisma }) {
+    async createChapterWithBookId(_, { title, content,publishStatus, bookId }, { req, res, prisma }) {
         try {
           const user = await getUserFromRequest(req, res);
           if (!user) {
@@ -145,6 +178,40 @@ Mutation: {
               title: title,
               content: content,
               bookId: bookId,
+              publishStatus: publishStatus
+            },
+          });
+      
+          return newChapter;
+        } catch (error) {
+          console.error("Error creating chapter:", error);
+          throw new Error("Failed to create chapter");
+        }
+      },
+
+      async createChapterWithBookSlug(_, { title, content,publishStatus, slug }, { req, res, prisma }) {
+        try {
+          const user = await getUserFromRequest(req, res);
+          if (!user) {
+            throw new Error("Not authenticated");
+          }
+      
+          // Проверка существования книги
+          const bookExists = await prisma.book.findUnique({
+            where: { slug },
+          });
+      
+          if (!bookExists) {
+            throw new Error("Book not found");
+          }
+      
+          // Создание новой главы с уникальным ID (cuid)
+          const newChapter = await prisma.chapter.create({
+            data: {
+              id: cuid(), // Генерация уникального ID для главы
+              title: title,
+              content: content,
+              bookId: bookExists.id,
               publishStatus: publishStatus
             },
           });

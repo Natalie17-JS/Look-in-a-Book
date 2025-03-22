@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+
 import { useQuery } from "@apollo/client";
 import { GET_BOOK_BY_SLUG } from "@/app/GraphqlOnClient/queries/bookQueries";
 import Image from "next/image";
@@ -15,40 +15,21 @@ import Link from "next/link";
 import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
 import { useBook } from "@/app/context/bookContext";
 import PublishBookButton from "@/app/allpages/profile/edit-book/[slug]/components/PublishBook";
+//import { useRouter } from "next/router";
 
 
 export default function Book() {
-  const {setCurrentBook} = useBook()
-  const {user} =useUser()
-  const params = useParams(); // Получаем slug
-  console.log("Params:", params); 
+  const { currentBook } = useBook(); // Получаем текущую книгу из контекста
+  const { user } = useUser();
+  //const router = useRouter();
+  //const { slug } = router.query;
 
-  const slug = params?.slug; // Достаем slug
-  if (!slug) return <p>Loading...</p>; // Защита от undefined
+  // Если книга не загружена, показываем загрузку
+  if (!currentBook) return <p>Loading...</p>;
 
-  const { data, loading, error } = useQuery(GET_BOOK_BY_SLUG, {
-    skip: !slug, // Не делаем запрос, если slug нет
-    variables: { slug },
-    onCompleted: (data) => {
-      console.log("Book data:", data);
-      if (data?.getBookBySlug && user?.id === data.getBookBySlug.author?.id) {
-        setCurrentBook(data.getBookBySlug); // Кладем в контекст только если автор
-      }
-    },
-  onError: (err) => console.error("GraphQL Error:", err), // ✅ Логируем ошибку
-  });
+  const slug = currentBook.slug;
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading book.</p>;
-
-  console.log("Final data:", data); 
-
-  // Проверяем, что data не undefined
-  if (!data) {
-    return <p>Book not found.</p>;
-  }
-
-  const { title, annotation, genre, writingStatus, publishStatus, author } = data.getBookBySlug;
+  const { title, annotation, genre, writingStatus, publishStatus, author } = currentBook;
 
   // Определяем, принадлежит ли книга текущему пользователю
   const isAuthor = user?.id === author?.id;

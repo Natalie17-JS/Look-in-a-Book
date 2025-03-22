@@ -4,6 +4,7 @@ import { BookResolvers } from "../resolversTypes/bookResolversTypes"
 import { DateTime } from "../resolversTypes/dateTime";
 import prisma from "@/app/server/prisma/prismaClient";
 import slugify from "slugify"
+import cuid from "cuid";
 
 const bookResolvers: BookResolvers = {
 DateTime,
@@ -118,7 +119,7 @@ Query: {
 },
 
 Mutation: {
-  async createBook(_, { title, annotation, cover, category, genre, publishStatus, writingStatus }, { req, res, prisma }) {
+  /*async createBook(_, { title, annotation, cover, category, genre, publishStatus, writingStatus }, { req, res, prisma }) {
     try {
       // Получаем текущего пользователя из запроса
       const user = await getUserFromRequest(req, res);
@@ -154,7 +155,47 @@ Mutation: {
       console.error("Error creating book:", error);
       throw new Error("Failed to create book");
     }
-  },
+  },*/
+  async createBook(_, { title, annotation, cover, category, genre, publishStatus, writingStatus }, { req, res, prisma }) {
+    try {
+        // Получаем текущего пользователя из запроса
+        const user = await getUserFromRequest(req, res);
+        if (!user) {
+            throw new Error("Not authenticated");
+        }
+
+        // Генерируем slug
+        const slug = slugify(title, { lower: true, strict: true });
+
+        // Генерируем уникальный идентификатор (slug + 8 символов cuid)
+        const uniqueId = `${slug}-${cuid().slice(0, 8)}`;
+
+        // Создаём книгу
+        const newBook = await prisma.book.create({
+            data: {
+                title,
+                annotation: annotation || null,
+                cover: cover || null,
+                slug: uniqueId, // Используем уникальный идентификатор
+                category,
+                genre,
+                publishStatus,
+                writingStatus,
+                author: { connect: { id: user.id } },
+            },
+            include: {
+                author: {
+                    select: { id: true, username: true },
+                },
+            },
+        });
+
+        return newBook;
+    } catch (error) {
+        console.error("Error creating book:", error);
+        throw new Error("Failed to create book");
+    }
+},
 
  async updateBookById(_, { id, title, annotation, cover, category, genre, writingStatus, publishStatus }, { req, res, user }) {
     try {
@@ -241,7 +282,11 @@ Mutation: {
   
       if (title) {
         updatedFields.title = title;
-        updatedFields.slug = slugify(title, { lower: true, strict: true });
+        //updatedFields.slug = slugify(title, { lower: true, strict: true });
+        const oldCuidPart = book.slug.split("-").pop(); // Получаем последние 8 символов cuid
+        const newSlug = `${slugify(title, { lower: true, strict: true })}-${oldCuidPart}`;
+        updatedFields.slug = newSlug;
+        
       }
       if (annotation) updatedFields.annotation = annotation;
       if (cover) updatedFields.cover = cover;

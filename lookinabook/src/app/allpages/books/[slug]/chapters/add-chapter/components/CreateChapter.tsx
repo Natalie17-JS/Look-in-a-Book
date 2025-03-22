@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@apollo/client";
-import { CREATE_CHAPTER } from "@/app/GraphqlOnClient/mutations/chapterMutations";
+import { CREATE_CHAPTER_WITH_BOOKSLUG } from "@/app/GraphqlOnClient/mutations/chapterMutations";
 import { useBook } from "@/app/context/bookContext"; // Контекст книги
 import { useForm } from "react-hook-form";
 import { CreateChapterFormData, Chapter } from "@/app/types/chapterTypes";
@@ -10,7 +10,10 @@ import Link from "next/link";
 
 const CreateChapter = () => {
     const { currentBook } = useBook(); // Получаем книгу из контекста
-    const bookId = currentBook?.id;
+    const slug = currentBook?.slug;
+    if (!slug) {
+        return <p>Book not found</p>;
+    }
 
     const { register, handleSubmit, formState: { errors } } = useForm<CreateChapterFormData>({
         defaultValues: {
@@ -19,9 +22,15 @@ const CreateChapter = () => {
             publishStatus: PStatus.DRAFT
         }
     });
+    const accessToken = localStorage.getItem("token");
 
-    const [createChapter, { loading, error }] = useMutation<Chapter>(CREATE_CHAPTER, {
-        variables: { bookId },
+    const [createChapter, { loading, error }] = useMutation<Chapter>(CREATE_CHAPTER_WITH_BOOKSLUG, {
+        context: {
+            headers: {
+              Authorization: accessToken ? `Bearer ${accessToken}` : "", 
+            },
+          },
+        variables: { slug },
         onCompleted: (data) => {
             console.log("Chapter created:", data);
             // Дополнительная логика для UI, например уведомления
@@ -29,12 +38,21 @@ const CreateChapter = () => {
     });
 
     const onSubmit = async (data: { title: string; content: string; publishStatus: string }) => {
-        if (!bookId) {
+        if (!slug) {
             alert("Book not found");
             return;
         }
         try {
-            await createChapter({ variables: { ...data, bookId } });
+            await createChapter(
+                {
+                variables: {
+                    title: data.title,
+                    content: data.content,
+                    publishStatus: data.publishStatus,
+                    createdAt: new Date(),
+                    },
+                  }
+            );
         } catch (err) {
             console.error("Error creating chapter:", err);
         }
@@ -76,6 +94,10 @@ const CreateChapter = () => {
                 </button>
             </form>
             {error && <p>Error: {error.message}</p>}
+
+            <Link href={`/allpages/books/${slug}/chapters`}>
+            <button>Back to chapters</button>
+            </Link>
 
             
         </div>

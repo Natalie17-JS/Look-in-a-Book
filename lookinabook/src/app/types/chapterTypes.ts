@@ -6,13 +6,13 @@ export interface Chapter {
     id: string;
     title: string;
     content: string;
-    book: Book;
+    //book: Book;
     publishStatus: PStatus;
     createdAt: Date;
     updatedAt: Date;
 }
 export interface ChaptersData {
-    chapters: Chapter[]; 
+  getChaptersByBookSlug: Chapter[]; 
   }
 
 export interface CreateChapterFormData {

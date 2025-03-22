@@ -7,10 +7,17 @@ export enum PStatus {
     DRAFT = "DRAFT",
   }
 
-export type createChapterArgs = {
+export type createChapterWithBookIdArgs = {
     title: string;
     content: string;
     bookId: number;
+    publishStatus: PStatus;
+}
+
+export type createChapterWithBookSlugArgs = {
+    title: string;
+    content: string;
+    slug: string;
     publishStatus: PStatus;
 }
 export type editChapterArgs = {
@@ -27,14 +34,20 @@ export type deleteChapterByIdArgs = {
 export type ChapterResolvers = {
     Query: {
       getChapterById: (parent: unknown, args: { id: string }) => Promise<Chapter | null>;
-      getChapters: (parent: unknown, args: { bookId: number }) =>  Promise<Chapter[] | null>;
+      getChaptersByBookId: (parent: unknown, args: { bookId: number }) =>  Promise<Chapter[] | null>;
+      getChaptersByBookSlug: (parent: unknown, args: { slug: string }) =>  Promise<Chapter[] | null>;
       getChapterDrafts: (parent: unknown, args: { bookId: number }, context: IContext) => Promise<Chapter[]>
       getAuthorBookChapters: (parent: unknown, args: { bookId: number }, context: IContext)=> Promise<Chapter[]>
     },
     Mutation: {
-        createChapter: (
+        createChapterWithBookId: (
             parent: unknown, 
-            args: createChapterArgs, 
+            args: createChapterWithBookIdArgs, 
+            context: IContext
+        ) => Promise<Chapter>;
+        createChapterWithBookSlug: (
+            parent: unknown, 
+            args: createChapterWithBookSlugArgs, 
             context: IContext
         ) => Promise<Chapter>;
         editChapter: (

@@ -1,12 +1,24 @@
 import { gql } from "@apollo/client";
 
-export const GET_CHAPTERS = gql`
-query getChapters ($bookId: Int!) {
-    getChapters(bookId: $bookId) {
+export const GET_CHAPTERS_BY_BOOKID = gql`
+query GetChaptersByBookId ($bookId: Int!) {
+    getChaptersByBookId(bookId: $bookId) {
         id
         title
         content
-        
+        publishStatus
+   
+  }
+    }
+`
+
+export const GET_CHAPTERS_BY_BOOKSLUG = gql`
+query GetChaptersByBookSlug ($slug: String!) {
+    getChaptersByBookSlug(slug: $slug) {
+        id
+        title
+        content
+        publishStatus
    
   }
     }

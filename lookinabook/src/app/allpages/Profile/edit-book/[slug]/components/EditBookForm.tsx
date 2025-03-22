@@ -8,18 +8,17 @@ import { EditBookData, Book, Category, Genre, WStatus, PStatus } from "@/app/typ
 import styles from "@/app/allpages/profile/new-book/components/BookForm.module.css"
 import { useBook } from "@/app/context/bookContext";
 import DeleteBookButton from "./DeleteBookBtn";
-import { useParams } from "next/navigation";
+//import { useParams } from "next/navigation";
 
 
 export default function EditBookForm() {
-  const params = useParams(); // Получаем slug
-  console.log("Params:", params); 
+ 
   const { currentBook, setCurrentBook } = useBook();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const bookSlug = params?.slug;
+  const slug = currentBook?.slug
   console.log("Book in context:", currentBook);
-  console.log("Looking for book with slug:", bookSlug);
+  console.log("Looking for book with slug:", slug);
   // Находим редактируемую книгу в массиве книг
   
 
@@ -27,11 +26,11 @@ export default function EditBookForm() {
     return <p>Book not found or not selected for editing.</p>;
   }
 
-  useEffect(() => {
-    if (!currentBook || currentBook.slug !== bookSlug) {
+  /*useEffect(() => {
+    if (!currentBook || currentBook.slug !== slug) {
       console.log("Book in context does not match the slug. Possible missing data.");
     }
-  }, [bookSlug, currentBook]);
+  }, [slug, currentBook]);*/
   
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<EditBookData>();
@@ -47,14 +46,16 @@ export default function EditBookForm() {
   });
 
   useEffect(() => {
-    reset({
-      title: currentBook.title,
-      annotation: currentBook.annotation,
-      category: currentBook.category,
-      genre: currentBook.genre,
-      writingStatus: currentBook.writingStatus,
-      publishStatus: currentBook.publishStatus,
-    });
+    if (currentBook) {
+      reset({
+        title: currentBook.title,
+        annotation: currentBook.annotation,
+        category: currentBook.category,
+        genre: currentBook.genre,
+        writingStatus: currentBook.writingStatus,
+        publishStatus: currentBook.publishStatus,
+      });
+    }
   }, [currentBook, reset]);
 
   const onSubmit = async (data: EditBookData) => {

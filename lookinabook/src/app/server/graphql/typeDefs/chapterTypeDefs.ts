@@ -18,7 +18,8 @@ export const chapterTypeDefs = `
 
   type Query {
     getChapterById(id: String!): Chapter
-    getChapters(bookId: Int!): [Chapter]
+    getChaptersByBookId(bookId: Int!): [Chapter]
+    getChaptersByBookSlug(slug: String!): [Chapter]
     getChapterDrafts(bookId: Int!): [Chapter]
     getAuthorBookChapters(bookId: Int!): [Chapter]
   }
@@ -27,7 +28,8 @@ type DeleteResponse {
 }
 
   type Mutation {
-    createChapter(title: String!, content: String!, publishStatus: PStatus!, bookId: Int!): Chapter!
+    createChapterWithBookId(title: String!, content: String!, publishStatus: PStatus!, bookId: Int!): Chapter!
+    createChapterWithBookSlug(title: String!, content: String!, publishStatus: PStatus!, slug: String!): Chapter!
     editChapter(id: String!, title: String, content: String, bookId: Int!): Chapter
     publishChapter(id: String!): Chapter!
     deleteChapterById(id: String!): DeleteResponse!
