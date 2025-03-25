@@ -1,50 +1,48 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { useEffect, useState, createContext, useContext, ReactNode } from "react";
 import { useQuery } from "@apollo/client";
+import { useParams } from "next/navigation"; // Получаем ID главы из URL
 import { GET_CHAPTER_BY_ID } from "@/app/GraphqlOnClient/queries/chapterQueries";
-import { Chapter } from "../types/chapterTypes";
-
+import { Chapter } from "@/app/types/chapterTypes";
 
 interface ChapterContextType {
-    chapter: Chapter | null;
-    loading: boolean;
-    error: string | null;
-    setChapterId: (id: string) => void;
+  currentChapter: Chapter | null;
+  setCurrentChapter: React.Dispatch<React.SetStateAction<Chapter | null>>;
 }
 
 const ChapterContext = createContext<ChapterContextType | undefined>(undefined);
 
-export const ChapterProvider = ({ children }: { children: React.ReactNode }) => {
-    const [chapterId, setChapterId] = useState<string | null>(null);
+export const ChapterProvider = ({ children }: { children: ReactNode }) => {
+  const [currentChapter, setCurrentChapter] = useState<Chapter | null>(null);
+  const { id } = useParams(); // Получаем ID главы из URL
 
-    const { loading, error, data } = useQuery(GET_CHAPTER_BY_ID, {
-        variables: { id: chapterId },
-        skip: !chapterId, // Запрос выполняется только если есть ID
-    });
+  const { data, error, loading } = useQuery(GET_CHAPTER_BY_ID, {
+    variables: { id: id as string }, 
+    skip: !id, // Не делаем запрос, если нет ID
+  });
 
-    useEffect(() => {
-        if (data?.getChapterById) {
-            setChapterId(data.getChapterById.id);
-        }
-    }, [data]);
+  // Устанавливаем главу в контекст после загрузки
+  useEffect(() => {
+    if (data?.getChapterById) {
+      setCurrentChapter(data.getChapterById);
+    }
+  }, [data]);
 
-    return (
-        <ChapterContext.Provider value={{ 
-            chapter: data?.getChapterById || null, 
-            loading, 
-            error: error ? error.message : null,
-            setChapterId 
-        }}>
-            {children}
-        </ChapterContext.Provider>
-    );
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  return (
+    <ChapterContext.Provider value={{ currentChapter, setCurrentChapter }}>
+      {children}
+    </ChapterContext.Provider>
+  );
 };
 
 export const useChapter = () => {
-    const context = useContext(ChapterContext);
-    if (!context) {
-        throw new Error("useChapter must be used within a ChapterProvider");
-    }
-    return context;
+  const context = useContext(ChapterContext);
+  if (!context) {
+    throw new Error("useChapter must be used within a ChapterProvider");
+  }
+  return context;
 };
