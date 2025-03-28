@@ -10,7 +10,6 @@ export const chapterTypeDefs = `
     id: String!
     title: String!
     content: String!
-    bookId: Int!
     publishStatus: PStatus!
     createdAt: DateTime!
     updatedAt: DateTime!

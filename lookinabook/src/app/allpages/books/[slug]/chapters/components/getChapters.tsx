@@ -32,7 +32,10 @@ if (!slug) return <p>Select a book to view chapters.</p>;
                     <ul>
                         {data?.getChaptersByBookSlug.map(chapter => (
                             <li key={chapter.id}>
-                                <p>{chapter.title}</p>
+                                <Link href={`/allpages/books/${currentBook.slug}/chapters/${chapter.id}`}>
+                                    <p>{chapter.title}</p>
+                                </Link>
+                               
                                 <p>{chapter.content}</p>
                                 <p>{chapter.publishStatus}</p>
                             </li>

@@ -50,7 +50,7 @@
     border: 1px solid rgb(86, 45, 16);
     border-radius: 8px;
 }
-.window {
+/*.window {
     width:100%;
     border: 1px solid orange;
     display: flex;
@@ -60,9 +60,9 @@
 .window-image {
     width: 35%;
     height: auto;
-    /*border: 1px solid purple;*/
+    
     flex-shrink: 0;
-}
+}*/
 
 .book-info {
     width: 35%;

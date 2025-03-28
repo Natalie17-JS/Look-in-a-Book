@@ -15,6 +15,7 @@ import Link from "next/link";
 import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
 import { useBook } from "@/app/context/bookContext";
 import PublishBookButton from "@/app/allpages/profile/edit-book/[slug]/components/PublishBook";
+import SmallWindow from "./SmallWindow";
 //import { useRouter } from "next/router";
 
 
@@ -50,7 +51,9 @@ export default function Book() {
           <div className={styles.cover}></div>
           </div>
           
-            <Image src={window} alt="Small window" className={styles["window-image"]}/>
+         
+            <SmallWindow />
+        
        
           <div className={styles["book-info"]}>
             <div className={styles["book-title"]}>

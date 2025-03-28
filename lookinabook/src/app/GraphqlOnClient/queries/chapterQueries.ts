@@ -35,12 +35,12 @@ query GetChapterDrafts($bookId: Int!) {
 `
 
 export const GET_CHAPTER_BY_ID = gql`
-query GetChapterByID($id: String) {
+query GetChapterByID($id: String!) {
     getChapterById(id: $id) {
     id
     title
     content
-    publishStatus
+   createdAt
     }
 }
 `

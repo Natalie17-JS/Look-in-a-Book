@@ -26,6 +26,7 @@ export const ChapterProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (data?.getChapterById) {
       setCurrentChapter(data.getChapterById);
+      console.log("Current chapter: " + data.getChapterById)
     }
   }, [data]);
 

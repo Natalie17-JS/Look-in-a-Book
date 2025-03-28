@@ -1,0 +1,9 @@
+.small-window {
+    width: 100%;
+    border: 1px solid yellow;
+}
+
+.window-view-image {
+    width: 38%;
+    height: auto;
+}
