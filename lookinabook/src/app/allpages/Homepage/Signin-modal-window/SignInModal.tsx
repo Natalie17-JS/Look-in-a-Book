@@ -40,7 +40,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => {
                 setStep("verify"); // Переходим к шагу верификации
               }}
             />
-            <p>
+            <p className={styles.text}>
               Already have an account?{" "}
               <a href="#" className={styles.link} onClick={() => setStep("login")}>
                 Sign in here
@@ -59,7 +59,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => {
         {step === "login" && (
           <>
             <SignInForm />
-            <p>
+            <p className={styles.text}>
               Don't have an account?{" "}
               <a href="#" className={styles.link} onClick={() => setStep("register")}>
                 Register here

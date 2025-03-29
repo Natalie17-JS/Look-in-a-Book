@@ -6,12 +6,21 @@ import styles from "./SignInUpForm.module.css";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
 import { RegisterFormData, RegisterUserData } from "@/app/types/userTypes";
+import { useTheme } from "@/app/context/themeContext";
 
 
 export default function RegisterForm({ onSuccess }: { onSuccess: (email: string) => void }) {
   const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<RegisterFormData>({
     mode: "onChange",
   });
+  const { theme } = useTheme();
+
+   const themeInput =
+      theme === "dark"
+        ? styles.dark
+        : theme === "gray"
+        ? styles.gray
+        : styles.light;
 
   const [registerUser, { loading }] = useMutation<RegisterUserData>(REGISTER_USER);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -42,14 +51,14 @@ export default function RegisterForm({ onSuccess }: { onSuccess: (email: string)
 
   return (
     <>
-      <h2>Register</h2>
+      <h2 className={styles["head-text"]}>Create an account</h2>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formGroup}>
           <label className={styles.label} htmlFor="username">
             Name:
           </label>
           <input
-            className={styles.input}
+            className={`${styles.input} ${themeInput}`}
             type="username"
             id="username"
             placeholder="Enter your name..."
@@ -68,7 +77,7 @@ export default function RegisterForm({ onSuccess }: { onSuccess: (email: string)
             Email:
           </label>
           <input
-            className={styles.input}
+            className={`${styles.input} ${themeInput}`}
             type="email"
             id="email"
             placeholder="Enter your email..."
@@ -90,7 +99,7 @@ export default function RegisterForm({ onSuccess }: { onSuccess: (email: string)
             Password:
           </label>
           <input
-            className={styles.input}
+            className={`${styles.input} ${themeInput}`}
             type="password"
             id="password"
             placeholder="Enter your password..."
@@ -117,7 +126,7 @@ export default function RegisterForm({ onSuccess }: { onSuccess: (email: string)
             Confirm Password:
           </label>
           <input
-            className={styles.input}
+           className={`${styles.input} ${themeInput}`}
             type="password"
             id="confirmPassword"
             placeholder="Confirm your password..."
@@ -137,7 +146,7 @@ export default function RegisterForm({ onSuccess }: { onSuccess: (email: string)
             Bio:
           </label>
           <textarea
-            className={styles.input}
+            className={`${styles.input} ${themeInput}`}
             id="bio"
             placeholder="Tell us about yourself..."
             {...register("bio")}

@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 export const sendVerificationEmail = async (email: string, code: string) => {
   try {
     const info = await transporter.sendMail({
-      from: `"Your App" <${process.env.EMAIL_USER}>`,
+      from: `"Look in a book" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Verification code",
       text: `You verification code: ${code}. It is valid 24 hours.`,

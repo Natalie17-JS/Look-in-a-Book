@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import window from "@/app/images/small-window.svg"
-import dayView from "@/app/images/small-window-day.svg"
+import sunView from "@/app/images/small-window-day.svg"
 import cloudsView from "@/app/images/small-window-clouds.svg"
 import nightView from "@/app/images/small-window-night.svg"
 import { useTheme } from "@/app/context/themeContext"
@@ -20,7 +20,7 @@ switch (theme) {
     viewImage = cloudsView;
     break;
   default:
-    viewImage = dayView;
+    viewImage = sunView;
 }
 
 return(

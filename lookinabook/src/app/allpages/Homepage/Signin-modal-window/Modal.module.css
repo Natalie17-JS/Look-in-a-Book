@@ -30,6 +30,13 @@
   font-size: 1.2rem;
   cursor: pointer;
 }
+.link {
+  color:  rgb(172, 120, 43);
+  text-decoration: none;
+}
+.text {
+  margin-top: 15px;
+}
 
 /*----------------------------theme close-btn------------------------*/
 .closelight {
@@ -57,5 +64,5 @@
 .dark {
   background: rgb(26, 26, 26);
   color: white;
-  border: 1px solid white;
+  border: 1px solid  rgb(218, 153, 54);
 }

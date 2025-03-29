@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import { useUser } from "./authContext";
 
 // Тип для темы
 type Theme = "light" | "dark" | "gray";
@@ -32,10 +33,22 @@ interface ThemeProviderProps {
 
 // Создаем провайдер контекста
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  const { user } = useUser(); // Получаем текущего пользователя
+  const userId = user?.id || "guest"; // Если нет авторизации — "guest"
+
   const [theme, setTheme] = useState<Theme>("dark"); // Начальная тема — 'light'
+
+   // Загружаем тему из localStorage при первом рендере
+   useEffect(() => {
+    const savedTheme = localStorage.getItem(`theme-${userId}`) as Theme;
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, [userId]); // Перезапускаем при смене пользователя
 
   const toggleTheme = (newTheme: Theme) => {
     setTheme(newTheme);
+    localStorage.setItem(`theme-${userId}`, newTheme);
   };
 
   return (
