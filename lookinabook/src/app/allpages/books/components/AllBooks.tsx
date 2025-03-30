@@ -7,7 +7,9 @@ import { Book } from "@/app/types/bookTypes";
 import Link from "next/link";
 
 export default function Books() {
-  const { loading, error, data } = useQuery(GET_BOOKS);
+  const { loading, error, data } = useQuery(GET_BOOKS, {
+    pollInterval: 10000,
+  });
 
   if (loading) return <p className={styles.loading}>Loading books...</p>;
   if (error) return <p className={styles.error}>Error: {error.message}</p>;
@@ -19,7 +21,7 @@ export default function Books() {
       </div>
 
     <div className={styles.container}>
-      <h1>All Books</h1>
+      <h1 className={styles["welcome-text"]}>Welcome to the library!</h1>
       <div className={styles.bookList}>
         {data.getBooks.map((book: Book) => (
           <div key={book.id} className={styles.bookCard}>

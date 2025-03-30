@@ -30,6 +30,31 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   }, [fetchedUser]);
 
+  // Обновляем время последней активности при закрытии вкладки или перезагрузке страницы
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (user?.id) {
+        navigator.sendBeacon("/api/updateLastActive");
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Очистка при размонтировании компонента
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [user]);
+
+  /*useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 10000); // Запрос каждые 10 секунд
+
+    return () => clearInterval(interval);
+  }, [refetch]);*/
+
+
   return (
     <UserContext.Provider value={{ user, setUser, loading }}>
       {children}

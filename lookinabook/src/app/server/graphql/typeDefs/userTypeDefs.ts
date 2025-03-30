@@ -20,8 +20,8 @@ type User {
   verificationAttempts: Int!
   lastVerificationRequest: DateTime!
   isOnline: Boolean!
-  isBanned: Boolean!
-  publishBanned: Boolean!
+  isBanned: Boolean
+  publishBanned: Boolean
   banEndDate: DateTime
   banCount: Int
   books: [Book!] 

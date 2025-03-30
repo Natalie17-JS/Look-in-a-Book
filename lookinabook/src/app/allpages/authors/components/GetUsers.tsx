@@ -3,6 +3,7 @@
 import { useQuery } from "@apollo/client"
 import { GET_USERS } from "@/app/GraphqlOnClient/queries/userQueries"
 import { UsersData, User } from "@/app/types/userTypes"
+import Link from "next/link"
 
 export default function UsersList() {
 
@@ -14,7 +15,13 @@ export default function UsersList() {
         return (
             <ul>
                 {data?.getUsers.map((user: User) => (
-                    <li key={user.id}>{user.username}</li>
+                    <li key={user.id}>
+                        <Link href={`/allpages/authors/${user.id}`}>
+                        <p>{user.username}</p>
+                        </Link>
+                        
+                        <p>Books: {user.books?.length || 0}</p>
+                        </li>
                 ))}
             </ul>
         )

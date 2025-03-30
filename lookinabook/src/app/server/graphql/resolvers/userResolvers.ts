@@ -19,9 +19,10 @@ const userResolvers: UserResolvers = {
       try {
         return await prisma.user.findUnique({
           where: { id },
-          /*include: {
+          include: {
             books: true,
-            comments: true,
+          }
+           /* comments: true,
             likes: true,
             posts: true,
             notifications: true,
@@ -383,7 +384,8 @@ const userResolvers: UserResolvers = {
          // Обновляем статус isOnline на true
       await prisma.user.update({
         where: { id: user.id },
-        data: { isOnline: true },
+        data: { isOnline: true, lastActive: new Date(), },
+        
       });
 
         // Создать токены
@@ -456,7 +458,7 @@ const userResolvers: UserResolvers = {
     });
         await prisma.user.update({
           where: { id: user.id },
-          data: { isOnline: false },
+          data: { isOnline: false, lastActive: new Date(), },
         });
     
         return true;

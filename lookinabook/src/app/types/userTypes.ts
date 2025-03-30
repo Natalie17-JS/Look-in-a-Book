@@ -1,3 +1,5 @@
+import { Book } from "./bookTypes";
+
 export interface User {
     id: number;
     username: string;
@@ -11,6 +13,7 @@ export interface User {
     points: number;
     lastActive: string;
     isOnline: boolean;
+    books: Book[]
   }
 // Типизация данных формы
 export interface RegisterFormData {

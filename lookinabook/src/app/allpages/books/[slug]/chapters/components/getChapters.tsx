@@ -6,6 +6,8 @@ import { ChaptersData } from "@/app/types/chapterTypes"
 import { useBook } from "@/app/context/bookContext"
 import Link from "next/link"
 import { useUser } from "@/app/context/authContext"
+import styles from "./Chapters.module.css"
+import SmallWindow from "../../components/SmallWindow"
 
 const Chapters = () => {
     const { currentBook } = useBook(); 
@@ -27,9 +29,13 @@ if (!slug) return <p>Select a book to view chapters.</p>;
     
 
         return (
-            <div>
+            <div className={styles["chapters-container"]}>
+                <SmallWindow/>
+
+                <div className={styles["chapters-list-container"]}>
+                    <h1>Chapters</h1>
                 {data?.getChaptersByBookSlug ? (
-                    <ul>
+                    <ul className={styles["chapters-list"]}>
                         {data?.getChaptersByBookSlug.map(chapter => (
                             <li key={chapter.id}>
                                 <Link href={`/allpages/books/${currentBook.slug}/chapters/${chapter.id}`}>
@@ -54,6 +60,8 @@ if (!slug) return <p>Select a book to view chapters.</p>;
                     <button>Add chapter</button>
                 </Link>
             )}
+
+</div>
            
             </div>
         );

@@ -12,7 +12,6 @@ export default function ChaptersPage() {
 
     return (
         <div className={`${styles["chapters-container"]} ${themeClass}`}>
-            <h1>Chapters</h1>
             <Chapters />
         </div>
     );

@@ -24,9 +24,6 @@ switch (theme) {
 }
 
 return(
-  
-   
     <Image src={viewImage} alt="window-view" className={styles["window-view-image"]} />
-
 )
 }
