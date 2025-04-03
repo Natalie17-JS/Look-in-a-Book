@@ -8,6 +8,8 @@ import Link from "next/link";
 import Image from "next/image";
 import bookcase from "@/app/images/bookcase.svg"
 import SmallWindow from "./SmallWindow";
+import leftshelf from "@/app/images/left-books-shelf.svg"
+import rightshelf from "@/app/images/right-books-shelf.svg"
 
 export default function Books() {
   const { loading, error, data } = useQuery(GET_BOOKS, {
@@ -20,9 +22,13 @@ export default function Books() {
   return (
 <div className={styles["books-page-container"]}>
   <div className={styles["shelves-window"]}>
-    <div className={styles["left-shelf"]}></div>
+    <div className={styles["left-shelf"]}>
+      <Image src={leftshelf} alt="left-shelf" className={styles["left-books-shelf"]} />
+    </div>
     <SmallWindow/>
-    <div className={styles["right-shelf"]}></div>
+    <div className={styles["right-shelf"]}>
+    <Image src={rightshelf} alt="right-shelf" className={styles["right-books-shelf"]} />
+    </div>
   </div>
 
     <div className={styles["books-filter-bookcase"]}>
