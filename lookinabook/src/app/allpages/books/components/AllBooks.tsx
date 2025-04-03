@@ -7,9 +7,7 @@ import { Book } from "@/app/types/bookTypes";
 import Link from "next/link";
 import Image from "next/image";
 import bookcase from "@/app/images/bookcase.svg"
-import SmallWindow from "./SmallWindow";
-import leftshelf from "@/app/images/left-books-shelf.svg"
-import rightshelf from "@/app/images/right-books-shelf.svg"
+import GoBackDoor from "./GoBackDoor";
 
 export default function Books() {
   const { loading, error, data } = useQuery(GET_BOOKS, {
@@ -20,22 +18,15 @@ export default function Books() {
   if (error) return <p className={styles.error}>Error: {error.message}</p>;
 
   return (
-<div className={styles["books-page-container"]}>
-  <div className={styles["shelves-window"]}>
-    <div className={styles["left-shelf"]}>
-      <Image src={leftshelf} alt="left-shelf" className={styles["left-books-shelf"]} />
-    </div>
-    <SmallWindow/>
-    <div className={styles["right-shelf"]}>
-    <Image src={rightshelf} alt="right-shelf" className={styles["right-books-shelf"]} />
-    </div>
-  </div>
-
     <div className={styles["books-filter-bookcase"]}>
 
     
       <div className={styles["filter-container"]}>
-        Filter
+        <h2 className={styles["filter-text"]}>Find your favourite book!</h2>
+        <div className={styles["filter-shelf"]}>
+       
+        </div>
+        <GoBackDoor/>
       </div>
 
 
@@ -71,7 +62,6 @@ export default function Books() {
     </div>
     
 
-    </div>
     </div>
   );
 }

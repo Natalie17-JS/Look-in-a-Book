@@ -24,7 +24,7 @@ switch (theme) {
 
 return(
   <div className={styles["small-window-container"]}>
-    <Image src={viewImage} alt="window-view" className={styles["window-view-image"]} />
+    <Image src={viewImage} alt="window-view" className={styles["window-view-image"]} width={180} />
    </div>
 )
 }

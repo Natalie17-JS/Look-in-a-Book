@@ -1,29 +1,22 @@
 "use client";
 
 
-import { useQuery } from "@apollo/client";
-import { GET_BOOK_BY_SLUG } from "@/app/GraphqlOnClient/queries/bookQueries";
 import Image from "next/image";
-import window from "@/app/images/small-window.svg"
 import flowers from "@/app/images/flowers-on-shelf-1.svg"
 import uzor from "@/app/images/zavitushka.svg"
 import plakat from "@/app/images/annot-plakat-night.svg"
-//import { Book } from "@/app/types/bookTypes";
 import styles from "./GetBook.module.css"
 import { useUser } from "@/app/context/authContext";
 import Link from "next/link";
 import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
 import { useBook } from "@/app/context/bookContext";
 import PublishBookButton from "@/app/allpages/profile/edit-book/[slug]/components/PublishBook";
-import SmallWindow from "./SmallWindow";
-//import { useRouter } from "next/router";
+
 
 
 export default function Book() {
   const { currentBook } = useBook(); // Получаем текущую книгу из контекста
   const { user } = useUser();
-  //const router = useRouter();
-  //const { slug } = router.query;
 
   // Если книга не загружена, показываем загрузку
   if (!currentBook) return <p>Loading...</p>;
@@ -52,7 +45,7 @@ export default function Book() {
           </div>
           
          
-            <SmallWindow />
+          
         
        
           <div className={styles["book-info"]}>

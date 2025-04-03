@@ -1,0 +1,29 @@
+.left-books-shelf,
+  .right-books-shelf {
+    width: 100%;
+    height: 25vh;
+    object-fit: cover;
+  }
+  .shelves-window {
+    display: flex;
+    height: 25vh;
+    width: 100vw;
+  }
+  .left-shelf,
+.right-shelf{
+  width: calc((100% - 10%) / 2);
+  /*border: 1px solid orange;*/
+}
+
+/*----theme--------*/
+.shelves-window.light {
+    background-color: white;
+  }
+  .shelves-window.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .shelves-window.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }

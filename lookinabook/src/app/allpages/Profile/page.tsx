@@ -3,10 +3,10 @@
 import Shelf from "./profileComponents/Shelf/Shelf";
 import Worktable from "./profileComponents/Worktable/Worktable";
 import LittleClock from "./profileComponents/LittleClock/LittleClock";
-import GoBackDoor from "./profileComponents/GobackDoor/GobackDoor";
 import styles from "./MainPage.module.css";
 import { useTheme } from "@/app/context/themeContext";
 import { useUser } from "@/app/context/authContext";
+import GoBackDoor from "./profileComponents/GobackDoor/GobackDoor";
 
 const ProfilePage = () => {
   const { theme } = useTheme();

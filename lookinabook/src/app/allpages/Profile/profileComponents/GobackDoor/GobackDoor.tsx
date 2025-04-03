@@ -1,38 +1,15 @@
-"use client";
-
-import doorday from "@/app/images/go-back-door-day.svg";
-import doornight from "@/app/images/go-back-door-night.svg";
-import { useTheme } from "@/app/context/themeContext";
-import Image from "next/image";
-import Link from "next/link";
+import Door from "./Door";
 import styles from "./GobackDoor.module.css";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 export default function GoBackDoor() {
-  const { theme } = useTheme();
 
-  let doorImage;
-  switch (theme) {
-    case "dark":
-      doorImage = doornight;
-      break;
-    case "gray":
-      doorImage = doorday;
-      break;
-    default:
-      doorImage = doorday;
-  }
-
+    const router = useRouter();
   return (
-    <div className={styles.gobackdoor}>
-      <div className={styles.door}>
-        <Link href="/">
-          <Image
-            src={doorImage}
-            alt="go-back-door"
-            className={styles["gobackdoor-image"]}
-          />
-        </Link>
-      </div>
+    <div className={styles.gobackdoor} onClick={() => router.push("/")}>
+      <Door />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-
+import LibraryUpperPart from "./BookShelvesUp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +20,7 @@ export default function BooksLayout({
     <div
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-     
+     <LibraryUpperPart/>
       <main>
         {children}
       </main>
