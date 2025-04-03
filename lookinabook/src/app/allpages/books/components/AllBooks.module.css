@@ -1,3 +1,21 @@
+.shelves-window {
+  display: flex;
+  height: 25vh;
+}
+.left-shelf,
+.right-shelf{
+  width: calc((100% - 15%) / 2);
+  border: 1px solid orange;
+}
+
+.books-filter-bookcase {
+display: flex;
+border: 1px solid yellow;
+align-items: flex-end;
+height: 75vh;
+}
+
+
 .book-composition {
   display: flex;
   gap: 20px;
@@ -10,12 +28,16 @@
   /*background: url('book-cover.jpg') no-repeat center;
   background-size: cover;*/
 }
+
+
 .container {
     padding-block: 20px;
-    max-width: 800px;
+    width: 50vw;
+    min-width: 500px;
     margin: auto;
     border: 20px solid rgb(118, 61, 26);
-    margin-top: 100px;
+    height: 75vh;
+   
   }
   
   .loading, .error {
@@ -48,5 +70,27 @@
   }
   .welcome-text {
     text-align: center;
+  }
+
+
+  /*-----------------------bookcase--------------------*/
+  .bookcase-image {
+    height: auto;
+    width: 100%;
+  }
+  .bookcase-container{
+    width: 25vw;
+    height: 75vh;
+    display: flex;
+    justify-content: left;
+    align-items: flex-end;
+   /*border: 1px solid red;*/
+  }
+
+  /*------------------------filter-------------------------------*/
+  .filter-container{
+    width: 25vw;
+    height: 75vh;
+    border: 1px solid brown;
   }
   

@@ -1,0 +1,10 @@
+.window-view-image {
+    width: 75%;
+}
+.small-window-container {
+    width: 15%;
+    border:1px solid purple;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

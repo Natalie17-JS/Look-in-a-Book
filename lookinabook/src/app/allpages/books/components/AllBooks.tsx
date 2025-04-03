@@ -5,6 +5,9 @@ import { GET_BOOKS } from "@/app/GraphqlOnClient/queries/bookQueries";
 import styles from "./AllBooks.module.css"; 
 import { Book } from "@/app/types/bookTypes";
 import Link from "next/link";
+import Image from "next/image";
+import bookcase from "@/app/images/bookcase.svg"
+import SmallWindow from "./SmallWindow";
 
 export default function Books() {
   const { loading, error, data } = useQuery(GET_BOOKS, {
@@ -15,11 +18,22 @@ export default function Books() {
   if (error) return <p className={styles.error}>Error: {error.message}</p>;
 
   return (
-    <div className={styles["books-and-filter"]}>
+<div className={styles["books-page-container"]}>
+  <div className={styles["shelves-window"]}>
+    <div className={styles["left-shelf"]}></div>
+    <SmallWindow/>
+    <div className={styles["right-shelf"]}></div>
+  </div>
+
+    <div className={styles["books-filter-bookcase"]}>
+
+    
       <div className={styles["filter-container"]}>
         Filter
       </div>
 
+
+<div className={styles["books-container"]}>
     <div className={styles.container}>
       <h1 className={styles["welcome-text"]}>Welcome to the library!</h1>
       <div className={styles.bookList}>
@@ -44,7 +58,14 @@ export default function Books() {
         ))}
       </div>
     </div>
+    </div>
 
+    <div className={styles["bookcase-container"]}>
+<Image src={bookcase} alt="bookcase" className={styles["bookcase-image"]}/>
+    </div>
+    
+
+    </div>
     </div>
   );
 }
