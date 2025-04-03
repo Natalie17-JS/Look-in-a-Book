@@ -11,8 +11,7 @@ import Link from "next/link";
 import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
 import { useBook } from "@/app/context/bookContext";
 import PublishBookButton from "@/app/allpages/profile/edit-book/[slug]/components/PublishBook";
-
-
+import GoBackDoor from "./GoBackDoor";
 
 export default function Book() {
   const { currentBook } = useBook(); // Получаем текущую книгу из контекста
@@ -32,7 +31,7 @@ export default function Book() {
 
   return (
 <div className={styles["table-outer-container"]}>
-
+<GoBackDoor/>
       <div className={styles["table-container"]}>
         
         <div className={styles["things-on-table"]}>
