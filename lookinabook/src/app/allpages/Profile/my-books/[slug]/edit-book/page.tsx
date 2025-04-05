@@ -3,7 +3,7 @@
 import EditBookForm from "./components/EditBookForm"
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./MainPage.module.css"
-import SideShelf from "../../profileComponents/SideShelf/SideShelf";
+import SideShelf from "../../../profileComponents/SideShelf/SideShelf";
 
 
 export default function EditBookPage() {

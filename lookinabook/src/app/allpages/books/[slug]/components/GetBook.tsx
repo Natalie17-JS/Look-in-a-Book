@@ -8,9 +8,9 @@ import plakat from "@/app/images/annot-plakat-night.svg"
 import styles from "./GetBook.module.css"
 import { useUser } from "@/app/context/authContext";
 import Link from "next/link";
-import DeleteBookButton from "@/app/allpages/profile/edit-book/[slug]/components/DeleteBookBtn";
+import DeleteBookButton from "@/app/allpages/profile/my-books/[slug]/edit-book/components/DeleteBookBtn";
 import { useBook } from "@/app/context/bookContext";
-import PublishBookButton from "@/app/allpages/profile/edit-book/[slug]/components/PublishBook";
+import PublishBookButton from "@/app/allpages/profile/my-books/[slug]/edit-book/components/PublishBook";
 import GoBackDoor from "./GoBackDoor";
 
 export default function Book() {
@@ -30,24 +30,24 @@ export default function Book() {
   const isDraft = publishStatus === "DRAFT";
 
   return (
-<div className={styles["table-outer-container"]}>
+<div className={styles["book-container"]}>
+
 <GoBackDoor/>
+
+
       <div className={styles["table-container"]}>
         
         <div className={styles["things-on-table"]}>
           
-          <div className={styles["shelf-and-cover"]}>
-            <div className={styles["small-shelf"]}>
+          
+          <div className={styles.cover}></div>
+
+          
+          <div className={styles["flower-container"]}>
               <Image src={flowers} alt="flowers" className={styles["flowers-image"]} />
             </div>
-          <div className={styles.cover}></div>
-          </div>
           
-         
-          
-        
-       
-          <div className={styles["book-info"]}>
+          <div className={styles["book-info-container"]}>
             <div className={styles["book-title"]}>
             <h1 className={styles.title}>{title}</h1>
             <Image src={uzor} alt="uzor" className={styles["uzor-image"]}/>

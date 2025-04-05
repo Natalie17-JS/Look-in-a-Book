@@ -1,11 +1,19 @@
 "use client"
 
-import Book from "./components/GetBook";
+import BookContent from "./components/Book";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./MainPage.module.css"
+import { Book } from "@/app/types/bookTypes";
+import { useBook } from "@/app/context/bookContext";
+import GoBackDoor from "./components/GoBackDoor";
 
-export default function BookPage() {
+type PublicBookProps = {
+  book: Book;
+};
+
+export default function PublicBookPage({ book }: PublicBookProps) {
   const {theme} = useTheme()
+  const {currentBook} = useBook()
 
   const themeClass =
     theme === "dark"
@@ -16,7 +24,8 @@ export default function BookPage() {
 
   return(
     <div  className={`${styles["book-container"]} ${themeClass}`}>
-    <Book />
+      <GoBackDoor/>
+    <BookContent book={currentBook} />
     </div>
   )
 }

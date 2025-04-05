@@ -3,8 +3,8 @@
 
 <svg
    width="694.70099"
-   height="545.52002"
-   viewBox="0 0 183.80663 144.33641"
+   height="440.51999"
+   viewBox="0 0 183.80663 116.55498"
    version="1.1"
    id="svg1"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
@@ -31,7 +31,8 @@
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3" />
+     inkscape:current-layer="layer3"
+     showgrid="false" />
   <defs
      id="defs1" />
   <g
@@ -41,8 +42,8 @@
      transform="translate(6.1375431,-96.065892)"
      style="display:inline">
     <path
-       style="display:inline;fill:#a0a0a0;fill-opacity:1;stroke:#575757;stroke-width:0.362113;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       d="M 2.8738068,109.9503 V 231.58234 H 170.5695 V 110.54363 Z"
+       style="display:inline;fill:#a0a0a0;fill-opacity:1;stroke:#575757;stroke-width:0.326583;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       d="M 2.8560417,109.93253 V 208.8458 H 170.58727 v -98.43076 z"
        id="path3-2" />
     <path
        style="display:inline;fill:#a0a0a0;fill-opacity:1;stroke:#575757;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
@@ -51,7 +52,7 @@
        sodipodi:nodetypes="csccscsc" />
     <path
        style="display:inline;fill:#a0a0a0;fill-opacity:1;stroke:#575757;stroke-width:0.499999;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       d="m 3.1811533,235.68755 c 0,0 -1.473198,-0.19963 -1.7878267,-4.7736 L 0.70249864,220.87088 c 0,0 42.62017536,7.7056 88.66083836,7.7056 46.040653,0 81.514603,-2.64168 83.024133,-5.66074 1.50953,-3.01906 1.21586,12.51837 -2.55797,13.65052 -3.77382,1.13214 -19.72723,1.82216 -19.72723,1.82216 z"
+       d="m 3.1811533,208.69988 c 0,0 -1.473198,-0.19963 -1.7878267,-4.7736 L 0.70249864,193.88321 c 0,0 42.62017536,7.7056 88.66083836,7.7056 46.040653,0 81.514603,-2.64168 83.024133,-5.66074 1.50953,-3.01906 1.21586,12.51837 -2.55797,13.65052 -3.77382,1.13214 -19.72723,1.82216 -19.72723,1.82216 z"
        id="path4-7"
        sodipodi:nodetypes="cscssscc" />
   </g>

@@ -1,20 +1,21 @@
-.book-container.light {
+.author-book-container.light {
     background-color: white;
   }
-  .book-container.gray {
+  .author-book-container.gray {
     background-color: rgb(185, 180, 166);
     color: rgb(26, 26, 26);
   }
-  .book-container.dark {
+  .author-book-container.dark {
     background-color: rgb(36, 36, 36);
     color: white;
   }
-  .book-container {
+  .author-book-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+  
     align-items: flex-end;
-   width: 100vw;
-    height: 75vh;
+   width: 80vw;
+    height: 100vh;
     border: 1px solid red;
     margin: 0 auto;
   }

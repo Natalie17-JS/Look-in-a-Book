@@ -34,6 +34,16 @@ query GetChapterDrafts($bookId: Int!) {
   }
 `
 
+export const GET_AUTHORBOOK_CHAPTERS = gql`
+  query GetAuthorBookChapters($bookId: Int!) {
+    getAuthorBookChapters(bookId: $bookId) {
+    id
+    title
+    content
+    }
+    }
+`
+
 export const GET_CHAPTER_BY_ID = gql`
 query GetChapterByID($id: String!) {
     getChapterById(id: $id) {

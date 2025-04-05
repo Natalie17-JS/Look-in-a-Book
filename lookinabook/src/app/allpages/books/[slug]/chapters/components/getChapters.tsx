@@ -30,20 +30,15 @@ if (!slug) return <p>Select a book to view chapters.</p>;
 
         return (
             <div className={styles["chapters-container"]}>
-                <SmallWindow/>
-
-                <div className={styles["chapters-list-container"]}>
-                    <h1>Chapters</h1>
+            
+                    <h1 className={styles["head-text"]}>Chapters</h1>
                 {data?.getChaptersByBookSlug ? (
                     <ul className={styles["chapters-list"]}>
                         {data?.getChaptersByBookSlug.map(chapter => (
                             <li key={chapter.id}>
                                 <Link href={`/allpages/books/${currentBook.slug}/chapters/${chapter.id}`}>
-                                    <p>{chapter.title}</p>
+                                    <p className={styles["chapter-title"]}>{chapter.title}</p>
                                 </Link>
-                               
-                                <p>{chapter.content}</p>
-                                <p>{chapter.publishStatus}</p>
                             </li>
                             
                         ))}
@@ -63,7 +58,6 @@ if (!slug) return <p>Select a book to view chapters.</p>;
 
 </div>
            
-            </div>
         );
 }
 

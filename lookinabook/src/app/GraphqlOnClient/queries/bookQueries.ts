@@ -16,7 +16,7 @@ export const GET_BOOKS = gql `
     }
 `
 
-export const GET_MY_BOOKS = gql `
+export const GET_AUTHOR_BOOKS = gql `
   query GetMyBooks {
     getMyBooks {
       id

@@ -87,7 +87,7 @@ async getChaptersByBookSlug(_, { slug }) {
 },
 
 
-async getAuthorBookChapters(_, { bookId }, { req, res, prisma }) {
+async getAuthorBookChapters(_, { slug }, { req, res, prisma }) {
   try {
     const user = await getUserFromRequest(req, res);
     if (!user) {
@@ -96,7 +96,7 @@ async getAuthorBookChapters(_, { bookId }, { req, res, prisma }) {
 
     // Проверяем, принадлежит ли книга этому автору
     const book = await prisma.book.findUnique({
-      where: { id: bookId, authorId: user.id },
+      where: { slug, authorId: user.id },
       select: { id: true }, // Достаточно только ID
     });
 

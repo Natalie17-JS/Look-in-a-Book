@@ -1,15 +1,17 @@
-.table-outer-container {
+/*.book-container {
     display: flex;
+    justify-content: center;
     align-items: flex-end;
    width: 100vw;
     height: 75vh;
-    /*border: 1px solid red;*/
+    border: 1px solid red;
     margin: 0 auto;
-}
+}*/
 
 .table-container {
    width: 100%;
    height: auto;
+   border: 1px solid green;
    /* display: flex;
     align-items: flex-end;*/
     
@@ -17,11 +19,11 @@
 
 .table {
    width: 95%;
-   height: 150px;
+   height: 120px;
     background-color: rgb(93, 62, 32);
     margin: 0 auto;
     display: flex;
- 
+
     justify-content: center;
     
     
@@ -30,15 +32,15 @@
 .table-shelf {
     width: 50%;
     height: auto;
-    border: 35px solid rgb(132, 89, 46);
+    border: 20px solid rgb(132, 89, 46);
 }
 
 .things-on-table {
     width: 90%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: flex-end;
-    gap: 10px;
+   
     /*border: 1px solid black;*/
     margin: 0 auto;
 }
@@ -50,23 +52,10 @@
     border: 1px solid rgb(86, 45, 16);
     border-radius: 8px;
 }
-/*.window {
-    width:100%;
-    border: 1px solid orange;
-    display: flex;
-    justify-content: center;
-    
-}
-.window-image {
-    width: 35%;
-    height: auto;
-    
-    flex-shrink: 0;
-}*/
 
-.book-info {
-    width: 35%;
-    height: 450px;
+.book-info-container {
+    width: 50%;
+    height: 430px;
     border-inline: 15px solid rgb(132, 89, 46);
     border-top: 15px solid rgb(132, 89, 46);
     background-color: rgb(93, 62, 32);
@@ -101,7 +90,7 @@
 .plakat-image {
     width: 100%;
     height: auto;
-   
+   object-fit: cover;
     /*border: 1px solid blue;*/
 }
 .annotation {
@@ -117,16 +106,14 @@
     gap: 20px;
 }
 .flowers-image {
-    width: 60%;
+    width: 100%;
     height: auto;
 }
 
-.small-shelf {
-    width: 80%;
-    height: 200px;
-    border-bottom: 15px solid rgb(132, 89, 46);
+.flower-container {
+    width: 20%;
+    
     display: flex;
-    flex-direction: column;
     justify-content: flex-end;
     align-items: center;
 }

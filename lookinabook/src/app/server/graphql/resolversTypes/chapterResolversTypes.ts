@@ -37,7 +37,7 @@ export type ChapterResolvers = {
       getChaptersByBookId: (parent: unknown, args: { bookId: number }) =>  Promise<Chapter[] | null>;
       getChaptersByBookSlug: (parent: unknown, args: { slug: string }) =>  Promise<Chapter[] | null>;
       getChapterDrafts: (parent: unknown, args: { bookId: number }, context: IContext) => Promise<Chapter[]>
-      getAuthorBookChapters: (parent: unknown, args: { bookId: number }, context: IContext)=> Promise<Chapter[]>
+      getAuthorBookChapters: (parent: unknown, args: { slug: string }, context: IContext)=> Promise<Chapter[]>
     },
     Mutation: {
         createChapterWithBookId: (
