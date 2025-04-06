@@ -1,0 +1,17 @@
+.chapters-list {
+    list-style: none;
+}
+.chapters-inwardly-container{
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid green;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.chapters-item {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}

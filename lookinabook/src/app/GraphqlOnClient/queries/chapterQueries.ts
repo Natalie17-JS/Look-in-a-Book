@@ -35,8 +35,8 @@ query GetChapterDrafts($bookId: Int!) {
 `
 
 export const GET_AUTHORBOOK_CHAPTERS = gql`
-  query GetAuthorBookChapters($bookId: Int!) {
-    getAuthorBookChapters(bookId: $bookId) {
+  query GetAuthorBookChapters($slug: String!) {
+    getAuthorBookChapters(slug: $slug) {
     id
     title
     content

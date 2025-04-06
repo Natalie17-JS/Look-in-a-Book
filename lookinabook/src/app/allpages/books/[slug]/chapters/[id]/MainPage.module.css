@@ -1,0 +1,15 @@
+.chapter-container.light {
+    background-color: white;
+  }
+  .chapter-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .chapter-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .chapter-container {
+    width: 100vw;
+    height: 75vh;
+  }

@@ -1,11 +1,11 @@
 "use client"
 
 import { useChapter } from "@/app/context/chapterContext"  
-import styles from "./GetChapter.module.css"
+import styles from "./Chapter.module.css"
 import Link from "next/link"
 import { useBook } from "@/app/context/bookContext"
 
-export default function Chapter() {
+export default function AuthorBookChapter() {
     const { currentChapter } = useChapter()
     const{currentBook} = useBook()
     const slug = currentBook?.slug
@@ -18,7 +18,7 @@ export default function Chapter() {
             <h1 className={styles["chapter-title"]}>{currentChapter.title}</h1>
             <p className={styles["chapter-content"]}>{currentChapter.content}</p>
 
-<Link href={`/allpages/books/${slug}/chapters`}>
+<Link href={`/allpages/profile/my-books/${slug}/chapters`}>
             <button>Back to chapters page</button>
             </Link>
         </div>

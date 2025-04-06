@@ -20,7 +20,7 @@ export const chapterTypeDefs = `
     getChaptersByBookId(bookId: Int!): [Chapter]
     getChaptersByBookSlug(slug: String!): [Chapter]
     getChapterDrafts(bookId: Int!): [Chapter]
-    getAuthorBookChapters(bookId: Int!): [Chapter]
+    getAuthorBookChapters(slug: String!): [Chapter]
   }
 type DeleteResponse {
   message: String!

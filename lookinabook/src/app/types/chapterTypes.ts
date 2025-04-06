@@ -29,3 +29,6 @@ export interface updateChapter extends Partial<CreateChapterFormData> {
 export interface ChapterDraftsData {
   getChapterDrafts: Chapter[];
 }
+export interface GetAuthorBookChaptersData {
+  getAuthorBookChapters: Chapter[];
+};

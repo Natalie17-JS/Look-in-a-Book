@@ -1,0 +1,14 @@
+.authorbook-chapter-container.light {
+    background-color: white;
+  }
+  .authorbook-chapter-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .authorbook-chapter-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .authorbook-chapter-container{
+    height: 100vh;
+  }
