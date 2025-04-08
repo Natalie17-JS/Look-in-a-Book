@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { CreateChapterFormData, Chapter } from "@/app/types/chapterTypes";
 import { PStatus } from "@/app/types/bookTypes";
 import Link from "next/link";
+import styles from "./CreateChapter.module.css"
 
 const CreateChapter = () => {
     const { currentBook } = useBook(); // Получаем книгу из контекста
@@ -59,24 +60,26 @@ const CreateChapter = () => {
     };
 
     return (
-        <div>
-            <h2>Create New Chapter</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles["addchapter-inwardly-container"]}>
+            <h1>Create New Chapter</h1>
+            <form className={styles["addchapter-form"]} onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                    <label htmlFor="title">Title</label>
-                    <input
+                    <label htmlFor="title"></label>
+                    <input className={styles.title}
                         {...register("title", { required: "Title is required" })}
                         id="title"
                         type="text"
+                        placeholder="Title"
                     />
                     {errors.title && <p>{errors.title.message}</p>}
                 </div>
                 
-                <div>
-                    <label htmlFor="content">Content</label>
-                    <textarea
+                <div className={styles["content-container"]}>
+                    <label htmlFor="content"></label>
+                    <textarea className={styles.content}
                         {...register("content", { required: "Content is required" })}
                         id="content"
+                        placeholder="Content..."
                     />
                     {errors.content && <p>{errors.content.message}</p>}
                 </div>
@@ -89,13 +92,13 @@ const CreateChapter = () => {
                     </select>
                 </div>
 
-                <button type="submit" disabled={loading}>
+                <button className={styles["addchapter-btn"]} type="submit" disabled={loading}>
                     {loading ? "Creating..." : "Create Chapter"}
                 </button>
             </form>
             {error && <p>Error: {error.message}</p>}
 
-            <Link href={`/allpages/books/${slug}/chapters`}>
+            <Link href={`/allpages/profile/my-books/${slug}/chapters`}>
             <button>Back to chapters</button>
             </Link>
 

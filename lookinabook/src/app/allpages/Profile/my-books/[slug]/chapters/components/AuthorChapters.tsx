@@ -55,6 +55,10 @@ const AuthorBookChapters = () => {
             <Link href={`/allpages/profile/my-books/${slug}`}>
             <button>Back</button>
             </Link>
+
+            <Link href={`/allpages/profile/my-books/${slug}/chapters/add-chapter`}>
+            <button>Add chapter</button>
+            </Link>
         </div>
     )
 

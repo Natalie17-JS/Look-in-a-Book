@@ -9,6 +9,7 @@ export const GET_BOOKS = gql `
             slug
             writingStatus
             author {
+                id
                 username
             }
             createdAt

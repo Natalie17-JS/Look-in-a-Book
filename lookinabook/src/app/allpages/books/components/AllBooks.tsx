@@ -8,14 +8,22 @@ import Link from "next/link";
 import Image from "next/image";
 import bookcase from "@/app/images/bookcase.svg"
 import GoBackDoor from "./GoBackDoor";
+import { useUser } from "@/app/context/authContext";
 
 export default function Books() {
+  const { user } = useUser();
   const { loading, error, data } = useQuery(GET_BOOKS, {
     pollInterval: 10000,
   });
 
   if (loading) return <p className={styles.loading}>Loading books...</p>;
   if (error) return <p className={styles.error}>Error: {error.message}</p>;
+
+   // 👇 фильтруем книги, убираем книги текущего автора
+   const filteredBooks = user
+   ? data.getBooks.filter((book: Book) => book.author.id !== user.id)
+   : data.getBooks; // если нет user, возвращаем все книги
+ 
 
   return (
     <div className={styles["books-filter-bookcase"]}>
@@ -34,7 +42,7 @@ export default function Books() {
     <div className={styles.container}>
       <h1 className={styles["welcome-text"]}>Welcome to the library!</h1>
       <div className={styles.bookList}>
-        {data.getBooks.map((book: Book) => (
+        {filteredBooks.map((book: Book) => (
           <div key={book.id} className={styles.bookCard}>
 
             <div className={styles["book-composition"]}>
