@@ -4,10 +4,10 @@ export const CREATE_CHAPTER_WITH_BOOKID = gql `
 mutation createChapterWithBookId(
   $title: String!, 
   $content: String!, 
-  $publishStatus: String!, 
+  $publishStatus: PStatus!, 
   $bookId: Int!
 ) {
-  createChapter(
+  createChapterWithBookId(
     title: $title,
     content: $content,
     publishStatus: $publishStatus,
@@ -26,10 +26,10 @@ export const CREATE_CHAPTER_WITH_BOOKSLUG = gql `
 mutation createChapterWithBookSlug(
   $title: String!, 
   $content: String!, 
-  $publishStatus: String!, 
+  $publishStatus: PStatus!, 
   $slug: String!
 ) {
-  createChapter(
+  createChapterWithBookSlug(
     title: $title,
     content: $content,
     publishStatus: $publishStatus,
@@ -40,7 +40,26 @@ mutation createChapterWithBookSlug(
     content
     publishStatus
     createdAt
-    updatedAt
+    
+  }
+}
+`
+
+export const PUBLISH_CHAPTER = gql`
+  mutation PublishChapter($id: String!) {
+    publishChapter(id: $id) {
+      id
+      title
+      publishStatus
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_CHAPTER = gql`
+mutation DeleteChapterById($id: ID!) {
+  deleteChapterById(id: $id) {
+    message
   }
 }
 `

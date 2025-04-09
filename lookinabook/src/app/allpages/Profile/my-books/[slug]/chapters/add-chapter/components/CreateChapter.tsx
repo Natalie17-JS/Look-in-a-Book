@@ -8,15 +8,24 @@ import { CreateChapterFormData, Chapter } from "@/app/types/chapterTypes";
 import { PStatus } from "@/app/types/bookTypes";
 import Link from "next/link";
 import styles from "./CreateChapter.module.css"
+import { useTheme } from "@/app/context/themeContext";
 
 const CreateChapter = () => {
+    const {theme} = useTheme()
     const { currentBook } = useBook(); // Получаем книгу из контекста
     const slug = currentBook?.slug;
     if (!slug) {
         return <p>Book not found</p>;
     }
 
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateChapterFormData>({
+    const themeInput =
+          theme === "dark"
+            ? styles.dark
+            : theme === "gray"
+            ? styles.gray
+            : styles.light;
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<CreateChapterFormData>({
         defaultValues: {
             title: "",
             content: "",
@@ -25,13 +34,12 @@ const CreateChapter = () => {
     });
     const accessToken = localStorage.getItem("token");
 
-    const [createChapter, { loading, error }] = useMutation<Chapter>(CREATE_CHAPTER_WITH_BOOKSLUG, {
+    const [createChapterWithBookSlug, { loading, error }] = useMutation<Chapter>(CREATE_CHAPTER_WITH_BOOKSLUG, {
         context: {
             headers: {
               Authorization: accessToken ? `Bearer ${accessToken}` : "", 
             },
           },
-        variables: { slug },
         onCompleted: (data) => {
             console.log("Chapter created:", data);
             // Дополнительная логика для UI, например уведомления
@@ -44,16 +52,22 @@ const CreateChapter = () => {
             return;
         }
         try {
-            await createChapter(
+            const newChapter = await createChapterWithBookSlug(
                 {
                 variables: {
                     title: data.title,
                     content: data.content,
                     publishStatus: data.publishStatus,
-                    createdAt: new Date(),
+                    slug
+                    //createdAt: new Date(),
                     },
                   }
             );
+            if (newChapter) {
+
+                console.log("Created book:", newChapter);
+                reset();
+              }
         } catch (err) {
             console.error("Error creating chapter:", err);
         }
@@ -65,7 +79,7 @@ const CreateChapter = () => {
             <form className={styles["addchapter-form"]} onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="title"></label>
-                    <input className={styles.title}
+                    <input className={`${styles.title} ${themeInput}`}
                         {...register("title", { required: "Title is required" })}
                         id="title"
                         type="text"
@@ -76,7 +90,7 @@ const CreateChapter = () => {
                 
                 <div className={styles["content-container"]}>
                     <label htmlFor="content"></label>
-                    <textarea className={styles.content}
+                    <textarea className={`${styles.content} ${themeInput}`}
                         {...register("content", { required: "Content is required" })}
                         id="content"
                         placeholder="Content..."
@@ -87,8 +101,8 @@ const CreateChapter = () => {
                 <div>
                     <label htmlFor="publishStatus">Publish Status</label>
                     <select {...register("publishStatus")}>
-                        <option value="draft">Draft</option>
-                        <option value="published">Published</option>
+                        <option value="DRAFT">Draft</option>
+                        <option value="PUBLISHED">Published</option>
                     </select>
                 </div>
 
@@ -98,9 +112,7 @@ const CreateChapter = () => {
             </form>
             {error && <p>Error: {error.message}</p>}
 
-            <Link href={`/allpages/profile/my-books/${slug}/chapters`}>
-            <button>Back to chapters</button>
-            </Link>
+            
 
             
         </div>

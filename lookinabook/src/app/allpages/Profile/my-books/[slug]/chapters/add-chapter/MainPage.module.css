@@ -12,4 +12,6 @@
   .add-chapter-container {
     width: auto;
     height: 100vh;
+    display: flex;
+    align-items: flex-end;
   }

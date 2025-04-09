@@ -30,6 +30,7 @@ query GetChapterDrafts($bookId: Int!) {
       id
       title
       content
+      publishStatus
     }
   }
 `
@@ -40,6 +41,7 @@ export const GET_AUTHORBOOK_CHAPTERS = gql`
     id
     title
     content
+    publishStatus
     }
     }
 `
@@ -50,6 +52,7 @@ query GetChapterByID($id: String!) {
     id
     title
     content
+    publishStatus
    createdAt
     }
 }

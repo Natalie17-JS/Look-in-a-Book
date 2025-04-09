@@ -8,6 +8,7 @@ import Link from "next/link"
 import { useBook } from "@/app/context/bookContext"
 import { GetAuthorBookChaptersData } from "@/app/types/chapterTypes"
 import styles from "./Chapters.module.css"
+import PublishChapterButton from "../[id]/edit-chapter/components/PublishButton"
 
 const AuthorBookChapters = () => {
     const { user } = useUser()
@@ -39,11 +40,24 @@ const AuthorBookChapters = () => {
             {data?.getAuthorBookChapters ? (
                 <ul className={styles["chapters-list"]}>
                 {data?.getAuthorBookChapters.map((chapter: Chapter) => (
-                    
-                        <li className={styles["chapters-item"]} key={chapter.id}>
-                             <Link href={`/allpages/profile/my-books/${currentBook?.slug}/chapters/${chapter.id}`}>
-                            <p>{chapter.title}</p>
-                            </Link>
+                    <li className={styles["chapters-item"]} key={chapter.id}>
+                    <Link href={`/allpages/profile/my-books/${currentBook?.slug}/chapters/${chapter.id}`}>
+
+                      <div className={styles["chapter-title-container"]}>
+                        <p className={styles["chapter-title"]}>{chapter.title}</p>
+                        <span
+                          className={chapter.publishStatus === "PUBLISHED" ? styles["published-badge"] : styles["draft-badge"]}
+                        >
+                          {chapter.publishStatus === "PUBLISHED" ? "Published" : "Draft"}
+                        </span>
+                      </div>
+                    </Link>
+                  
+
+                             {/* Показываем кнопку, только если статус - черновик */}
+    {chapter.publishStatus === "DRAFT" && (
+      <PublishChapterButton />
+    )}
                         </li>
                     
                 ))}
