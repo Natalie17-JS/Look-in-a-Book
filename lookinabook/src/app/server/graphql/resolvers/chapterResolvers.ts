@@ -223,7 +223,7 @@ Mutation: {
         }
       },
 
-      async editChapter(_, { id, title, content, bookId }, { req, res, prisma }) {
+      async editChapterByBookId(_, { id, title, content, bookId }, { req, res, prisma }) {
         try {
           // Получаем текущего пользователя
           const user = await getUserFromRequest(req, res);
@@ -262,6 +262,56 @@ Mutation: {
           throw new Error("Failed to edit chapter");
         }
       },
+
+      async editChapterByBookSlug(_, { id, title, content, slug }, { req, res, prisma }) {
+        try {
+          const user = await getUserFromRequest(req, res);
+          if (!user) {
+            throw new Error("Not authenticated");
+          }
+      
+          // Ищем книгу по slug
+          const book = await prisma.book.findUnique({
+            where: { slug },
+          });
+      
+          if (!book) {
+            throw new Error("Book not found");
+          }
+      
+          if (book.authorId !== user.id) {
+            throw new Error("You can only edit chapters of your own books");
+          }
+      
+          // Проверяем, что глава существует и принадлежит этой книге
+          const chapter = await prisma.chapter.findUnique({
+            where: { id },
+          });
+      
+          if (!chapter) {
+            throw new Error("Chapter not found");
+          }
+      
+          if (chapter.bookId !== book.id) {
+            throw new Error("This chapter doesn't belong to the specified book");
+          }
+      
+          // Обновляем главу
+          const updatedChapter = await prisma.chapter.update({
+            where: { id },
+            data: {
+              title: title || chapter.title,
+              content: content || chapter.content,
+            },
+          });
+      
+          return updatedChapter;
+        } catch (error) {
+          console.error("Error editing chapter:", error);
+          throw new Error("Failed to edit chapter");
+        }
+      },
+      
 
       async publishChapter(_, { id }, { req, res, prisma }) {
         try {

@@ -9,6 +9,7 @@ import { PStatus } from "@/app/types/bookTypes";
 import Link from "next/link";
 import styles from "./CreateChapter.module.css"
 import { useTheme } from "@/app/context/themeContext";
+import ChapterForm from "./ChapterForm";
 
 const CreateChapter = () => {
     const {theme} = useTheme()
@@ -18,7 +19,7 @@ const CreateChapter = () => {
         return <p>Book not found</p>;
     }
 
-    const themeInput =
+    /*const themeInput =
           theme === "dark"
             ? styles.dark
             : theme === "gray"
@@ -31,7 +32,7 @@ const CreateChapter = () => {
             content: "",
             publishStatus: PStatus.DRAFT
         }
-    });
+    });*/
     const accessToken = localStorage.getItem("token");
 
     const [createChapterWithBookSlug, { loading, error }] = useMutation<Chapter>(CREATE_CHAPTER_WITH_BOOKSLUG, {
@@ -46,7 +47,7 @@ const CreateChapter = () => {
         },
     });
 
-    const onSubmit = async (data: { title: string; content: string; publishStatus: string }) => {
+    const handleCreate = async (data: { title: string; content: string; publishStatus: string }) => {
         if (!slug) {
             alert("Book not found");
             return;
@@ -66,7 +67,7 @@ const CreateChapter = () => {
             if (newChapter) {
 
                 console.log("Created book:", newChapter);
-                reset();
+               // reset();
               }
         } catch (err) {
             console.error("Error creating chapter:", err);
@@ -74,7 +75,16 @@ const CreateChapter = () => {
     };
 
     return (
-        <div className={styles["addchapter-inwardly-container"]}>
+        <div>
+        <h1>Create Chapter</h1>
+        <ChapterForm
+          onSubmit={handleCreate}
+          isSubmitting={loading}
+          submitLabel="Create Chapter"
+        />
+        {error && <p>Error: {error.message}</p>}
+      </div>
+       /* <div className={styles["addchapter-inwardly-container"]}>
             <h1>Create New Chapter</h1>
             <form className={styles["addchapter-form"]} onSubmit={handleSubmit(onSubmit)}>
                 <div>
@@ -110,12 +120,8 @@ const CreateChapter = () => {
                     {loading ? "Creating..." : "Create Chapter"}
                 </button>
             </form>
-            {error && <p>Error: {error.message}</p>}
-
-            
-
-            
-        </div>
+            {error && <p>Error: {error.message}</p>} 
+        </div>*/
     );
 };
 

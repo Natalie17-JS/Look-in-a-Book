@@ -63,3 +63,28 @@ mutation DeleteChapterById($id: ID!) {
   }
 }
 `
+export const EDIT_CHAPTER = gql `
+mutation editChapterWithBookSlug(
+  $id: String!
+  $title: String, 
+  $content: String, 
+  $publishStatus: PStatus, 
+  $slug: String!
+) {
+  editChapterWithBookSlug(
+    id:  $id,
+    title: $title,
+    content: $content,
+    publishStatus: $publishStatus,
+    slug: $slug
+  ) {
+    id
+    title
+    content
+    publishStatus
+    createdAt
+    
+  }
+}
+
+`

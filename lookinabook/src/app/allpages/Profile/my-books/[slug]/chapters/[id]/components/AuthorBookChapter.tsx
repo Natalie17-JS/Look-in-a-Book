@@ -9,7 +9,8 @@ export default function AuthorBookChapter() {
     const { currentChapter } = useChapter()
     const{currentBook} = useBook()
     const slug = currentBook?.slug
-    console.log("Chapter is:", currentChapter?.id)
+    const id = currentChapter?.id
+    console.log("Chapter is:", id)
 
     if (!currentChapter) return <p>Loading...</p>
 
@@ -21,6 +22,10 @@ export default function AuthorBookChapter() {
 
 <Link href={`/allpages/profile/my-books/${slug}/chapters`}>
             <button>Back to chapters page</button>
+            </Link>
+
+            <Link href={`/allpages/profile/my-books/${slug}/chapters/${id}/edit-chapter`}>
+            <button>Edit</button>
             </Link>
         </div>
     )

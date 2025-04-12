@@ -29,7 +29,8 @@ type DeleteResponse {
   type Mutation {
     createChapterWithBookId(title: String!, content: String!, publishStatus: PStatus!, bookId: Int!): Chapter!
     createChapterWithBookSlug(title: String!, content: String!, publishStatus: PStatus!, slug: String!): Chapter!
-    editChapter(id: String!, title: String, content: String, bookId: Int!): Chapter
+    editChapterByBookId(id: String!, title: String, content: String, bookId: Int!): Chapter
+    editChapterByBookSlug(id: String!, title: String, content: String, slug: String!): Chapter
     publishChapter(id: String!): Chapter!
     deleteChapterById(id: String!): DeleteResponse!
   }
