@@ -30,8 +30,8 @@ type DeleteResponse {
     createChapterWithBookId(title: String!, content: String!, publishStatus: PStatus!, bookId: Int!): Chapter!
     createChapterWithBookSlug(title: String!, content: String!, publishStatus: PStatus!, slug: String!): Chapter!
     editChapterByBookId(id: String!, title: String, content: String, bookId: Int!): Chapter
-    editChapterByBookSlug(id: String!, title: String, content: String, slug: String!): Chapter
+    editChapter(id: String!, title: String, content: String, publishStatus: PStatus): Chapter
     publishChapter(id: String!): Chapter!
-    deleteChapterById(id: String!): DeleteResponse!
+    deleteChapter(id: String!): DeleteResponse!
   }
 `;

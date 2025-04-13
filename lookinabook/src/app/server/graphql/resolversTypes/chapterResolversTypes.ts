@@ -32,7 +32,6 @@ export type editChapterArgsByBookSlug = {
     id: string;
     title?: string;
     content?: string;
-    slug: string;
     publishStatus?: PStatus;
 }
 export type deleteChapterByIdArgs = {
@@ -63,7 +62,7 @@ export type ChapterResolvers = {
             args: editChapterArgs, 
             context: IContext
         ) => Promise<Chapter | null>;
-        editChapterByBookSlug: (
+        editChapter: (
             parent: unknown, 
             args: editChapterArgsByBookSlug, 
             context: IContext
@@ -73,7 +72,7 @@ export type ChapterResolvers = {
             args: { id: string }, 
             context: IContext
             ) => Promise<Chapter>;
-        deleteChapterById: (
+        deleteChapter: (
             parent: unknown, 
             args: deleteChapterByIdArgs, 
             context: IContext

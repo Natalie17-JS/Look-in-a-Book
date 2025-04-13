@@ -263,7 +263,7 @@ Mutation: {
         }
       },
 
-      async editChapterByBookSlug(_, { id, title, content, slug }, { req, res, prisma }) {
+      async editChapter(_, { id, title, content, publishStatus }, { req, res, prisma }) {
         try {
           const user = await getUserFromRequest(req, res);
           if (!user) {
@@ -271,7 +271,7 @@ Mutation: {
           }
       
           // Ищем книгу по slug
-          const book = await prisma.book.findUnique({
+          /*const book = await prisma.book.findUnique({
             where: { slug },
           });
       
@@ -281,20 +281,25 @@ Mutation: {
       
           if (book.authorId !== user.id) {
             throw new Error("You can only edit chapters of your own books");
-          }
+          }*/
       
           // Проверяем, что глава существует и принадлежит этой книге
           const chapter = await prisma.chapter.findUnique({
             where: { id },
+            include: { book: true },
           });
       
           if (!chapter) {
             throw new Error("Chapter not found");
           }
       
-          if (chapter.bookId !== book.id) {
+         /* if (chapter.bookId !== book.id) {
             throw new Error("This chapter doesn't belong to the specified book");
-          }
+          }*/
+            if (chapter.book.authorId !== user.id) {
+              throw new Error("You can only edit your own chapters");
+            }
+        
       
           // Обновляем главу
           const updatedChapter = await prisma.chapter.update({
@@ -302,6 +307,7 @@ Mutation: {
             data: {
               title: title || chapter.title,
               content: content || chapter.content,
+              publishStatus: publishStatus || chapter.publishStatus,
             },
           });
       
@@ -357,7 +363,7 @@ Mutation: {
       
   
       // Резолвер для удаления главы
-      async deleteChapterById(_, { id }, { req, res, prisma }) {
+      async deleteChapter(_, { id }, { req, res, prisma }) {
         try {
           // Получаем текущего пользователя
           const user = await getUserFromRequest(req, res);

@@ -57,26 +57,24 @@ export const PUBLISH_CHAPTER = gql`
 `;
 
 export const DELETE_CHAPTER = gql`
-mutation DeleteChapterById($id: ID!) {
-  deleteChapterById(id: $id) {
+mutation DeleteChapter($id: String!) {
+  deleteChapter(id: $id) {
     message
   }
 }
 `
 export const EDIT_CHAPTER = gql `
-mutation editChapterWithBookSlug(
+mutation editChapter(
   $id: String!
   $title: String, 
   $content: String, 
   $publishStatus: PStatus, 
-  $slug: String!
 ) {
-  editChapterWithBookSlug(
+  editChapter(
     id:  $id,
     title: $title,
     content: $content,
     publishStatus: $publishStatus,
-    slug: $slug
   ) {
     id
     title
@@ -88,3 +86,5 @@ mutation editChapterWithBookSlug(
 }
 
 `
+
+

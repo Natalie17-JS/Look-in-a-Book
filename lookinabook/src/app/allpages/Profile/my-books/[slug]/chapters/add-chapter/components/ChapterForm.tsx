@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { CreateChapterFormData } from "@/app/types/chapterTypes";
+import { CreateChapterFormData, EditChapterData } from "@/app/types/chapterTypes";
 import { PStatus } from "@/app/types/bookTypes";
 import styles from "./CreateChapter.module.css";
 import { useTheme } from "@/app/context/themeContext";

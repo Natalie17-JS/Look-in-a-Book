@@ -9,6 +9,7 @@ import { useBook } from "@/app/context/bookContext"
 import { GetAuthorBookChaptersData } from "@/app/types/chapterTypes"
 import styles from "./Chapters.module.css"
 import PublishChapterButton from "../[id]/edit-chapter/components/PublishButton"
+import DeleteChapterButton from "../[id]/edit-chapter/components/DeleteChapter"
 
 const AuthorBookChapters = () => {
     const { user } = useUser()
@@ -18,7 +19,7 @@ const AuthorBookChapters = () => {
 
      const accessToken = localStorage.getItem("token");
 
-    const { loading, error, data } = useQuery<GetAuthorBookChaptersData>(GET_AUTHORBOOK_CHAPTERS, {
+    const { loading, error, data, refetch  } = useQuery<GetAuthorBookChaptersData>(GET_AUTHORBOOK_CHAPTERS, {
         
             context: {
               headers: {
@@ -53,11 +54,13 @@ const AuthorBookChapters = () => {
                       </div>
                     </Link>
                   
-
+<div>
+  <DeleteChapterButton chapterId={chapter.id} onDeleted={() => refetch()}/>
                              {/* Показываем кнопку, только если статус - черновик */}
     {chapter.publishStatus === "DRAFT" && (
       <PublishChapterButton />
     )}
+    </div>
                         </li>
                     
                 ))}

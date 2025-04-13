@@ -22,7 +22,7 @@ export interface CreateChapterFormData {
     
 }
 
-export interface updateChapter extends Partial<CreateChapterFormData> {
+export interface EditChapterData extends Partial<CreateChapterFormData> {
     id: string;
 }
 

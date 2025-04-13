@@ -6,8 +6,11 @@ import { useChapter } from "@/app/context/chapterContext";
 import ChapterForm from "../../../add-chapter/components/ChapterForm";
 import { CreateChapterFormData, Chapter } from "@/app/types/chapterTypes";
 
+
 export default function EditChapter() {
-  const { currentChapter } = useChapter();
+  const { currentChapter, setCurrentChapter } = useChapter();
+
+ 
   const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const [updateChapter, { loading, error }] = useMutation<Chapter>(EDIT_CHAPTER, {
@@ -23,12 +26,17 @@ export default function EditChapter() {
 
   const handleUpdate = async (data: CreateChapterFormData) => {
     try {
-      await updateChapter({
+      const editedChapter = await updateChapter({
         variables: {
           id: currentChapter?.id,
-          ...data,
+          title: data.title,
+          content: data.content,
+          publishStatus: data.publishStatus,
         },
       });
+      if (editedChapter.data) {
+        setCurrentChapter(editedChapter.data)
+      }
     } catch (err) {
       console.error("Update error:", err);
     }
