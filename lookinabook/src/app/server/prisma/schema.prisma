@@ -138,12 +138,12 @@ model Comment {
   chapterId  String?                                  // Chapter ID (if the comment is on a chapter)
   chapter    Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade) // Relation with the chapter
 
-  postId     Int?                                  // Post ID (if the comment is on a post)
+  postId     String?                                  // Post ID (if the comment is on a post)
   post       Post?    @relation(fields: [postId], references: [id], onDelete: Cascade) // Relation with the post
 }
 
 model Post {
-  id              Int      @id @default(autoincrement())
+  id              String      @id @default(cuid())
   title           String
   content         String
   createdAt       DateTime @default(now())
@@ -170,7 +170,7 @@ model Like {
   book      Book?    @relation(fields: [bookId], references: [id], onDelete: Cascade)
 
   // Relation with the post (optional)
-  postId    Int?     // Post ID
+  postId    String?     // Post ID
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([type, userId, bookId], map: "unique_like_book") // Unique like for a book

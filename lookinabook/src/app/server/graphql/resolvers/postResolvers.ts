@@ -3,7 +3,7 @@ import prisma from "@/app/server/prisma/prismaClient";
 import { getUserFromRequest } from "../../auth/authMiddleware";
 import { PostResolversTypes } from "../resolversTypes/postResolversTypes";
 
-export const postResolvers: PostResolversTypes = {
+const postResolvers: PostResolversTypes = {
   Query: {
     getPostById: async (_, { id }) => {
       try {
@@ -25,8 +25,17 @@ export const postResolvers: PostResolversTypes = {
       try {
         return await prisma.post.findMany({
           where: { publishStatus: "PUBLISHED" },
-          include: { author: true },
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                email: true,
+              },
+            },
+          },
           orderBy: { createdAt: "desc" },
+          take: 5,
         });
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -95,6 +104,9 @@ export const postResolvers: PostResolversTypes = {
             publishStatus,
             authorId: user.id, // Добавил связь с автором
           },
+          include: {
+            author: true, 
+          },
         });
       } catch (error) {
         console.error("Error creating post:", error);
@@ -149,3 +161,4 @@ export const postResolvers: PostResolversTypes = {
     },
   },
 };
+export default postResolvers

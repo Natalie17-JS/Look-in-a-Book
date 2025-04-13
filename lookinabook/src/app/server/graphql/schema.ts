@@ -10,12 +10,14 @@ import bookTypeDefs from "./typeDefs/bookTypeDefs";
 import bookResolvers from "./resolvers/bookResolvers";
 import chapterResolvers from "./resolvers/chapterResolvers";
 import { chapterTypeDefs } from "./typeDefs/chapterTypeDefs";
+import postResolvers  from "./resolvers/postResolvers";
+import { postTypeDefs } from "./typeDefs/postTypeDefs";
 import uploadResolvers from "./resolvers/uploadResolvers";
 import uploadTypeDefs from "./typeDefs/uploadTypeDefs";
 
-const resolvers = mergeResolvers([userResolvers, uploadResolvers, adminResolvers,bookResolvers,chapterResolvers, complaintResolvers]);
+const resolvers = mergeResolvers([userResolvers, uploadResolvers, adminResolvers,bookResolvers,chapterResolvers,postResolvers, complaintResolvers]);
 
-const typeDefs = mergeTypeDefs([userTypeDefs, uploadTypeDefs, adminTypeDefs,bookTypeDefs,chapterTypeDefs, complaintTypeDefs]);
+const typeDefs = mergeTypeDefs([userTypeDefs, uploadTypeDefs, adminTypeDefs,bookTypeDefs,chapterTypeDefs, postTypeDefs, complaintTypeDefs]);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
