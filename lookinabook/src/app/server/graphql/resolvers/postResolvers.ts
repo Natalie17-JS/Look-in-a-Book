@@ -1,9 +1,12 @@
 import { GraphQLError } from "graphql";
 import prisma from "@/app/server/prisma/prismaClient";
+import { DateTime } from "../resolversTypes/dateTime";
 import { getUserFromRequest } from "../../auth/authMiddleware";
 import { PostResolversTypes } from "../resolversTypes/postResolversTypes";
 
 const postResolvers: PostResolversTypes = {
+  DateTime,
+
   Query: {
     getPostById: async (_, { id }) => {
       try {

@@ -7,7 +7,7 @@ enum PublishStatus {
 }
 
 type Post {
-  id: Int!
+  id: String!
   title: String!
   content: String!
   image: String
@@ -22,7 +22,7 @@ type DeleteResponse {
 }
 
 type Query {
-  getPostById(id: Int!): Post
+  getPostById(id: String!): Post
   getAllPosts: [Post!]!
   getUserPosts(authorId: ID!): [Post!]!
   getPostDrafts: [Post!]!
@@ -39,14 +39,14 @@ type Mutation {
   ): Post!
 
   updatePost(
-    id: Int!
+    id: String!
     title: String
     content: String
     image: String
     publishStatus: PublishStatus
   ): Post!
 
-  deletePost(id: Int!): DeleteResponse!
+  deletePost(id: String!): DeleteResponse!
 }
 
 `

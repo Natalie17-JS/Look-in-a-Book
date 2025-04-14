@@ -10,7 +10,7 @@ export type CreatePostArgs = {
     publishStatus: PStatus;
 }
 export type UpdatePostArgs = {
-    id: number;
+    id: string;
     title?: string;
     content?: string;
     image?: string;
@@ -18,12 +18,12 @@ export type UpdatePostArgs = {
 }
 
 export type DeletePostArgs = {
-    id: number;
+    id: string;
 }
 
 export type PostResolversTypes = {
      Query: {
-          getPostById: (parent: unknown, args: { id: number }) => Promise<Post | null>;
+          getPostById: (parent: unknown, args: { id: string }) => Promise<Post | null>;
           getAllPosts: () => Promise<Post[]>;
           getUserPosts: (parent: unknown, args: { authorId: number }) => Promise<Post[]>;
           getMyPosts: (parent: unknown, args: unknown, context: IContext) => Promise<Post[]>;
@@ -34,4 +34,5 @@ export type PostResolversTypes = {
           updatePost: (parent: unknown, args: UpdatePostArgs, context: IContext) => Promise<Post | null>;
           deletePost: (parent: unknown, args: DeletePostArgs, context: IContext) => Promise<{ message: string; }>;
         };
+        DateTime: GraphQLScalarType;
 }
