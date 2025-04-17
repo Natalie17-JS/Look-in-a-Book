@@ -24,10 +24,12 @@ const Navbar = () => {
         </div>
         </Link>
         
+        <Link href="/allpages/blog">
         <div className={styles.menubox}>
           <div className={styles.tag}></div>
           <p>Blog</p>
         </div>
+        </Link>
       </div>
     </div>
   );

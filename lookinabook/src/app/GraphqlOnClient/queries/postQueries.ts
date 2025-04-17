@@ -16,7 +16,7 @@ export const GET_ALL_POSTS = gql`
 `
 
 export const GET_POST_BY_ID = gql`
-    GetPostById($id: String!) {
+    query GetPostById($id: String!) {
     getPostById(id: $id) {
         id
         title

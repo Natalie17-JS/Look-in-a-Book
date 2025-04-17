@@ -1,9 +1,11 @@
 import { PStatus } from "./bookTypes";
+import { User } from "./userTypes";
 
 export interface Post {
     id: string;
     title: string;
     content: string;
+    author: User;
     publishStatus: PStatus;
     createdAt: Date;
     updatedAt: Date;

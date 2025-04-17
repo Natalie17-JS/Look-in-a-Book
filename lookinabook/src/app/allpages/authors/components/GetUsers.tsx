@@ -21,6 +21,7 @@ export default function UsersList() {
                         </Link>
                         
                         <p>Books: {user.books?.length || 0}</p>
+                        <p>Posts: {user.posts?.length || 0}</p>
                         </li>
                 ))}
             </ul>

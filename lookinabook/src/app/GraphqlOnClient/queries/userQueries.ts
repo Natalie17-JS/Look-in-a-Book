@@ -18,7 +18,14 @@ export const GET_USERS = gql`
     getUsers {
       id
       username
-      
+      books {
+        id
+        title
+      }
+      posts {
+        id
+        title
+      }
     }
   }
 `

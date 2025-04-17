@@ -24,11 +24,11 @@ type User {
   publishBanned: Boolean
   banEndDate: DateTime
   banCount: Int
-  books: [Book!] 
+  books: [Book!],
+  posts: [Post!]
   
   # comments: [Comment!] 
   # likes: [Like!]
-  # posts: [Post!]
   # notifications: [Notification!] 
   # subscriptionsAsSubscriber: [Subscription!]
   # subscriptionsAsSubscribedTo: [Subscription!]

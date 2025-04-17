@@ -1,4 +1,5 @@
 import { Book } from "./bookTypes";
+import { Post } from "./postTypes";
 
 export interface User {
     id: number;
@@ -13,7 +14,8 @@ export interface User {
     points: number;
     lastActive: string;
     isOnline: boolean;
-    books: Book[]
+    books: Book[],
+    posts: Post[]
   }
 // Типизация данных формы
 export interface RegisterFormData {

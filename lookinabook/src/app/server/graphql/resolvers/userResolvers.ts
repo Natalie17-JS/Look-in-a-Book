@@ -21,6 +21,7 @@ const userResolvers: UserResolvers = {
           where: { id },
           include: {
             books: true,
+            posts: true
           }
            /* comments: true,
             likes: true,
@@ -44,7 +45,8 @@ const userResolvers: UserResolvers = {
       try {
         return await prisma.user.findMany({
           include:{
-            books: true
+            books: true,
+            posts: true
           }
         });
       } catch (error) {
