@@ -6,12 +6,21 @@ enum PublishStatus {
   PUBLISHED
 }
 
+enum PostCategory {
+  THOUGHTS
+  NEWS
+  NEW_BOOK_PROMOTION
+  BOOK_REVIEW
+  OTHER
+}
+
 type Post {
   id: String!
   title: String!
   content: String!
   image: String
   publishStatus: PublishStatus!
+  category: PostCategory!
   createdAt: String!
   updatedAt: String!
   author: User!
@@ -36,6 +45,7 @@ type Mutation {
     content: String!
     image: String
     publishStatus: PublishStatus!
+    category: PostCategory!
   ): Post!
 
   updatePost(
@@ -44,6 +54,7 @@ type Mutation {
     content: String
     image: String
     publishStatus: PublishStatus
+    category: PostCategory
   ): Post!
 
   deletePost(id: String!): DeleteResponse!

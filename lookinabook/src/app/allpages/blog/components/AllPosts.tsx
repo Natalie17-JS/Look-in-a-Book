@@ -26,8 +26,10 @@ const filteredPosts = user
         {data.getAllPosts ? (
             <ul>
             {filteredPosts.map((post: Post) => (
-                <li key={post.id}>
+                <li className={styles["post-item"]} key={post.id}>
                      <p className={styles["post-title"]}>{post.title}</p>
+                     <p className={styles["post-content"]}>{post.content}</p>
+                     <p className={styles["post-category"]}>{post.category}</p>
                 </li>
                 ))}
                 </ul>

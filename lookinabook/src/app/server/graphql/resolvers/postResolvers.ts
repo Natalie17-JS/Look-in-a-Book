@@ -92,7 +92,7 @@ const postResolvers: PostResolversTypes = {
   },
 
   Mutation: {
-    createPost: async (_, { title, content, image, publishStatus }, { req, res }) => {
+    createPost: async (_, { title, content, image, publishStatus, category  }, { req, res }) => {
       try {
         const user = await getUserFromRequest(req, res);
         if (!user) {
@@ -105,6 +105,7 @@ const postResolvers: PostResolversTypes = {
             content,
             image: image || null,
             publishStatus,
+            category,
             authorId: user.id, // Добавил связь с автором
           },
           include: {
@@ -117,7 +118,7 @@ const postResolvers: PostResolversTypes = {
       }
     },
 
-    updatePost: async (_, { id, title, content, image, publishStatus }, { req, res }) => {
+    updatePost: async (_, { id, title, content, image, publishStatus, category }, { req, res }) => {
       try {
         const user = await getUserFromRequest(req, res);
         if (!user) {
@@ -131,7 +132,7 @@ const postResolvers: PostResolversTypes = {
 
         return await prisma.post.update({
           where: { id },
-          data: { title, content, image, publishStatus, updatedAt: new Date() },
+          data: { title, content, image, publishStatus, category, updatedAt: new Date() },
         });
       } catch (error) {
         console.error("Error updating post:", error);

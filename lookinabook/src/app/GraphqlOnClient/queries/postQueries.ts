@@ -7,6 +7,7 @@ export const GET_ALL_POSTS = gql`
             title
             content
             publishStatus
+            category
             author {
                 id
                 username
@@ -22,6 +23,7 @@ export const GET_POST_BY_ID = gql`
         title
         content
         publishStatus
+        category
         author{
             id
             username

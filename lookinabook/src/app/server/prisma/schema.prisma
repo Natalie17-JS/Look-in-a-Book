@@ -142,14 +142,24 @@ model Comment {
   post       Post?    @relation(fields: [postId], references: [id], onDelete: Cascade) // Relation with the post
 }
 
+enum PostCategory {
+  THOUGHTS
+  NEWS
+  NEW_BOOK_PROMOTION
+  BOOK_REVIEW
+  OTHER
+}
+
 model Post {
-  id              String      @id @default(cuid())
+  id              String          @id @default(cuid())
   title           String
   content         String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
   image           String?
-  publishStatus   PStatus  @default(DRAFT)
+  publishStatus   PStatus         @default(DRAFT)
+  category        PostCategory    @default(OTHER)
+  
 
   authorId   Int
   author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // Post author
