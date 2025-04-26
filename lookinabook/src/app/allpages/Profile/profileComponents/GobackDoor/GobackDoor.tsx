@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 
 
 export default function GoBackDoor() {
-
-    const router = useRouter();
   return (
-    <div className={styles.gobackdoor} onClick={() => router.push("/")}>
-      <Door />
-    </div>
+    <Link href="/">
+      <Door
+        className={styles.gobackdoor}
+        imageClassName={styles["goback-door-image"]}
+      />
+    </Link>
   );
 }

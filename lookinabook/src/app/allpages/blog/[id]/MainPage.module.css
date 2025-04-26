@@ -1,16 +1,19 @@
-.posts-container.light {
+.post-container.light {
     background-color: white;
   }
-  .posts-container.gray {
+  .post-container.gray {
     background-color: rgb(185, 180, 166);
     color: rgb(26, 26, 26);
   }
-  .posts-container.dark {
+  .post-container.dark {
     background-color: rgb(36, 36, 36);
     color: white;
   }
-  .posts-container {
+  .post-container {
     width: 100vw;
     height: 100vh;
-    
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    /*gap: 2rem;*/
   }

@@ -6,7 +6,7 @@ import LittleClock from "./profileComponents/LittleClock/LittleClock";
 import styles from "./MainPage.module.css";
 import { useTheme } from "@/app/context/themeContext";
 import { useUser } from "@/app/context/authContext";
-import GoBackDoor from "./profileComponents/GobackDoor/GobackDoor";
+import GoBackDoor from "./profileComponents/GobackDoor/GoBackDoor";
 
 const ProfilePage = () => {
   const { theme } = useTheme();

@@ -5,34 +5,32 @@ import doornight from "@/app/images/go-back-door-night.svg";
 import { useTheme } from "@/app/context/themeContext";
 import Image from "next/image";
 
-import styles from "./GobackDoor.module.css";
 
-export default function Door() {
+interface DoorProps {
+  className?: string;
+  imageClassName?: string;
+  alt?: string;
+}
+
+export default function Door({
+  className = "",
+  imageClassName = "",
+  alt = "door-image",
+}: DoorProps) {
   const { theme } = useTheme();
 
-  let doorImage;
-  switch (theme) {
-    case "dark":
-      doorImage = doornight;
-      break;
-    case "gray":
-      doorImage = doorday;
-      break;
-    default:
-      doorImage = doorday;
-  }
+  const doorImage =
+    theme === "dark" ? doornight :
+    theme === "gray" ? doorday :
+    doorday;
 
   return (
-   
-      <div className={styles.door}>
-       
-          <Image
-            src={doorImage}
-            alt="go-back-door"
-            className={styles["gobackdoor-image"]}
-          />
-       
-      </div>
-    
+    <div className={className}>
+      <Image
+        src={doorImage}
+        alt={alt}
+        className={imageClassName}
+      />
+    </div>
   );
 }

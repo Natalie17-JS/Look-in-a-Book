@@ -19,13 +19,22 @@ import other_post_clouds from "@/app/images/book-post-clouds-bg.svg"
 import other_post_night from "@/app/images/book-post-night-bg.svg"
 import  {Post}  from "@/app/types/postTypes"
 import styles from "./Post.module.css"
+import { usePost } from "@/app/context/postContext"
 
 interface PostCardProps {
-    post: Post;
-  }
+  post?: Post; // Сделаем пропсу необязательной
+  preview?: boolean; // если true, показываем только начало текста
+}
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, preview = false }: PostCardProps) {
     const { theme } = useTheme();
+    const {currentPost} = usePost()
+  
+    
+  const displayedPost = post || currentPost;
+
+  if (!displayedPost) return null;
+
 
     const getImage = (category: Post["category"], theme: string) => {
         switch (category) {
@@ -82,25 +91,25 @@ export default function PostCard({ post }: PostCardProps) {
         }
       };
     
-      const backgroundImage = getImage(post.category, theme);
+      const backgroundImage = getImage(displayedPost.category, theme);
+      const contentPreview = preview
+        ? displayedPost.content.split(" ").slice(0, 10).join(" ") + "..."
+        : displayedPost.content;
 
-      return (
-        <div className={styles["post-card-container"]}>
-          <div className={styles["image-wrapper"]}>
-            <Image
-              src={backgroundImage}
-              alt={`${post.category} background`}
-              fill
-              style={{ objectFit: "cover" }}
-              className={styles["post-background"]}
-            />
-            <div className={styles["post-content"]}>
-              <h2 className={styles["post-title"]}>{post.title}</h2>
-              <p className={styles["post-text"]}>{post.content}</p>
-              <span className={styles["post-category"]}>{post.category}</span>
+        return (
+          <div className={`${styles["post-card-container"]} ${preview ? styles.preview : ""}`}>
+            <div className={styles["image-wrapper"]}>
+              <Image
+                src={backgroundImage}
+                alt={`${displayedPost.category} background`}
+                className={styles["post-image"]}
+              />
+              <div className={styles["post-container"]}>
+                <h2 className={styles["post-title"]}>{displayedPost.title}</h2>
+                <p className={styles["post-content"]}>{contentPreview}</p>
+                <span className={styles["post-category"]}>{displayedPost.category}</span>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    }
-    
+        );
+      }

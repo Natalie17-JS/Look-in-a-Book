@@ -18,14 +18,16 @@ export const PostProvider = ({children}: {children: ReactNode}) => {
     const { id } = useParams();
 
     const {data, error, loading} = useQuery(GET_POST_BY_ID, {
-        variables: {id: id as String},
+        //variables: {id: id as String},
+        variables: { id: String(id) },
         skip: !id
     });
 
     useEffect(() => {
         if (data?.getPostById) {
           setCurrentPost(data.getPostById);
-          console.log("Current post: " + data.getPostById)
+          console.log("Current post:", data.getPostById);
+         // console.log("Current post: " + data.getPostById)
         }
       }, [data]);
     
