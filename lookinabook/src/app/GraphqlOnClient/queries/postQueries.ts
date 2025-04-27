@@ -16,6 +16,38 @@ export const GET_ALL_POSTS = gql`
     }
 `
 
+export const GET_AUTHOR_POSTS = gql`
+    query GetMyPosts{
+        getAuthorPosts {
+            id
+            title
+            content
+            publishStatus
+            category
+            author {
+                id
+                username
+            }
+        }
+    }
+`
+
+export const GET_POSTS_DRAFTS = gql`
+    query GetPostDrafts{
+        getPostDrafts {
+            id
+            title
+            content
+            publishStatus
+            category
+            author {
+                id
+                username
+            }
+        }
+    }
+`
+
 export const GET_POST_BY_ID = gql`
     query GetPostById($id: String!) {
     getPostById(id: $id) {

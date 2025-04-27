@@ -35,7 +35,7 @@ type Query {
   getAllPosts: [Post!]!
   getUserPosts(authorId: ID!): [Post!]!
   getPostDrafts: [Post!]!
-  getMyPosts: [Post!]!
+  getAuthorPosts: [Post!]!
 }
 
 

@@ -12,6 +12,7 @@ export enum postCategory {
 export interface Post {
     id: string;
     title: string;
+    image?: string,
     content: string;
     author: User;
     publishStatus: PStatus;
@@ -27,13 +28,14 @@ export interface PostsData {
   export interface CreatePostFormData {
     title: string;
     content: string;
+    image?: string,
     publishStatus: PStatus;
     category: postCategory;
 }
 
 export interface PostsDraftsData {
-  getChapterDrafts: Post[];
+  getPostDrafts: Post[];
 }
 export interface GetAuthorPostsData {
-  getAuthorBookChapters: Post[];
+  getAuthorPosts: Post[];
 };

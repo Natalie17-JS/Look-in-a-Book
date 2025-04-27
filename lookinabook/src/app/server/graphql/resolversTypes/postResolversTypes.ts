@@ -36,7 +36,7 @@ export type PostResolversTypes = {
           getPostById: (parent: unknown, args: { id: string }) => Promise<Post | null>;
           getAllPosts: () => Promise<Post[]>;
           getUserPosts: (parent: unknown, args: { authorId: number }) => Promise<Post[]>;
-          getMyPosts: (parent: unknown, args: unknown, context: IContext) => Promise<Post[]>;
+          getAuthorPosts: (parent: unknown, args: unknown, context: IContext) => Promise<Post[]>;
           getPostDrafts: (parent: unknown, args: unknown, context: IContext) => Promise<Post[]>
         };
         Mutation: {

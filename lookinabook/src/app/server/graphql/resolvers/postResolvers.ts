@@ -58,23 +58,29 @@ const postResolvers: PostResolversTypes = {
       }
     },
 
-    getPostDrafts: async (_, __, { req, res }) => {
+    getPostDrafts: async (_, __, { req, res, prisma }) => {
       try {
         const user = await getUserFromRequest(req, res);
         if (!user) {
           throw new Error("Not authenticated");
         }
-        return await prisma.post.findMany({
+         const postsDrafts = await prisma.post.findMany({
           where: { authorId: user.id, publishStatus: "DRAFT" },
+          include: {
+            author: {
+              select: { id: true, username: true },
+            }
+          },
           orderBy: { createdAt: "desc" },
         });
+        return postsDrafts;
       } catch (error) {
         console.error("Error fetching post drafts:", error);
         throw new Error("Failed to fetch post drafts");
       }
     },
 
-    getMyPosts: async (_, __, { req, res }) => {
+    getAuthorPosts: async (_, __, { req, res }) => {
       try {
         const user = await getUserFromRequest(req, res);
         if (!user) {

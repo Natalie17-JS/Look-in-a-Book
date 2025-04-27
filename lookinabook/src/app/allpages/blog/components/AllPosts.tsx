@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef,  useState, useEffect } from "react";
 import { useQuery } from "@apollo/client"
 import { GET_ALL_POSTS } from "@/app/GraphqlOnClient/queries/postQueries"
 import { useUser } from "@/app/context/authContext"
@@ -9,13 +10,14 @@ import Link from "next/link"
 import PostCard from "../[id]/components/Post"
 
 export default function GetAllPosts() {
-      const { user } = useUser();
-      const { loading, error, data } = useQuery(GET_ALL_POSTS, {
-        pollInterval: 10000,
-      });
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-      if (loading) return <p className={styles.loading}>Loading posts...</p>;
-  if (error) return <p className={styles.error}>Error: {error.message}</p>;
+  const { user } = useUser();
+  const { loading, error, data } = useQuery(GET_ALL_POSTS, {
+    pollInterval: 10000,
+  });
 
   const allPosts: Post[] = data?.getAllPosts || [];
 
@@ -23,35 +25,85 @@ export default function GetAllPosts() {
     ? allPosts.filter((post) => post.author.id !== user.id)
     : allPosts;
 
-    console.log("data", data);
-console.log("allPosts", allPosts);
-console.log("filteredPosts", filteredPosts);
+    const checkForScrollPosition = () => {
+      if (!scrollRef.current) return;
+  
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+    };
+  
+    useEffect(() => {
+      checkForScrollPosition();
+      scrollRef.current?.addEventListener("scroll", checkForScrollPosition);
+      return () => {
+        scrollRef.current?.removeEventListener("scroll", checkForScrollPosition);
+      };
+    }, []);
+  
+    const scrollLeft = () => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({ left: -440, behavior: "smooth" });
+      }
+    };
+  
+    const scrollRight = () => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollBy({ left: 440, behavior: "smooth" });
+      }
+    };
+  
 
-   return (
-    <div className={styles["posts-filter-container"]}>
+  if (loading) return <p className={styles.loading}>Loading posts...</p>;
+  if (error) return <p className={styles.error}>Error: {error.message}</p>;
 
-      <div className={styles["filter-container"]}></div>
+return (
+  <div className={styles["posts-filter-container"]}>
+    <div className={styles["filter-container"]}></div>
 
-<div className={styles.posts}>
-        <h1 className={styles["welcome-text"]}>Welcome to all posts!</h1>
-        {filteredPosts.length > 0 ? (
-          <ul className={styles["post-list"]}>
-            {filteredPosts.map((post) => (
-              <li key={post.id} className={styles["post-item"]}>
-                <Link href={`/allpages/blog/${post.id}`}>
-                  <PostCard post={post} preview />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No posts found.</p>
-        )}
+    <div className={styles.posts}>
+      <h1 className={styles["welcome-text"]}>Welcome to all posts!</h1>
 
-        <Link href="/">
-          <button>Back to home page</button>
-        </Link>
+      <div className={styles.carouselContainer}>
+      {canScrollLeft && (
+    <button 
+    onClick={scrollLeft} 
+    className={`${styles.arrow} ${styles.leftArrow} ${!canScrollLeft ? styles.arrowHidden : ""}`}>
+      ⬅️
+    </button>
+  )}
+
+
+        {/* ВАЖНО: ref навешиваем на блок, где список постов! */}
+        <div ref={scrollRef} className={styles.carousel}>
+          {filteredPosts.length > 0 ? (
+            <ul className={styles["post-list"]}>
+              {filteredPosts.map((post) => (
+                <li key={post.id} className={styles["post-item"]}>
+                  <Link href={`/allpages/blog/${post.id}`}>
+                    <PostCard post={post} preview />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No posts found.</p>
+          )}
+        </div>
+
+        {canScrollRight && (
+    <button 
+    onClick={scrollRight} 
+    className={`${styles.arrow} ${styles.rightArrow} ${!canScrollRight ? styles.arrowHidden : ""}`}>
+      ➡️
+    </button>
+  )}
       </div>
+
+      <Link href="/">
+        <button>Back to home page</button>
+      </Link>
     </div>
-  );
+  </div>
+);
 }
