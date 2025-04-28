@@ -9,6 +9,7 @@ import Recommendations from "../Recommendations/Recommendations";
 import PostsDrafts from "../../my-posts/components/AuthorPosts";
 import BooksDrafts from "../BooksDrafts/BooksDrafts";
 import SavedBooks from "../SavedBooks/SavedBooks";
+import AuthorPostsPage from "../../my-posts/page";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -33,7 +34,7 @@ export default function Worktable() {
     <div className={styles["worktable-container"]}>
       <div className={styles.ontablethings}>
         {activeComponent === "notebookbooks" && <NotebookBooks />}
-        {activeComponent === "posts" && <Posts />}
+        {activeComponent === "posts" && <AuthorPostsPage />}
         {activeComponent === "recommendations" && <Recommendations />}
         {activeComponent === "postsdrafts" && <PostsDrafts />}
         {activeComponent === "booksdrafts" && <BooksDrafts />}

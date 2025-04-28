@@ -17,7 +17,7 @@ export const GET_ALL_POSTS = gql`
 `
 
 export const GET_AUTHOR_POSTS = gql`
-    query GetMyPosts{
+    query GetAuthorPosts{
         getAuthorPosts {
             id
             title

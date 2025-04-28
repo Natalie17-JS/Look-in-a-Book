@@ -1,12 +1,10 @@
-"use client"
+import AuthorPosts from "./components/AuthorPosts";
 
-import PostsDrafts from "./components/AuthorPosts"
+export default function AuthorPostsPage() { 
 
-export default function PostsDraftsPage() {
-
-    return(
-        <div>
-            <PostsDrafts/>
-        </div>
-    )
+return (
+<div>
+<AuthorPosts/>
+</div>
+)
 }

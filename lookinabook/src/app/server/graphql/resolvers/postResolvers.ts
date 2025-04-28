@@ -88,6 +88,11 @@ const postResolvers: PostResolversTypes = {
         }
         return await prisma.post.findMany({
           where: { authorId: user.id },
+          include: {
+            author: {
+              select: { id: true, username: true },
+            }
+          },
           orderBy: { createdAt: "desc" },
         });
       } catch (error) {

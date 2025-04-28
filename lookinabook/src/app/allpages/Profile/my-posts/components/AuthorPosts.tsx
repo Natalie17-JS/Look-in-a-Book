@@ -1,47 +1,86 @@
 "use client"
 
-import { useQuery } from "@apollo/client"
-import { GET_POSTS_DRAFTS } from "@/app/GraphqlOnClient/queries/postQueries"
 import PostCard from "@/app/allpages/blog/[id]/components/Post"
+import { useRef,  useState, useEffect } from "react";
+import { useQuery } from "@apollo/client"
+import { GET_AUTHOR_POSTS } from "@/app/GraphqlOnClient/queries/postQueries";
 import Link from "next/link"
-import { useUser } from "@/app/context/authContext"
-import { useTheme } from "@/app/context/themeContext"
-import { PostsDraftsData } from "@/app/types/postTypes"
+import { Post } from "@/app/types/postTypes";
+import { useUser } from "@/app/context/authContext";
+import styles from "./AuthorPosts.module.css"
 
-const PostsDrafts = () => {
-    const { user } = useUser();
-    const { theme } = useTheme();
+export default function AuthorPosts() {
+    const {user} = useUser()
+
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
+
     const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    const {loading, error, data} = useQuery<PostsDraftsData>(GET_POSTS_DRAFTS, {
+    const {loading, error, data} = useQuery(GET_AUTHOR_POSTS, {
         context: {
             headers: {
-                Authorization: accessToken ? `bearer ${accessToken}` : "",
+                Authorization: accessToken ? `bearer ${accessToken}` : ""
             }
         }
     })
 
-    if (loading)  return <p>Loading posts...</p>
-    if (error) return <p>Error: {error.message}</p>
+    const AuthorPosts: Post[] = data?.getAuthorPosts || [];
 
-    return(
-        <div>
-            <h2>My posts drafts</h2>
-            {data?.getPostDrafts.length ? (
-                <ul>
-                    {data?.getPostDrafts?.map((post) => ( 
-                        <li key={post.id}>
-                            <h3>{post.title}</h3>
-                            <p>{post.content}</p>
-                           
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No posts drafts found.</p>
-            )
+      const checkForScrollPosition = () => {
+        if (!scrollRef.current) return;
+    
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        setCanScrollLeft(scrollLeft > 0);
+        setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+      };
+    
+      useEffect(() => {
+        checkForScrollPosition();
+        scrollRef.current?.addEventListener("scroll", checkForScrollPosition);
+        return () => {
+          scrollRef.current?.removeEventListener("scroll", checkForScrollPosition);
+        };
+      }, []);
+    
+      const scrollLeft = () => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollBy({ left: -240, behavior: "smooth" });
         }
+      };
+    
+      const scrollRight = () => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollBy({ left: 240, behavior: "smooth" });
+        }
+      };
+
+      if (loading) return <p>Loading posts...</p>;
+      if (error) return <p>Error: {error.message}</p>;
+
+    
+      return (
+        <div>
+            <div className={styles.carouselContainer}>
+                {canScrollLeft && <button onClick={scrollLeft}>⬅️</button>}
+
+                <div ref={scrollRef} className={styles.carousel}>
+                    {AuthorPosts.length > 0 ? (
+                        <ul>
+                            {AuthorPosts.map((post) => (
+                                <li key={post.id}>
+                                    <PostCard preview post={post} />
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No posts found</p>
+                    )}
+                </div>
+
+                {canScrollRight && <button onClick={scrollRight}>➡️</button>}
+            </div>
         </div>
-    )
+    );
 }
-export default PostsDrafts;
