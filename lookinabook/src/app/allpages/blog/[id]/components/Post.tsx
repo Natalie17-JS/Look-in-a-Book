@@ -24,9 +24,10 @@ import { usePost } from "@/app/context/postContext"
 interface PostCardProps {
   post?: Post; // Сделаем пропсу необязательной
   preview?: boolean; // если true, показываем только начало текста
+  onTable?: boolean;
 }
 
-export default function PostCard({ post, preview = false }: PostCardProps) {
+export default function PostCard({ post, preview = false, onTable = false }: PostCardProps) {
     const { theme } = useTheme();
     const {currentPost} = usePost()
   
@@ -97,7 +98,11 @@ export default function PostCard({ post, preview = false }: PostCardProps) {
         : displayedPost.content;
 
         return (
-          <div className={`${styles["post-card-container"]} ${preview ? styles.preview : ""}`}>
+          <div className={`
+            ${styles["post-card-container"]} 
+            ${preview ? styles.preview : ""} 
+            ${onTable ? styles.onTable : ""}
+          `}>
             <div className={styles["image-wrapper"]}>
               <Image
                 src={backgroundImage}

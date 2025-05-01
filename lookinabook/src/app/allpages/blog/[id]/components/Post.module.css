@@ -9,6 +9,10 @@
     transform-origin: top left;
   }
 
+  .onTable {
+    width: 200px;
+  }
+
 
 .image-wrapper {
     width: 93%;

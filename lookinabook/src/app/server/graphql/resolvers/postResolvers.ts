@@ -87,7 +87,7 @@ const postResolvers: PostResolversTypes = {
           throw new Error("Not authenticated");
         }
         return await prisma.post.findMany({
-          where: { authorId: user.id },
+          where: { authorId: user.id, publishStatus: "PUBLISHED" },
           include: {
             author: {
               select: { id: true, username: true },

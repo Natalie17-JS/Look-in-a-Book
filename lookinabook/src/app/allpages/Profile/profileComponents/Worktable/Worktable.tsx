@@ -6,10 +6,10 @@ import Posts from "../Posts/Posts";
 import NotebookBooks from "../NotebookBooks/NotebookBooks";
 import Recommendations from "../Recommendations/Recommendations";
 //import PostsDrafts from "../PostsDrafts/PostsDrafts";
-import PostsDrafts from "../../my-posts/components/AuthorPosts";
+import PostsDrafts from "../../posts-drafts/components/PostsDrafts";
 import BooksDrafts from "../BooksDrafts/BooksDrafts";
 import SavedBooks from "../SavedBooks/SavedBooks";
-import AuthorPostsPage from "../../my-posts/page";
+import AuthorPosts from "../../my-posts/components/AuthorPosts";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -34,7 +34,7 @@ export default function Worktable() {
     <div className={styles["worktable-container"]}>
       <div className={styles.ontablethings}>
         {activeComponent === "notebookbooks" && <NotebookBooks />}
-        {activeComponent === "posts" && <AuthorPostsPage />}
+        {activeComponent === "posts" && <AuthorPosts />}
         {activeComponent === "recommendations" && <Recommendations />}
         {activeComponent === "postsdrafts" && <PostsDrafts />}
         {activeComponent === "booksdrafts" && <BooksDrafts />}

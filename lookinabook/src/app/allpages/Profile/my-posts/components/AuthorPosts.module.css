@@ -1,0 +1,74 @@
+/*.carouselContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+  overflow: hidden;
+  }
+  
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .carousel::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .post-item {
+    flex: 0 0 auto;
+    width: 800px;
+  }
+  .post-list {
+    display: flex;
+    gap: 20px; /* промежутки между карточками */
+   /* padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 10;
+    font-size: 24px;
+    border-radius: 50%;
+    transition: opacity 0.3s;
+  }
+  
+  .leftArrow {
+    left: 10px;
+  }
+  
+  .rightArrow {
+    right: 10px;
+  }
+  /* Можно добавить плавную прозрачность для скрытия */
+/*.arrowHidden {
+    opacity: 0;
+    pointer-events: none; /* чтобы нельзя было кликнуть по невидимой кнопке */
+  
+    .carouselWrapper {
+      width: 100%;
+      padding: 1rem 0;
+    }
+    
+    .staticList {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .staticItem {
+      flex: 0 1 300px;
+    }
+    
