@@ -129,7 +129,7 @@ const postResolvers: PostResolversTypes = {
       }
     },
 
-    updatePost: async (_, { id, title, content, image, publishStatus, category }, { req, res }) => {
+    editPost: async (_, { id, title, content, image, publishStatus, category }, { req, res }) => {
       try {
         const user = await getUserFromRequest(req, res);
         if (!user) {
@@ -176,4 +176,4 @@ const postResolvers: PostResolversTypes = {
     },
   },
 };
-export default postResolvers
+export default postResolvers;

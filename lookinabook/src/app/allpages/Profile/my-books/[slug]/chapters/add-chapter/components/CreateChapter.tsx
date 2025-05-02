@@ -66,7 +66,7 @@ const CreateChapter = () => {
             );
             if (newChapter) {
 
-                console.log("Created book:", newChapter);
+                console.log("Created chapter:", newChapter);
                // reset();
               }
         } catch (err) {

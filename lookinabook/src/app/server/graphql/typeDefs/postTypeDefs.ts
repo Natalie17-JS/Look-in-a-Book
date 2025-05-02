@@ -48,7 +48,7 @@ type Mutation {
     category: PostCategory!
   ): Post!
 
-  updatePost(
+  editPost(
     id: String!
     title: String
     content: String

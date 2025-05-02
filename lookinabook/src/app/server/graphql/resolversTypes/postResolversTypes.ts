@@ -41,7 +41,7 @@ export type PostResolversTypes = {
         };
         Mutation: {
           createPost: (parent: unknown, args: CreatePostArgs, context: IContext) => Promise<Post>;
-          updatePost: (parent: unknown, args: UpdatePostArgs, context: IContext) => Promise<Post | null>;
+          editPost: (parent: unknown, args: UpdatePostArgs, context: IContext) => Promise<Post | null>;
           deletePost: (parent: unknown, args: DeletePostArgs, context: IContext) => Promise<{ message: string; }>;
         };
         DateTime: GraphQLScalarType;

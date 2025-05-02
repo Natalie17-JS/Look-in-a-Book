@@ -55,7 +55,7 @@ export default function ChapterForm({
       <div className={styles["content-container"]}>
         <textarea
           {...register("content", { required: "Content is required" })}
-          placeholder="Content..."
+          placeholder="Chapter content..."
           className={`${styles.content} ${themeInput}`}
         />
         {errors.content && <p>{errors.content.message}</p>}
