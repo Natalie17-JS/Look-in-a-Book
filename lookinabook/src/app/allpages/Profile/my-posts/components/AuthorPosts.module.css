@@ -71,4 +71,7 @@
     .staticItem {
       flex: 0 1 300px;
     }
-    
+
+    .posts-ontable {
+      display: flex;
+    }

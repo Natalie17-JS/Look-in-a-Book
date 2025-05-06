@@ -36,11 +36,17 @@ export default function AuthorPosts() {
   const shouldUseCarousel = AuthorPosts.length > 2;
 
   return (
+    <div className={styles["posts-ontable"]}>
+<Link href="/allpages/profile/my-posts/new-post">
+      <button>New +</button>
+      </Link>
     <div className={styles.carouselWrapper}>
       {shouldUseCarousel ? (
         <Carousel3slides>
           {AuthorPosts.map((post) => (
+            <Link href={`/allpages/profile/my-posts/${post.id}`}>
             <PostCard key={post.id} post={post} onTable />
+            </Link>
           ))}
         </Carousel3slides>
       ) : (
@@ -52,6 +58,7 @@ export default function AuthorPosts() {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

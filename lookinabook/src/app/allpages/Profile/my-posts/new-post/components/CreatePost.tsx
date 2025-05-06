@@ -42,7 +42,7 @@ const CreatePost =()=> {
   }
 
   return(
-    <div>
+    <div className={styles["create-post-container"]}>
       <h1>Create a post</h1>
       <PostForm
        onSubmit={handleCreate}

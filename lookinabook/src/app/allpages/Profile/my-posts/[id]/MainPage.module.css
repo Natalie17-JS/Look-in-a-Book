@@ -1,0 +1,17 @@
+.author-post-container.light {
+    background-color: white;
+  }
+  .author-post-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .author-post-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .author-post-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+  }

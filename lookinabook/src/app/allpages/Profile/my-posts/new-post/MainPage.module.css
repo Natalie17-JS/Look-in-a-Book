@@ -1,0 +1,27 @@
+.new-post-container.light {
+    background-color: white;
+  }
+  .new-post-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .new-post-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .new-post-container {
+    width: auto;
+    height: 100vh;
+    display: flex;
+   /* border: 1px solid green;
+    justify-content: space-around;*/
+    /*align-items: flex-end;*/
+  }
+  .shelf-door {
+    width: 30%;
+    /*border: 1px solid orange;*/
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+    justify-content: flex-end;
+  }

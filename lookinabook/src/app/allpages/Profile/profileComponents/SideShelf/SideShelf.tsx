@@ -6,7 +6,7 @@ export default function SideShelf() {
 
     return (
         <div className={styles["sideshelf-container"]}>
-            <div className={styles["sideshelf-first"]}>
+            
             <div className={styles.flowers}>
             <Image
               src={flowers}
@@ -15,10 +15,9 @@ export default function SideShelf() {
             ></Image>
           </div>
             </div>
-            <div className={styles["sideshelf-second"]}>
+            
                 
-            </div>
+          
 
-        </div>
     )
 }

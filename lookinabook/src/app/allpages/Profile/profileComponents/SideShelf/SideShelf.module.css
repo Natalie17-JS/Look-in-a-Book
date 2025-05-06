@@ -1,24 +1,14 @@
 .sideshelf-container {
-    width: 30%;
-    height: 40%;
-    border-inline: 15px solid rgb(124, 81, 34);
-    border-top: 15px solid rgb(124, 81, 34);
+    width: 100%;
+    height: 25%;
+    border: 15px solid rgb(124, 81, 34);
     margin-top: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     /*gap: 10px;*/
 }
-.sideshelf-first {
-    width: 100%;
-    height: 60%;
-    border-bottom: 15px solid rgb(124, 81, 34);
-}
- .sideshelf-second {
-    width: 100%;
-    height: 40%;
-    border-bottom: 15px solid rgb(124, 81, 34);
-}
+
 .flowers-image {
     width: 100%;
     height: auto;
