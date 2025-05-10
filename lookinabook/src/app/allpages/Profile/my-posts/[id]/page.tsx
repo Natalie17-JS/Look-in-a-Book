@@ -1,6 +1,8 @@
 "use client"
 
 import AuthorPost from "./components/Post";
+import CommentsCase from "./components/CommentsCase";
+import GoBackDoor from "./components/GoBackDoor";
 import { useTheme } from "@/app/context/themeContext";
 import { getThemeClass } from "@/app/themeclass";
 import styles from "./MainPage.module.css"
@@ -12,6 +14,8 @@ export default function AuthorPostPage() {
     return(
         <div className={`${styles["author-post-container"]} ${themeClass}`}>
             <AuthorPost/>
+            <CommentsCase/>
+            <GoBackDoor/>
         </div>
     )
 }

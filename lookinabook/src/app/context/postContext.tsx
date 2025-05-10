@@ -9,6 +9,7 @@ import { Post } from "../types/postTypes"
 interface PostContextType {
     currentPost: Post | null;
     setCurrentPost: React.Dispatch<React.SetStateAction<Post | null>>;
+    //refetchPost: () => void;
 }
 
 const PostContext = createContext<PostContextType | undefined>(undefined)
@@ -17,10 +18,11 @@ export const PostProvider = ({children}: {children: ReactNode}) => {
     const [currentPost, setCurrentPost] = useState<Post | null>(null)
     const { id } = useParams();
 
-    const {data, error, loading} = useQuery(GET_POST_BY_ID, {
+    const {data, error, loading } = useQuery(GET_POST_BY_ID, {
         //variables: {id: id as String},
         variables: { id: String(id) },
-        skip: !id
+        skip: !id,
+        fetchPolicy: "network-only",
     });
 
     useEffect(() => {

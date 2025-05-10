@@ -1,0 +1,19 @@
+.small-table {
+    width: 90%;
+    height: 70px;
+    border: 10px solid rgb(101, 62, 37);
+    background-color: rgb(87, 47, 17);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.editpens {
+    width: 100%;
+    height: auto;
+}
+.editpens-container{
+    width: 6%;
+    display: flex;
+    align-items: flex-end;
+   /* border: 1px solid pink;*/
+}

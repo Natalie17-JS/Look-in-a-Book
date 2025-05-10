@@ -20,7 +20,10 @@ const CreatePost =()=> {
   },
   })
 
-  const handleCreate = async (data: Post) =>{
+  {error && <p className="error">Error: {error.message}</p>}
+
+  const handleCreate = async (data: CreatePostFormData) =>{
+    console.log("Submitting post data:", data);
     try {
       const newPost = await createPost({
         variables: {
@@ -29,7 +32,8 @@ const CreatePost =()=> {
           image: data.image || null,
           publishStatus: data.publishStatus,
           category: data.category,
-          createdAt: data.createdAt
+          //createdAt: data.createdAt
+         // createdAt: new Date().toISOString()
         }
       })
       if (newPost) {

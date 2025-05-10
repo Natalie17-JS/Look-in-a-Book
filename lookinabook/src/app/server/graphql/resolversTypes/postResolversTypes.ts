@@ -3,7 +3,7 @@ import { GraphQLScalarType } from "graphql";
 import { IContext } from "./UserResolversTypes";
 import { PStatus } from "./bookResolversTypes";
 
-export enum postCategory {
+export enum PostCategory {
   THOUGHTS = "THOUGHTS",
   NEWS = "NEWS",
   NEW_BOOK_PROMOTION = "NEW_BOOK_PROMOTION",
@@ -16,7 +16,7 @@ export type CreatePostArgs = {
     content: string;
     image?: string;
     publishStatus: PStatus;
-    category: postCategory;
+    category: PostCategory;
 }
 export type UpdatePostArgs = {
     id: string;
@@ -24,7 +24,7 @@ export type UpdatePostArgs = {
     content?: string;
     image?: string;
     publishStatus?: PStatus;
-    category?: postCategory;
+    category?: PostCategory;
 }
 
 export type DeletePostArgs = {

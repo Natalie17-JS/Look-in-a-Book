@@ -1,7 +1,7 @@
 import { PStatus } from "./bookTypes";
 import { User } from "./userTypes";
 
-export enum postCategory {
+export enum PostCategory {
   THOUGHTS = "THOUGHTS",
   NEWS = "NEWS",
   NEW_BOOK_PROMOTION = "NEW_BOOK_PROMOTION",
@@ -16,7 +16,7 @@ export interface Post {
     content: string;
     author: User;
     publishStatus: PStatus;
-    category: postCategory;
+    category: PostCategory;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -30,7 +30,7 @@ export interface PostsData {
     content: string;
     image?: string,
     publishStatus: PStatus;
-    category: postCategory;
+    category: PostCategory;
 }
 
 export interface PostsDraftsData {

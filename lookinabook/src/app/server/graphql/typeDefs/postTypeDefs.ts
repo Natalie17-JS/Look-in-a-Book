@@ -1,7 +1,7 @@
 export const postTypeDefs = `
 scalar DateTime
 
-enum PublishStatus {
+enum PStatus {
   DRAFT
   PUBLISHED
 }
@@ -19,7 +19,7 @@ type Post {
   title: String!
   content: String!
   image: String
-  publishStatus: PublishStatus!
+  publishStatus: PStatus!
   category: PostCategory!
   createdAt: String!
   updatedAt: String!
@@ -44,7 +44,7 @@ type Mutation {
     title: String!
     content: String!
     image: String
-    publishStatus: PublishStatus!
+    publishStatus: PStatus!
     category: PostCategory!
   ): Post!
 
@@ -53,7 +53,7 @@ type Mutation {
     title: String
     content: String
     image: String
-    publishStatus: PublishStatus
+    publishStatus: PStatus
     category: PostCategory
   ): Post!
 

@@ -5,13 +5,15 @@ export const CREATE_POST = gql`
     $title: String!, 
     $content: String!, 
     $image: String,
-    $category: postCategory!,
+    $category: PostCategory!,
     $publishStatus: PStatus!){
     createPost(
     title: $title,
     content: $content,
     image: $image,
-    publishStatus: $publishStatus){
+    publishStatus: $publishStatus
+    category: $category
+    ){
         id
         title
         image
@@ -25,23 +27,27 @@ export const CREATE_POST = gql`
 
 export const EDIT_POST = gql`
     mutation EditPost( 
+    $id: String!,
     $title: String, 
     $content: String, 
     $image: String,
-    $category: postCategory,
+    $category: PostCategory,
     $publishStatus: PStatus){
     editPost(
+    id: $id,
     title: $title,
     content: $content,
     image: $image,
-    publishStatus: $publishStatus){
+    publishStatus: $publishStatus
+    category: $category
+    ){
         id
         title
         image
         content
         category
         publishStatus
-        updatedAt
+        
     }
   }
 `

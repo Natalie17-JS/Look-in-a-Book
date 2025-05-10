@@ -25,9 +25,10 @@ interface PostCardProps {
   post?: Post; // Сделаем пропсу необязательной
   preview?: boolean; // если true, показываем только начало текста
   onTable?: boolean;
+  inProfile?: boolean;
 }
 
-export default function PostCard({ post, preview = false, onTable = false }: PostCardProps) {
+export default function PostCard({ post, preview = false, onTable = false, inProfile = false }: PostCardProps) {
     const { theme } = useTheme();
     const {currentPost} = usePost()
   
@@ -102,6 +103,7 @@ export default function PostCard({ post, preview = false, onTable = false }: Pos
             ${styles["post-card-container"]} 
             ${preview ? styles.preview : ""} 
             ${onTable ? styles.onTable : ""}
+            ${inProfile ? styles.inProfile : ""}
           `}>
             <div className={styles["image-wrapper"]}>
               <Image

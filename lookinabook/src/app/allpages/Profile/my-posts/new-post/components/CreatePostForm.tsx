@@ -2,7 +2,7 @@
 
 import { useForm, useWatch } from "react-hook-form"
 import { PStatus } from "@/app/types/bookTypes"
-import { Post, postCategory } from "@/app/types/postTypes"
+import { Post, PostCategory } from "@/app/types/postTypes"
 import { useTheme } from "@/app/context/themeContext"
 import { CreatePostFormData } from "@/app/types/postTypes"
 import styles from "./CreatePost.module.css"
@@ -35,7 +35,7 @@ export default function PostForm({
     title: "",
     content: "",
     publishStatus: PStatus.DRAFT,
-    category: postCategory.NEWS
+    category: PostCategory.NEWS
 },
 onSubmit,
   isSubmitting,
@@ -151,7 +151,7 @@ const getImage = (category: Post["category"], theme: string) => {
                 <label htmlFor="publishStatus"></label>
                 <select {...register("publishStatus")} id="publishStatus">
                     <option value="DRAFT">Draft</option>
-                    <option value="PUDLISHED">Published</option>
+                    <option value="PUBLISHED">Published</option>
                 </select>
             </div>
 
