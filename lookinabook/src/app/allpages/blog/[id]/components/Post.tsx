@@ -20,6 +20,7 @@ import other_post_night from "@/app/images/other-post-night-bg.svg"
 import  {Post}  from "@/app/types/postTypes"
 import styles from "./Post.module.css"
 import { usePost } from "@/app/context/postContext"
+import { usePostStore } from "@/app/zustand/PostStore"
 
 interface PostCardProps {
   post?: Post; // Сделаем пропсу необязательной
@@ -30,7 +31,9 @@ interface PostCardProps {
 
 export default function PostCard({ post, preview = false, onTable = false, inProfile = false }: PostCardProps) {
     const { theme } = useTheme();
-    const {currentPost} = usePost()
+   // const {currentPost} = usePost()
+
+   const currentPost = usePostStore((state) => state.currentPost);
   
     
   const displayedPost = post || currentPost;

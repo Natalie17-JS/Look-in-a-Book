@@ -6,12 +6,24 @@ import { usePost } from "@/app/context/postContext"
 import PostForm from "../../../new-post/components/CreatePostForm"
 import { Post, CreatePostFormData, PostCategory } from "@/app/types/postTypes"
 import { PStatus } from "@/app/types/bookTypes"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { GET_POST_BY_ID } from "@/app/GraphqlOnClient/queries/postQueries"
+import { usePostStore } from "@/app/zustand/PostStore"
+import { useLoadPostById } from "@/app/hooks/useFetchPost"
 
 export default function EditPost() {
   const router = useRouter();
-    const {currentPost, setCurrentPost } = usePost()
+  const params = useParams()
+  const id =
+    typeof params.id === "string"
+      ? params.id
+      : Array.isArray(params.id)
+      ? params.id[0]
+      : ""
+    //const {currentPost, setCurrentPost } = usePost()
+
+    const { currentPost, setCurrentPost } = usePostStore()
+    const { loading: loadingPost, error: errorPost } = useLoadPostById(id)
     const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     const [editPost, {loading, error}] = useMutation<Post>(EDIT_POST, {
@@ -36,9 +48,7 @@ export default function EditPost() {
                     category: data.category,
                     //updatedAt: data.updatedAt
                 },
-               /* refetchQueries: [
-                  { query: GET_POST_BY_ID, variables: { id: currentPost?.id } },
-                ],*/
+              
             })
             if (editedPost.data) {
                 setCurrentPost(editedPost.data);
@@ -50,6 +60,8 @@ export default function EditPost() {
             console.error("Update error:", err);
           }
     }
+
+    if (loadingPost || !currentPost) return <p>Loading...</p>;
 
     return (
         <div>

@@ -7,12 +7,29 @@ import styles from "./MainPage.module.css"
 import CommentsCase from "./components/CommentsCase"
 import GoBackDoor from "./components/GoBackDoor"
 import { usePost } from "@/app/context/postContext"
+import { usePostStore } from "@/app/zustand/PostStore"
+import { useParams } from "next/navigation"
+import { useLoadPostById } from "@/app/hooks/useFetchPost"
 
 export default function PostPage() {
-    const {theme} = useTheme()
-    const {currentPost} = usePost()
-    if (!currentPost) return null;
-    const themeClass = getThemeClass(theme, styles);
+    const { theme } = useTheme()
+    const { currentPost } = usePostStore()
+  
+    const params = useParams()
+    const id =
+      typeof params.id === "string"
+        ? params.id
+        : Array.isArray(params.id)
+        ? params.id[0]
+        : ""
+  
+    const { loading, error } = useLoadPostById(id)
+    const themeClass = getThemeClass(theme, styles)
+  
+    if (loading) return <p>Loading post...</p>
+    if (error) return <p>Error loading post: {error.message}</p>
+    if (!currentPost) return <p>Post not found.</p>
+  
 
     return(
         <div className={`${styles["post-container"]} ${themeClass}`}>
