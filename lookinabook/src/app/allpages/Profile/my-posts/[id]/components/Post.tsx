@@ -12,6 +12,7 @@ import { GET_POST_BY_ID } from "@/app/GraphqlOnClient/queries/postQueries"
 import { usePostStore } from "@/app/zustand/PostStore"
 import { useLoadPostById } from "@/app/hooks/useFetchPost"
 import DeletePostButton from "../edit-post/components/DeletePost"
+import PublishPostButton from "../edit-post/components/PublishPost"
 
 export default function AuthorPost() {
     const params = useParams()
@@ -24,6 +25,8 @@ export default function AuthorPost() {
 
   const { currentPost } = usePostStore()
   const { loading, error } = useLoadPostById(id)
+
+const isDraft = currentPost?.publishStatus === "DRAFT"
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error.message}</p>
@@ -42,6 +45,10 @@ export default function AuthorPost() {
             </Link>
 
             <DeletePostButton/>
+
+            {isDraft && (
+                <PublishPostButton/>
+            )}
 
             </div>
         </div>

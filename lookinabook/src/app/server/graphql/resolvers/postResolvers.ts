@@ -151,6 +151,43 @@ const postResolvers: PostResolversTypes = {
       }
     },
 
+    async publishPost(_, { id }, { req, res }) {
+        try {
+          const user = await getUserFromRequest(req, res);
+          if (!user) {
+            throw new Error("Not authenticated");
+          }
+    
+          const post = await prisma.post.findUnique({ where: { id } });
+    
+          if (!post) {
+            throw new Error("Post not found");
+          }
+    
+          // Проверяем, является ли пользователь автором книги
+          if (user.id !== post.authorId) {
+            throw new Error("You are not allowed to publish this book");
+          }
+    
+          // Проверяем, что книга находится в статусе "DRAFT"
+          if (post.publishStatus === "PUBLISHED") {
+            throw new Error("This post is already published");
+          }
+    
+          // Обновляем статус на "PUBLISHED"
+          const updatedPost = await prisma.post.update({
+            where: { id },
+            data: { publishStatus: "PUBLISHED" },
+            include: { author: true }, // Возвращаем автора книги
+          });
+    
+          return updatedPost;
+        } catch (error) {
+          console.error("Error publishing post:", error);
+          throw new Error("Failed to publish post");
+        }
+      },
+
     deletePost: async (_, { id }, { req, res }) => {
       try {
         const user = await getUserFromRequest(req, res);

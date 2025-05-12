@@ -6,7 +6,9 @@ import PostCard from "@/app/allpages/blog/[id]/components/Post"
 import Link from "next/link"
 import { useUser } from "@/app/context/authContext"
 import { useTheme } from "@/app/context/themeContext"
-import { PostsDraftsData } from "@/app/types/postTypes"
+import { Post, PostsDraftsData } from "@/app/types/postTypes"
+import { Carousel3slides } from "../../my-posts/components/Carousel"
+import styles from "../../my-posts/components/AuthorPosts.module.css"
 
 const PostsDrafts = () => {
     const { user } = useUser();
@@ -20,28 +22,43 @@ const PostsDrafts = () => {
             }
         }
     })
+  const PostsDrafts: Post[] = data?.getPostDrafts || [];
 
-    if (loading)  return <p>Loading posts drafts...</p>
-    if (error) return <p>Error: {error.message}</p>
+  if (loading) return <p>Loading posts...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  if (PostsDrafts.length === 0) {
+    return <p>No drafts posts found</p>;
+  }
+
+  // Если постов 5 или меньше — не показываем стрелки и не включаем карусель
+  const shouldUseCarousel = PostsDrafts.length > 2;
 
     return(
-        <div>
-            <h2>My posts drafts</h2>
-            {data?.getPostDrafts.length ? (
-                <ul>
-                    {data?.getPostDrafts?.map((post) => ( 
-                        <li key={post.id}>
-                            <h3>{post.title}</h3>
-                            <p>{post.content}</p>
-                           
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No posts drafts found.</p>
-            )
-        }
+        <div className={styles["posts-ontable"]}>
+
+    <div className={styles.carouselWrapper}>
+      {shouldUseCarousel ? (
+        <Carousel3slides>
+          {PostsDrafts.map((post) => (
+            <Link href={`/allpages/profile/posts-drafts/${post.id}`}>
+            <PostCard key={post.id} post={post} onTable />
+            </Link>
+          ))}
+        </Carousel3slides>
+      ) : (
+        <div className={styles.staticList}>
+          {PostsDrafts.map((post) => (
+            <div key={post.id} className={styles.staticItem}>
+                 <Link href={`/allpages/profile/posts-drafts/${post.id}`}>
+              <PostCard post={post} onTable />
+                </Link>
+            </div>
+          ))}
         </div>
+      )}
+    </div>
+    </div>
     )
 }
 export default PostsDrafts;

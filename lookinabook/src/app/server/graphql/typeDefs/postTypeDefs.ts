@@ -57,6 +57,8 @@ type Mutation {
     category: PostCategory
   ): Post!
 
+  publishPost(id: String!): Post!
+
   deletePost(id: String!): DeleteResponse!
 }
 

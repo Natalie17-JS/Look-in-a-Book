@@ -18,11 +18,7 @@ export default function NewPost() {
 
       <div className={styles["shelf-door"]}>
       <SideShelf/>
-      <GoBackDoor/>
-     {/* <Link href="/allpages/profile">
-        <button>Back to profile</button>
-      </Link>*/}
-     
+      <GoBackDoor/> 
 </div>
   </div>
   );

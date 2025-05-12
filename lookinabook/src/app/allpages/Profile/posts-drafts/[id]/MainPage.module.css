@@ -1,0 +1,25 @@
+.draft-post-container.light {
+    background-color: white;
+  }
+  .draft-post-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .draft-post-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .draft-post-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+  }
+   .shelf-door {
+    width: 30%;
+    /*border: 1px solid orange;*/
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+    justify-content: flex-end;
+  }

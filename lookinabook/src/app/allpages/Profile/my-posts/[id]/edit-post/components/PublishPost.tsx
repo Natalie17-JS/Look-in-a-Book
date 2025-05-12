@@ -7,9 +7,12 @@ import { Post } from "@/app/types/postTypes";
 import { usePostStore } from "@/app/zustand/PostStore";
 import toast from 'react-hot-toast';
 import { useParams } from "next/navigation";
+import styles from "./Publish.module.css"
+import { useRouter } from "next/navigation";
 
 const PublishPostButton = () => {
   const params = useParams()
+  const router = useRouter()
     const id =
       typeof params.id === "string"
         ? params.id
@@ -18,11 +21,11 @@ const PublishPostButton = () => {
         : ""
   
     const { currentPost } = usePostStore()
-    const accessToken = localStorage.getItem("token");
-    
+    const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
 
   const [publishPost, { loading, error }] = useMutation<{ publishPost: Post }>(PUBLISH_POST, {
-    variables: { id},
+    variables: { id },
     context: {
       headers: {
         Authorization: accessToken ? `Bearer ${accessToken}` : "",
@@ -31,6 +34,7 @@ const PublishPostButton = () => {
     onCompleted: (data) => {
     toast.success(`Post "${data.publishPost.title}" is published! 🎉`);
     console.log("Chapter published:", data.publishPost);
+    router.push(`/allpages/profile`)
     },
     onError: (error) => {
     toast.error(`Error: ${error.message}`);
@@ -44,6 +48,9 @@ const PublishPostButton = () => {
       console.error("Publish error:", err);
     }
   };
+
+  if (!id) return null;
+
 
   return (
     <div>
