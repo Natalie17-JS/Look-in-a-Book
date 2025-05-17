@@ -121,11 +121,19 @@ model Chapter {
   comments    Comment[]
 }
 
+enum CommentType {
+  BOOKCOMMENT
+  POSTCOMMENT
+  CHAPTERCOMMENT
+  REPLYCOMMENT
+}
+
 model Comment {
-  id         Int      @id @default(autoincrement()) // Unique comment identifier
-  content    String                                // Comment content
-  createdAt  DateTime @default(now())              // Creation date
-  updatedAt  DateTime @updatedAt                   // Modification date
+  id            Int      @id @default(autoincrement()) // Unique comment identifier
+  content       String                                // Comment content
+  createdAt     DateTime @default(now())              // Creation date
+  updatedAt     DateTime @updatedAt                   // Modification date
+  commentType   CommentType
 
   // Relations
   authorId   Int?                                   // Author ID of the comment
@@ -140,6 +148,10 @@ model Comment {
 
   postId     String?                                  // Post ID (if the comment is on a post)
   post       Post?    @relation(fields: [postId], references: [id], onDelete: Cascade) // Relation with the post
+
+  parentCommentId Int?
+  parentComment   Comment?  @relation("CommentToReplies", fields: [parentCommentId], references: [id])
+  replies         Comment[] @relation("CommentToReplies")
 }
 
 enum PostCategory {

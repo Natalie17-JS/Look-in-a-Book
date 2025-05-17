@@ -34,6 +34,8 @@ export type editChapterArgsByBookSlug = {
     content?: string;
     publishStatus?: PStatus;
 }
+
+
 export type deleteChapterByIdArgs = {
     id: string;
 }
@@ -76,7 +78,7 @@ export type ChapterResolvers = {
             parent: unknown, 
             args: deleteChapterByIdArgs, 
             context: IContext
-        ) => Promise<{ message: string; }>;
+        ) => Promise<{ message: string }>;
     }
     DateTime: GraphQLScalarType;
     };
