@@ -1,7 +1,8 @@
 import prisma from "@/app/server/prisma/prismaClient"
 import { DateTime } from "../resolversTypes/dateTime";
 import { getUserFromRequest } from "../../auth/authMiddleware";
-import {CommentsResolversTypes, CommentType} from "../resolversTypes/commentsResolversTypes"
+import {CommentsResolversTypes} from "../resolversTypes/commentsResolversTypes"
+import { CommentType } from "@prisma/client";
 
 const commentsResolvers: CommentsResolversTypes = {
     DateTime,

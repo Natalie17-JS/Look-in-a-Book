@@ -7,6 +7,9 @@ import { usePostStore } from "@/app/zustand/PostStore"
 import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useLoadPostById } from "@/app/hooks/useFetchPost"
+import Image from "next/image"
+import basket from "@/app/images/trash.svg"
+import styles from "./Delete.module.css"
 
 type Props = {
   onDeleted?: () => void; 
@@ -68,9 +71,12 @@ export default function DeletePostButton({ onDeleted }: Props) {
 
            return (
             <div>
-    <button onClick={() => setShowConfirm(true)} disabled={loading}>
+   {/*  <button onClick={() => setShowConfirm(true)} disabled={loading}>
         {loading ? "Deleting..." : "Delete post"}
-    </button>
+    </button>*/}
+     <div className={styles["basket-container"]} onClick={() => setShowConfirm(true)}>
+              <Image src={basket} alt="basket" className={styles.basket} />
+      </div>
                 
     {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
                 

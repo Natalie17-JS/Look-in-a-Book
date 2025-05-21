@@ -1,11 +1,10 @@
-.print-container{
-    width: 7%;
+.basket-container {
+     width: 7%;
     display: flex;
     align-items: flex-end;
    /* border: 1px solid pink;*/
 }
-
-.print {
+.basket {
     width: 100%;
     height: auto;
 }

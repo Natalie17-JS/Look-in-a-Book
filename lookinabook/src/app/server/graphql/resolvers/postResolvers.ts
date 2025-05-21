@@ -12,7 +12,7 @@ const postResolvers: PostResolversTypes = {
       try {
         const post = await prisma.post.findUnique({
           where: { id },
-          include: { author: true },
+          include: { author: true, comments: true },
         });
         if (!post) {
           throw new GraphQLError("Post not found");
@@ -36,6 +36,7 @@ const postResolvers: PostResolversTypes = {
                 email: true,
               },
             },
+            comments: true,
           },
           orderBy: { createdAt: "desc" },
           take: 5,
@@ -50,6 +51,7 @@ const postResolvers: PostResolversTypes = {
       try {
         return await prisma.post.findMany({
           where: { authorId, publishStatus: "PUBLISHED" },
+          include: {comments: true},
           orderBy: { createdAt: "desc" },
         });
       } catch (error) {
@@ -91,8 +93,10 @@ const postResolvers: PostResolversTypes = {
           include: {
             author: {
               select: { id: true, username: true },
-            }
+            },
+            comments: true,
           },
+          
           orderBy: { createdAt: "desc" },
         });
       } catch (error) {

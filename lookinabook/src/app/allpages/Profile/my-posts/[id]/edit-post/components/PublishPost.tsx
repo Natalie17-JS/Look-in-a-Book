@@ -9,6 +9,8 @@ import toast from 'react-hot-toast';
 import { useParams } from "next/navigation";
 import styles from "./Publish.module.css"
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import print from "@/app/images/print.svg"
 
 const PublishPostButton = () => {
   const params = useParams()
@@ -54,9 +56,14 @@ const PublishPostButton = () => {
 
   return (
     <div>
-      <button className={styles.button} onClick={handlePublish} disabled={loading}>
-        {loading ? "Publishing..." : "Publish post"}
-      </button>
+     {/*  <button className={styles.button} onClick={handlePublish} disabled={loading}>*/} 
+         
+                <div className={styles["print-container"]} onClick={handlePublish}>
+            <Image src={print} alt="publish" className={styles.print} />
+            </div>
+            
+       {/* {loading ? "Publishing..." : "Publish post"}  */} 
+    
       {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
     </div>
   );

@@ -16,6 +16,7 @@ Query: {
                 where: { id },
                 include: {
                   chapters: true, 
+                  comments: true,
                   author: {        
                       select: { id: true, username: true } 
                   }
@@ -32,7 +33,8 @@ Query: {
           const book = await prisma.book.findUnique({
               where: { slug }, // Поиск по slug вместо id
               include: {
-                chapters: true, 
+                chapters: true,
+                comments: true, 
                   author: {        
                       select: { id: true, username: true } 
                   }
@@ -58,8 +60,8 @@ Query: {
               },
               include: {
                 chapters: true,  
-                /*comments: true,   
-                likes: true, */     
+                comments: true,   
+                /*likes: true, */     
                 author: {         
                     select: { id: true, username: true } 
                 }
@@ -113,6 +115,7 @@ Query: {
         },
         include: {
           chapters: true, 
+          comments: true,
         }
       });
     },

@@ -8,6 +8,7 @@ enum CommentType {
   REPLYCOMMENT
 }
 
+
 type Comment {
   id: Int!
   content: String!
@@ -31,30 +32,24 @@ type Query {
   getUserComments: [Comment!]!
 }
 
-input CreateCommentInput {
+
+type DeleteResponse {
+  message: String!id: Int!
+  content: String
+}
+
+type Mutation {
+  createComment(
   content: String!
   commentType: CommentType!
   targetId: ID!
   parentCommentId: Int
-}
+  ): Comment!
 
-input EditCommentInput {
-  id: Int!
-  content: String
-}
+  editComment(id: Int!
+  content: String): Comment!
 
-input DeleteCommentInput {
-  id: Int!
-}
-
-type DeleteResponse {
-  message: String!
-}
-
-type Mutation {
-  createComment(input: CreateCommentInput!): Comment!
-  editComment(input: EditCommentInput!): Comment!
-  deleteComment(input: DeleteCommentInput!): DeleteResponse!
+  deleteComment(id: Int!): DeleteResponse!
 }
 
 `

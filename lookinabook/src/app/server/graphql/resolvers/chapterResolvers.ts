@@ -13,7 +13,7 @@ Query: {
     try{
         const chapter = await prisma.chapter.findUnique({
             where: { id },
-            include: {book: true}
+            include: {book: true, comments: true}
         });
         return chapter;
     } catch(error) {
