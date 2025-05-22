@@ -24,7 +24,7 @@ type User {
   publishBanned: Boolean
   banEndDate: DateTime
   banCount: Int
-  books: [Book!],
+  books: [Book!]
   posts: [Post!]
   
   # comments: [Comment!] 

@@ -19,7 +19,7 @@ import other_post_clouds from "@/app/images/other-post-clouds-bg.svg"
 import other_post_night from "@/app/images/other-post-night-bg.svg"
 import  {Post}  from "@/app/types/postTypes"
 import styles from "./Post.module.css"
-import { usePost } from "@/app/context/postContext"
+
 import { usePostStore } from "@/app/zustand/PostStore"
 
 interface PostCardProps {

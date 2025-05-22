@@ -11,6 +11,7 @@ export const chapterTypeDefs = `
     title: String!
     content: String!
     publishStatus: PStatus!
+    comments: [Comment!]
     createdAt: DateTime!
     updatedAt: DateTime!
   }

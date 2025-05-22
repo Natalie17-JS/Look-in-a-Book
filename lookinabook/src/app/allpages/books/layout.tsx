@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import LibraryUpperPart from "./BookShelvesUp";
+import LibraryUpperPart from "./components/BookShelvesUp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

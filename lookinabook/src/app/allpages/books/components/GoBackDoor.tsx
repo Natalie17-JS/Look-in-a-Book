@@ -1,13 +1,15 @@
-import Door from "../../profile/profileComponents/GobackDoor/Door";
+import Door from "@/app/allpages/profile/profileComponents/GobackDoor/Door";
+import styles from "./GoBackDoor.module.css"
 import Link from "next/link";
 
 export default function GoBackDoor() {
 
-    return (
+    return(
         <Link href="/">
-        <div className="goback-door">
-            <Door />
-        </div>
+       <Door
+                className={styles["goback-door"]}
+                imageClassName={styles["goback-door-image"]}
+              />
         </Link>
-    );
+    )
 }

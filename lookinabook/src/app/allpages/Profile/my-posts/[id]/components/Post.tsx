@@ -5,7 +5,7 @@ import styles from "./Post.module.css"
 import Image from "next/image"
 import editpens from "@/app/images/editpens.svg"
 import Link from "next/link"
-import { usePost } from "@/app/context/postContext"
+
 import { useQuery } from "@apollo/client"
 import { useParams } from "next/navigation"
 import { GET_POST_BY_ID } from "@/app/GraphqlOnClient/queries/postQueries"

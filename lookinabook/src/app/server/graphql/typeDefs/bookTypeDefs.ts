@@ -43,7 +43,7 @@ type Book {
     writingStatus: WStatus!
     chapters: [Chapter!]
 
-    #comments: [Comment!]
+    comments: [Comment!]
     #likes: [Like!]
 
     createdAt: DateTime!

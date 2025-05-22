@@ -1,7 +1,7 @@
 .post-card-container {
-    width: 40vw;
+    width: 40%;
     height: auto;
-    /*border: 1px solid red;*/
+   /* border: 1px solid red;*/
 }
 .preview {
     /*transform: scale(0.6); /* уменьшить карточку до 60% размера */

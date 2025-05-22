@@ -6,9 +6,10 @@ export default function GoBackDoor() {
 
     return(
         <Link href="/allpages/books">
-        <div className={styles["goback-door"]}>
-            <Door />
-        </div>
+         <Door
+                        className={styles["goback-door"]}
+                        imageClassName={styles["goback-door-image"]}
+                      />
         </Link>
     )
 }

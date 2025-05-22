@@ -1,4 +1,4 @@
-"use client"
+/*"use client"
 
 import {useState, useContext, createContext, useEffect, ReactNode} from "react"
 import { useQuery } from "@apollo/client"
@@ -49,4 +49,4 @@ export const usePost = () => {
     throw new Error("usePost must be used within a PostProvider");
   }
   return context;
-};
+};*/

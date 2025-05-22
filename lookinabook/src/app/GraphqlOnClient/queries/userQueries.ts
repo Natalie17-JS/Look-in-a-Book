@@ -45,6 +45,10 @@ export const GET_USER_BY_ID = gql`
       writingStatus
       createdAt
     }
+      posts {
+        id
+        title
+      }
     createdAt
     points
   }

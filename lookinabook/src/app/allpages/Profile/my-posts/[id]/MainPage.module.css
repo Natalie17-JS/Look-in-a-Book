@@ -10,8 +10,9 @@
     color: white;
   }
   .author-post-container {
-    width: 100vw;
+    width: auto;
     height: 100vh;
     display: flex;
     align-items: flex-end;
+    border: 1px solid green;
   }

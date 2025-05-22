@@ -22,9 +22,7 @@ export default function BooksPage() {
     <div className={`${styles["books-container"]} ${themeClass}`}>
        
         <Books />
-        <Link href="/">
-        <button>Back to homepage</button>
-        </Link>
+        
     </div>
     ) 
 }

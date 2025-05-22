@@ -14,8 +14,8 @@ export interface User {
     points: number;
     lastActive: string;
     isOnline: boolean;
-    books: Book[],
-    posts: Post[]
+    books?: Book[],
+    posts?: Post[]
   }
 // Типизация данных формы
 export interface RegisterFormData {

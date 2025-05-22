@@ -30,9 +30,8 @@ export default function Book() {
   const isDraft = publishStatus === "DRAFT";
 
   return (
-<div className={styles["book-container"]}>
 
-<GoBackDoor/>
+
 
 
       <div className={styles["table-container"]}>
@@ -91,7 +90,7 @@ export default function Book() {
 
       </div>
 
-    </div>
+
 
    
   );

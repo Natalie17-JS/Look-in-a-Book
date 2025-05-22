@@ -6,7 +6,7 @@ import { getThemeClass } from "@/app/themeclass"
 import styles from "./MainPage.module.css"
 import CommentsCase from "./components/CommentsCase"
 import GoBackDoor from "./components/GoBackDoor"
-import { usePost } from "@/app/context/postContext"
+
 import { usePostStore } from "@/app/zustand/PostStore"
 import { useParams } from "next/navigation"
 import { useLoadPostById } from "@/app/hooks/useFetchPost"

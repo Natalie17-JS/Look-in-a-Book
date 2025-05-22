@@ -9,8 +9,8 @@
 }*/
 
 .table-container {
-   width: 100%;
-   height: auto;
+   width: auto;
+   height: 75vh;
    border: 1px solid green;
    /* display: flex;
     align-items: flex-end;*/
@@ -19,7 +19,7 @@
 
 .table {
    width: 95%;
-   height: 120px;
+   height: 20%;
     background-color: rgb(93, 62, 32);
     margin: 0 auto;
     display: flex;
@@ -37,6 +37,7 @@
 
 .things-on-table {
     width: 90%;
+    height: 90%;
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
@@ -55,7 +56,7 @@
 
 .book-info-container {
     width: 50%;
-    height: 430px;
+    height: 70%;
     border-inline: 15px solid rgb(132, 89, 46);
     border-top: 15px solid rgb(132, 89, 46);
     background-color: rgb(93, 62, 32);
