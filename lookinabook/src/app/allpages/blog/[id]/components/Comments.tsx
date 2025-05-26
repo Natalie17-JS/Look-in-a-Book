@@ -4,20 +4,34 @@ import { useQuery } from '@apollo/client';
 import { useUser } from '@/app/context/authContext';
 import { GET_COMMENTS_BY_POST } from '@/app/GraphqlOnClient/queries/commentsQueries';
 import { Comment } from '@/app/types/commentTypes';
+import { usePostStore } from '@/app/zustand/PostStore';
+import { useState } from 'react';
 
-interface CommentsForPostProps {
+/*interface CommentsForPostProps {
   postId: number;
-}
+}*/
 
-export const CommentsForPost: React.FC<CommentsForPostProps> = ({ postId }) => {
-  const { data, loading, error } = useQuery(GET_COMMENTS_BY_POST, {
-    variables: { postId },
-  });
-
+export default function CommentsForPost() {
   const { user } = useUser(); // Достаём текущего пользователя из контекста
+   const [openReplies, setOpenReplies] = useState<{ [key: number]: boolean }>({});
+  const { currentPost } = usePostStore()
+   const postId = currentPost?.id;
+
+  const { data, loading, error } = useQuery(GET_COMMENTS_BY_POST, {
+   variables: { postId },
+   skip: !postId, // если postId ещё нет, не делать запрос
+  });
 
   if (loading) return <p>Comments loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+  if (!data?.getCommentsByPost) return <p>No comments found.</p>;
+
+   const toggleReplies = (commentId: number) => {
+    setOpenReplies((prev) => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }));
+  };
 
   return (
     <div>
@@ -36,13 +50,24 @@ export const CommentsForPost: React.FC<CommentsForPostProps> = ({ postId }) => {
             </div>
           )}
 
-          {comment.replies.length > 0 && (
-            <div className="ml-4 mt-2 pl-4 border-l">
-              {comment.replies.map((reply: Comment) => (
-                <div key={reply.id}>
-                  <p>↳ {reply.content}</p>
+         {comment.replies.length > 0 && (
+            <div>
+              <button
+                onClick={() => toggleReplies(comment.id)}
+                
+              >
+                {openReplies[comment.id] ? 'Hide replies' : 'Show replies'}
+              </button>
+
+              {openReplies[comment.id] && (
+                <div>
+                  {comment.replies.map((reply: Comment) => (
+                    <div key={reply.id}>
+                      <p>↳ {reply.content}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           )}
         </div>

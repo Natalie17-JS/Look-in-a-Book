@@ -1,6 +1,7 @@
 import Image from "next/image"
 import flower from "@/app/images/flowers-on-shelf-1.svg"
 import styles from "./CommentsCase.module.css"
+import  CommentsForPost  from "./Comments"
 
 export default function CommentsCase() {
 
@@ -11,7 +12,7 @@ export default function CommentsCase() {
             </div>
 
             <div className={styles["comments-case"]}>
-
+                <CommentsForPost/>
             </div>
         </div>
     )
