@@ -39,6 +39,8 @@ const isDraft = currentPost?.publishStatus === "DRAFT"
             <div className={styles["small-table"]}>
 
                 <Link href={`/allpages/profile/my-posts/${currentPost.id}/edit-post`}>
+
+               
                 <div className={styles["editpens-container"]}>
             <Image src={editpens} alt="edit" className={styles.editpens} />
             </div>
@@ -50,7 +52,10 @@ const isDraft = currentPost?.publishStatus === "DRAFT"
                 <PublishPostButton/>
             )}
 
+            
+
             </div>
         </div>
+        
     )
 }

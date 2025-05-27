@@ -1,5 +1,6 @@
 .comments-container {
-    width: 100%;
+    width: 90%;
     height: 80%;
-    border: 10px solid brown;
+    border: 15px solid rgb(101, 62, 37);
+     background-color: rgb(87, 47, 17);
 }
