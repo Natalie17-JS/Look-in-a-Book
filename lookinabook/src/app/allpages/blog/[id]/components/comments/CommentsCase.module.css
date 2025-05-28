@@ -22,3 +22,14 @@
    width: 55%;
    height: auto;
 }
+/*--------------Comments container------*/
+
+.reply-container {
+    list-style: none;
+    width: 85%;
+     border: 1px solid gray;
+    padding: 5px;
+     border-radius: 10px;
+     margin-left: 20px;
+     margin-top: 10px;
+}

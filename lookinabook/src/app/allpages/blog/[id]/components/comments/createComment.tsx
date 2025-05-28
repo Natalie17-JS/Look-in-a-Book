@@ -27,9 +27,21 @@ export default function CommentForm (props: CommentFormProps){
   const [content, setContent] = useState(
     props.mode === 'edit' ? props.initialContent : ''
   );
-
-  const [createComment, { loading: creating, error: createError }] = useMutation(CREATE_COMMENT);
-  const [editComment, { loading: editing, error: editError }] = useMutation(EDIT_COMMENT);
+const accessToken = localStorage.getItem("token");
+  const [createComment, { loading: creating, error: createError }] = useMutation(CREATE_COMMENT, {
+    context: {
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      },
+    },
+  });
+  const [editComment, { loading: editing, error: editError }] = useMutation(EDIT_COMMENT, {
+    context: {
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      },
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

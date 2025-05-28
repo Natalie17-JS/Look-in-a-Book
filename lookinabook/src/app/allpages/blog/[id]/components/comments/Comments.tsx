@@ -7,6 +7,7 @@ import { Comment } from '@/app/types/commentTypes';
 import { usePostStore } from '@/app/zustand/PostStore';
 import { useState } from 'react';
 import styles from "./Comments.module.css"
+import CommentForm from './createComment';
 
 /*interface CommentsForPostProps {
   postId: number;
@@ -15,6 +16,8 @@ import styles from "./Comments.module.css"
 export default function CommentsForPost() {
   const { user } = useUser(); // Достаём текущего пользователя из контекста
    const [openReplies, setOpenReplies] = useState<{ [key: number]: boolean }>({});
+   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+
   const { currentPost } = usePostStore()
    const postId = currentPost?.id;
 
@@ -35,17 +38,31 @@ export default function CommentsForPost() {
   };
 
   return (
-    <div>
+    <div className={styles.comments}>
       {data.getCommentsByPost.map((comment: Comment) => {
         const isCommentAuthor = user?.id === comment.author.id;
         const isPostAuthor = user?.id === currentPost?.author?.id;
 
         return (
-          <div key={comment.id} className={styles["comment-container"]}>
-            <p>
-              <strong>{comment.author.username}:</strong> {comment.content}
-            </p>
-            <small>{new Date(comment.createdAt).toLocaleString()}</small>
+           <div key={comment.id} className={styles["comment-container"]}>
+          {editingCommentId === comment.id ? (
+            <CommentForm
+              mode="edit"
+              commentId={comment.id}
+              initialContent={comment.content}
+              onSuccess={(updatedComment) => {
+                setEditingCommentId(null);
+                // Можно вручную обновить локальные комментарии или refetch
+              }}
+            />
+          ) : (
+            <>
+              <p>
+                <strong>{comment.author.username}:</strong> {comment.content}
+              </p>
+              <small>{new Date(comment.createdAt).toLocaleString()}</small>
+            </>
+          )}
 
             <div>
               {user && (
@@ -53,7 +70,7 @@ export default function CommentsForPost() {
               )}
 
               {isCommentAuthor && (
-                <button onClick={() => console.log('Edit comment', comment.id)}>Edit</button>
+                 <button onClick={() => setEditingCommentId(comment.id)}>Edit</button>
               )}
 
               {(isCommentAuthor || isPostAuthor) && (

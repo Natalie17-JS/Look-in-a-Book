@@ -29,6 +29,13 @@
 }
 
 /*--------------Comments container------*/
+
+.comments {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    
+}
 .comment-container {
     border: 1px solid gray;
     padding: 5px;

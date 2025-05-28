@@ -5,6 +5,7 @@ import { useTheme } from "@/app/context/themeContext"
 import { getThemeClass } from "@/app/themeclass"
 import styles from "./MainPage.module.css"
 import CommentsCase from "./components/comments/CommentsCase"
+
 import GoBackDoor from "./components/GoBackDoor"
 
 import { usePostStore } from "@/app/zustand/PostStore"
