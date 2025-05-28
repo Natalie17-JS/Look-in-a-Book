@@ -1,0 +1,48 @@
+
+/*------------comments form----------*/
+.textarea {
+    width: 85%;
+    height: 100px;
+    background-color: rgb(101, 62, 37);
+    border-radius: 10px;
+    padding: 5px;
+}
+.send-icon {
+    width: 100%;
+    height: auto;
+}
+.send-btn {
+    width: 20px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    outline: none;
+    /*border: 1px solid red;*/
+    border: none;
+    cursor: pointer;
+}
+.send-comment-form {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+
+/*--------------Comments container------*/
+.comment-container {
+    border: 1px solid gray;
+    padding: 5px;
+    width: 90%;
+    border-radius: 10px;
+    margin: 0 auto;
+
+}
+.reply-container {
+    list-style: none;
+    width: 85%;
+     border: 1px solid gray;
+    padding: 5px;
+     border-radius: 10px;
+     margin-left: 20px;
+     margin-top: 10px;
+}

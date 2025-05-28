@@ -1,5 +1,6 @@
 import { PStatus } from "./bookTypes";
 import { User } from "./userTypes";
+import { Comment } from "./commentTypes";
 
 export enum PostCategory {
   THOUGHTS = "THOUGHTS",
@@ -19,6 +20,7 @@ export interface Post {
     category: PostCategory;
     createdAt: Date;
     updatedAt: Date;
+    comments: Comment[]
 }
 
 export interface PostsData {

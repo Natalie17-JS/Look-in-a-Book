@@ -12,7 +12,12 @@ const commentsResolvers: CommentsResolversTypes = {
             try {
                 const comment = await prisma.comment.findUnique({
                     where: {id},
-                     include: { author: true, replies: true, parentComment: true },
+                     include: { author: true,  
+                      replies: {
+    include: {
+      author: true,
+    },
+  }, parentComment: true },
                 })
                 return comment;
             } catch (error) {
@@ -25,7 +30,12 @@ const commentsResolvers: CommentsResolversTypes = {
     try {
       const commentsByBook =  await prisma.comment.findMany({
         where: { bookId },
-        include: { author: true, replies: true },
+        include: { author: true,  
+          replies: {
+    include: {
+      author: true,
+    },
+  }, },
       });
       return commentsByBook;
     } catch (error) {
@@ -37,7 +47,12 @@ const commentsResolvers: CommentsResolversTypes = {
     try{
         const commentsByChapter = await prisma.comment.findMany({
             where: {chapterId},
-            include: {author: true, replies: true}
+            include: {author: true,  
+              replies: {
+    include: {
+      author: true,
+    },
+  },}
         })
         return commentsByChapter;
     } catch (error) {
@@ -50,7 +65,12 @@ const commentsResolvers: CommentsResolversTypes = {
     try {
       const commentsByPost = await prisma.comment.findMany({
         where: { postId },
-        include: { author: true, replies: true },
+        include: { author: true,  
+          replies: {
+    include: {
+      author: true,
+    },
+  }, },
       });
       return commentsByPost;
     } catch (error) {

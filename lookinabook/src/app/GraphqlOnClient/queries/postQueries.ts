@@ -12,6 +12,14 @@ export const GET_ALL_POSTS = gql`
                 id
                 username
             }
+                comments {
+                    id
+                    content
+                    author {
+                        id
+                        username
+                    }
+                }
         }
     }
 `
@@ -28,6 +36,14 @@ export const GET_AUTHOR_POSTS = gql`
                 id
                 username
             }
+                comments {
+                    id
+                    content
+                    author {
+                        id
+                        username
+                    }
+                }
         }
     }
 `
@@ -60,6 +76,14 @@ export const GET_POST_BY_ID = gql`
             id
             username
         }
+            comments {
+                    id
+                    content
+                    author {
+                        id
+                        username
+                    }
+                }
     }
     }
 `

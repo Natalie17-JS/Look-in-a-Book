@@ -6,6 +6,7 @@ import { GET_COMMENTS_BY_POST } from '@/app/GraphqlOnClient/queries/commentsQuer
 import { Comment } from '@/app/types/commentTypes';
 import { usePostStore } from '@/app/zustand/PostStore';
 import { useState } from 'react';
+import styles from "./Comments.module.css"
 
 /*interface CommentsForPostProps {
   postId: number;
@@ -40,13 +41,13 @@ export default function CommentsForPost() {
         const isPostAuthor = user?.id === currentPost?.author?.id;
 
         return (
-          <div key={comment.id} className="comment border-b py-3">
+          <div key={comment.id} className={styles["comment-container"]}>
             <p>
               <strong>{comment.author.username}:</strong> {comment.content}
             </p>
             <small>{new Date(comment.createdAt).toLocaleString()}</small>
 
-            <div className="mt-1 space-x-2">
+            <div>
               {user && (
                 <button onClick={() => console.log('Reply to', comment.id)}>Reply</button>
               )}
@@ -64,17 +65,20 @@ export default function CommentsForPost() {
               <div className="mt-2">
                 <button
                   onClick={() => toggleReplies(comment.id)}
-                  className="text-blue-500 text-sm"
+                  
                 >
-                  {openReplies[comment.id] ? 'Hide replies' : 'Show replies'}
+                  {openReplies[comment.id]
+        ? `Hide replies (${comment.replies.length})`
+        : `Show replies (${comment.replies.length})`}
                 </button>
 
                 {openReplies[comment.id] && (
-                  <div className="pl-4 mt-2 border-l border-gray-300">
+                  <div>
                     {comment.replies.map((reply: Comment) => (
-                      <div key={reply.id} className="text-sm py-1">
-                        ↳ {reply.content}
-                      </div>
+                      <ul className={styles["reply-container"]} key={reply.id}>
+                        <li>{reply.content}</li> 
+                        <li>{reply.author.username}</li> 
+                      </ul>
                     ))}
                   </div>
                 )}
