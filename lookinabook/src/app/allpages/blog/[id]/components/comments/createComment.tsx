@@ -7,6 +7,7 @@ import { Comment } from '@/app/types/commentTypes';
 import styles from "./Comments.module.css"
 import Image from 'next/image';
 import sendicon from "@/app/images/send-icon.svg"
+import cancel from "@/app/images/cancel.svg"
 
 type CommentFormProps =
 
@@ -14,13 +15,16 @@ type CommentFormProps =
       mode: 'create';
       commentType: 'POSTCOMMENT' | 'BOOKCOMMENT' | 'CHAPTERCOMMENT' | 'REPLYCOMMENT';
       targetId: string | number;
+      parentCommentId?: number;
       onSuccess?: (comment: Comment) => void;
+      onCancel?: () => void;
     }
   | {
       mode: 'edit';
       commentId: number;
       initialContent: string;
       onSuccess?: (comment: Comment) => void;
+      onCancel?: () => void;
     };
 
 export default function CommentForm (props: CommentFormProps){
@@ -55,6 +59,7 @@ const accessToken = localStorage.getItem("token");
             content,
             commentType: props.commentType,
             targetId: props.targetId,
+            parentCommentId: props.parentCommentId ?? null,
           },
         });
         props.onSuccess?.(data.createComment);
@@ -100,6 +105,16 @@ const accessToken = localStorage.getItem("token");
           ? 'Save'
           : 'Post'} */}
       </button>
+
+      {props.onCancel && (
+      <button
+        type="button"
+        onClick={props.onCancel}
+        className={styles["cancel-btn"]}
+      >
+        <Image src={cancel} alt="cancel" className={styles["cancel-icon"]}/>
+      </button>
+    )}
     </form>
   );
 };

@@ -5,26 +5,35 @@ import { useUser } from '@/app/context/authContext';
 import { GET_COMMENTS_BY_POST } from '@/app/GraphqlOnClient/queries/commentsQueries';
 import { Comment } from '@/app/types/commentTypes';
 import { usePostStore } from '@/app/zustand/PostStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from "./Comments.module.css"
 import CommentForm from './createComment';
+import DeleteCommentButton from './DeleteComment';
 
-/*interface CommentsForPostProps {
-  postId: number;
-}*/
+type CommentsForPostProps = {
+  postId?: string;
+  comments: Comment[];
+  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+};
 
-export default function CommentsForPost() {
+export default function CommentsForPost({ postId, comments, setComments }: CommentsForPostProps) {
   const { user } = useUser(); // Достаём текущего пользователя из контекста
    const [openReplies, setOpenReplies] = useState<{ [key: number]: boolean }>({});
    const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null);
 
-  const { currentPost } = usePostStore()
-   const postId = currentPost?.id;
 
   const { data, loading, error } = useQuery(GET_COMMENTS_BY_POST, {
    variables: { postId },
    skip: !postId, // если postId ещё нет, не делать запрос
   });
+
+  // Синхронизируем один раз после получения данных:
+useEffect(() => {
+  if (data?.getCommentsByPost) {
+    setComments(data.getCommentsByPost);
+  }
+}, [data, setComments]);
 
   if (loading) return <p>Comments loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -37,23 +46,22 @@ export default function CommentsForPost() {
     }));
   };
 
-  return (
-    <div className={styles.comments}>
-      {data.getCommentsByPost.map((comment: Comment) => {
-        const isCommentAuthor = user?.id === comment.author.id;
-        const isPostAuthor = user?.id === currentPost?.author?.id;
+return (
+  <div className={styles.comments}>
+    {comments.map((comment: Comment) => {
+      const isCommentAuthor = user?.id === comment.author.id;
+      const isPostAuthor = user?.id === comment.post?.author?.id;
+      const shouldShowReplies = openReplies[comment.id];
 
-        return (
-           <div key={comment.id} className={styles["comment-container"]}>
+      return (
+        <div key={comment.id} className={styles["comment-container"]}>
           {editingCommentId === comment.id ? (
             <CommentForm
               mode="edit"
               commentId={comment.id}
               initialContent={comment.content}
-              onSuccess={(updatedComment) => {
-                setEditingCommentId(null);
-                // Можно вручную обновить локальные комментарии или refetch
-              }}
+              onSuccess={() => setEditingCommentId(null)}
+              onCancel={() => setEditingCommentId(null)}
             />
           ) : (
             <>
@@ -64,46 +72,135 @@ export default function CommentsForPost() {
             </>
           )}
 
-            <div>
-              {user && (
-                <button onClick={() => console.log('Reply to', comment.id)}>Reply</button>
-              )}
+          <div>
+            {user && (
+              <button
+                onClick={() => {
+                  setReplyingToCommentId(comment.id);
+                  setOpenReplies((prev) => ({ ...prev, [comment.id]: true }));
+                }}
+              >
+                Reply
+              </button>
+            )}
 
-              {isCommentAuthor && (
-                 <button onClick={() => setEditingCommentId(comment.id)}>Edit</button>
-              )}
+            {isCommentAuthor && (
+              <button onClick={() => setEditingCommentId(comment.id)}>Edit</button>
+            )}
 
-              {(isCommentAuthor || isPostAuthor) && (
-                <button onClick={() => console.log('Delete comment', comment.id)}>Delete</button>
-              )}
-            </div>
-
-            {comment.replies.length > 0 && (
-              <div className="mt-2">
-                <button
-                  onClick={() => toggleReplies(comment.id)}
-                  
-                >
-                  {openReplies[comment.id]
-        ? `Hide replies (${comment.replies.length})`
-        : `Show replies (${comment.replies.length})`}
-                </button>
-
-                {openReplies[comment.id] && (
-                  <div>
-                    {comment.replies.map((reply: Comment) => (
-                      <ul className={styles["reply-container"]} key={reply.id}>
-                        <li>{reply.content}</li> 
-                        <li>{reply.author.username}</li> 
-                      </ul>
-                    ))}
-                  </div>
-                )}
-              </div>
+            {(isCommentAuthor || isPostAuthor) && (
+              <DeleteCommentButton
+                commentId={comment.id}
+                onSuccess={() =>
+                  setComments((prev) => prev.filter((c) => c.id !== comment.id))
+                }
+              />
             )}
           </div>
-        );
-      })}
-    </div>
-  );
+
+          {/* Кнопка показа/скрытия ответов, если есть ответы */}
+          {comment.replies.length > 0 && (
+            <button onClick={() => toggleReplies(comment.id)}>
+              {shouldShowReplies
+                ? `Hide replies (${comment.replies.length})`
+                : `Show replies (${comment.replies.length})`}
+            </button>
+          )}
+
+          {/* Блок с ответами */}
+          {shouldShowReplies && (
+            <div className={styles.replies}>
+              {comment.replies.map((reply: Comment) => {
+                const isReplyAuthor = user?.id === reply.author.id;
+
+                return (
+                  <ul key={reply.id} className={styles["reply-container"]}>
+                    <li>
+                      {editingCommentId === reply.id ? (
+                        <CommentForm
+                          mode="edit"
+                          commentId={reply.id}
+                          initialContent={reply.content}
+                          onSuccess={(updatedReply) => {
+                            setEditingCommentId(null);
+                            setComments((prev) =>
+                              prev.map((c) =>
+                                c.id === comment.id
+                                  ? {
+                                      ...c,
+                                      replies: c.replies.map((r) =>
+                                        r.id === updatedReply.id ? updatedReply : r
+                                      ),
+                                    }
+                                  : c
+                              )
+                            );
+                          }}
+                          onCancel={() => setEditingCommentId(null)}
+                        />
+                      ) : (
+                        <>
+                          <p>
+                            <strong>{reply.author.username}:</strong> {reply.content}
+                          </p>
+                          <small>{new Date(reply.createdAt).toLocaleString()}</small>
+                        </>
+                      )}
+
+                      <div>
+                        {isReplyAuthor && (
+                          <button onClick={() => setEditingCommentId(reply.id)}>
+                            Edit
+                          </button>
+                        )}
+                        {(isReplyAuthor || isPostAuthor) && (
+                          <DeleteCommentButton
+                            commentId={reply.id}
+                            onSuccess={() =>
+                              setComments((prev) =>
+                                prev.map((c) =>
+                                  c.id === comment.id
+                                    ? {
+                                        ...c,
+                                        replies: c.replies.filter((r) => r.id !== reply.id),
+                                      }
+                                    : c
+                                )
+                              )
+                            }
+                          />
+                        )}
+                      </div>
+                    </li>
+                  </ul>
+                );
+              })}
+
+              {/* Форма для нового ответа */}
+              {replyingToCommentId === comment.id && (
+                <CommentForm
+                  mode="create"
+                  commentType="REPLYCOMMENT"
+                  targetId={String(comment.post?.id)}
+                  parentCommentId={comment.id}
+                  onSuccess={(newReply) => {
+                    setReplyingToCommentId(null);
+                    setComments((prev) =>
+                      prev.map((c) =>
+                        c.id === comment.id
+                          ? { ...c, replies: [...c.replies, newReply] }
+                          : c
+                      )
+                    );
+                  }}
+                  onCancel={() => setReplyingToCommentId(null)}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+);
 }

@@ -12,7 +12,9 @@ export default function CommentsCase() {
 
     return(
         <div className={styles["comments-container"]}>
-            <CommentsForPost/>
+            <CommentsForPost postId={postId}
+        comments={comments}
+        setComments={setComments}/>
             <CommentForm
         mode="create"
         commentType="POSTCOMMENT"
