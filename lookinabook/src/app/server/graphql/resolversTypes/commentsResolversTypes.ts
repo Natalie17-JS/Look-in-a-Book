@@ -14,6 +14,7 @@ export type CreateCommentArgs = {
   content: string;
   commentType: CommentType;
   targetId: number | string;
+  parentCommentId?: number;
 };
 
 export type EditCommentArgs = {

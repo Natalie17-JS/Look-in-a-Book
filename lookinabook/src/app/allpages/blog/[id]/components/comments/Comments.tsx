@@ -5,7 +5,7 @@ import { useUser } from '@/app/context/authContext';
 import { GET_COMMENTS_BY_POST } from '@/app/GraphqlOnClient/queries/commentsQueries';
 import { Comment } from '@/app/types/commentTypes';
 import { usePostStore } from '@/app/zustand/PostStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from "./Comments.module.css"
 import CommentForm from './createComment';
 import DeleteCommentButton from './DeleteComment';
@@ -21,6 +21,32 @@ export default function CommentsForPost({ postId, comments, setComments }: Comme
    const [openReplies, setOpenReplies] = useState<{ [key: number]: boolean }>({});
    const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null);
+
+const containerRef = useRef<HTMLDivElement>(null);
+  const [showScrollUp, setShowScrollUp] = useState(false);
+  const [showScrollDown, setShowScrollDown] = useState(false);
+
+  // Проверка при изменении комментариев или прокрутке
+  const updateScrollButtons = () => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    setShowScrollUp(el.scrollTop > 0);
+    setShowScrollDown(el.scrollTop + el.clientHeight < el.scrollHeight);
+  };
+
+  useEffect(() => {
+    updateScrollButtons();
+  }, [comments]);
+
+  const handleScroll = () => updateScrollButtons();
+
+  const scroll = (direction: "up" | "down") => {
+    const el = containerRef.current;
+    if (!el) return;
+    const offset = 100;
+    el.scrollBy({ top: direction === "up" ? -offset : offset, behavior: "smooth" });
+  };
 
 
   const { data, loading, error } = useQuery(GET_COMMENTS_BY_POST, {
@@ -47,13 +73,23 @@ useEffect(() => {
   };
 
 return (
-  <div className={styles.comments}>
+  <div className={styles.comments} ref={containerRef} onScroll={handleScroll}>
     {comments.map((comment: Comment) => {
       const isCommentAuthor = user?.id === comment.author.id;
       const isPostAuthor = user?.id === comment.post?.author?.id;
       const shouldShowReplies = openReplies[comment.id];
 
+      {showScrollUp && (
+    <button
+      className={styles.scrollButton}
+      onClick={() => scroll("up")}
+    >
+      ▲
+    </button>
+  )}
+
       return (
+        
         <div key={comment.id} className={styles["comment-container"]}>
           {editingCommentId === comment.id ? (
             <CommentForm
@@ -99,7 +135,7 @@ return (
           </div>
 
           {/* Кнопка показа/скрытия ответов, если есть ответы */}
-          {comment.replies.length > 0 && (
+          {comment.replies && comment.replies.length > 0 && (
             <button onClick={() => toggleReplies(comment.id)}>
               {shouldShowReplies
                 ? `Hide replies (${comment.replies.length})`
@@ -201,6 +237,15 @@ return (
         </div>
       );
     })}
+
+     {showScrollDown && (
+    <button
+      className={styles.scrollButton}
+      onClick={() => scroll("down")}
+    >
+      ▼
+    </button>
+  )}
   </div>
 );
 }

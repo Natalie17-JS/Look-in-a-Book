@@ -83,7 +83,11 @@ const commentsResolvers: CommentsResolversTypes = {
     try {
       const repliesToComment = await prisma.comment.findMany({
         where: { parentCommentId },
-        include: { author: true },
+        include: { author: true, replies: {
+    include: {
+      author: true,
+    },
+  }, },
       });
       return repliesToComment;
     } catch (error) {
@@ -122,20 +126,20 @@ const commentsResolvers: CommentsResolversTypes = {
     },
 
     Mutation: {
-  createComment: async (_parent, { content, commentType, targetId }, { req, res, prisma }) => {
+  createComment: async (_parent, { content, commentType, targetId, parentCommentId  }, { req, res, prisma }) => {
     try {
-        const user = await getUserFromRequest(req, res);
-        if (!user) {
-          throw new Error("Not authenticated");
-        }
+    const user = await getUserFromRequest(req, res);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
 
-      // Формируем данные подключения по типу комментария
     const data: any = {
       content,
       commentType,
       author: { connect: { id: user.id } },
     };
 
+    // Обработка типа комментария
     switch (commentType) {
       case CommentType.BOOKCOMMENT:
         data.book = { connect: { id: Number(targetId) } };
@@ -147,7 +151,11 @@ const commentsResolvers: CommentsResolversTypes = {
         data.chapter = { connect: { id: String(targetId) } };
         break;
       case CommentType.REPLYCOMMENT:
-        data.parentComment = { connect: { id: Number(targetId) } };
+        // replies не привязываются к книге/посту/главе — только к родительскому комментарию
+        if (!parentCommentId) {
+          throw new Error("Missing parentCommentId for REPLYCOMMENT");
+        }
+        data.parentComment = { connect: { id: Number(parentCommentId) } };
         break;
       default:
         throw new Error("Invalid comment type");
@@ -161,14 +169,15 @@ const commentsResolvers: CommentsResolversTypes = {
         chapter: true,
         post: true,
         parentComment: true,
+        replies: true,
       },
     });
 
-      return newComment;
-    } catch (error) {
-      console.error('Error creating comment:', error);
-      throw new Error("Failed to create a comment");
-    }
+    return newComment;
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    throw new Error("Failed to create a comment");
+  }
   },
 
   editComment: async (_parent, { id, content } , { req, res } ) => {
