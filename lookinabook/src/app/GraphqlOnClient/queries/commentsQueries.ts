@@ -75,9 +75,17 @@ export const GET_COMMENTS_BY_POST = gql`
       replies {
         id
         content
+        createdAt
         author {
           id
           username
+        }
+          parentComment {
+          id
+          author {
+            id
+            username
+          }
         }
       }
     }

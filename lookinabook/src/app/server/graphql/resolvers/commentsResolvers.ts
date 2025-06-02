@@ -69,6 +69,11 @@ const commentsResolvers: CommentsResolversTypes = {
           replies: {
     include: {
       author: true,
+       parentComment: {
+          include: {
+            author: true, // 👈 добавить сюда!
+          },
+        },
     },
   }, },
       });

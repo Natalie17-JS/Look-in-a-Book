@@ -131,7 +131,7 @@ return (
               <p>
                 <strong><span className={styles["username-text"]}>{comment.author.username}:</span></strong> {comment.content}
               </p>
-              <small>{new Date(comment.createdAt).toLocaleString()}</small>
+              <small><span className={styles.date}>{new Date(comment.createdAt).toLocaleString()}</span></small>
             </>
           )}
 
@@ -214,7 +214,7 @@ return (
   )}
   : {reply.content}
                           </p>
-                          <small>{new Date(reply.createdAt).toLocaleString()}</small>
+                          <small><span className={styles.date}>{new Date(reply.createdAt).toLocaleString()}</span></small>
                         </>
                       )}
 
