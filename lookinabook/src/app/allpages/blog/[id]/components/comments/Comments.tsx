@@ -27,16 +27,29 @@ const containerRef = useRef<HTMLDivElement>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
 
   // Проверка при изменении комментариев или прокрутке
-  const updateScrollButtons = () => {
-    const el = containerRef.current;
-    if (!el) return;
+const updateScrollButtons = () => {
+  const el = containerRef.current;
+  if (!el) return;
 
-    setShowScrollUp(el.scrollTop > 0);
-    setShowScrollDown(el.scrollTop + el.clientHeight < el.scrollHeight);
-  };
+  const scrollTop = el.scrollTop;
+  const scrollHeight = el.scrollHeight;
+  const clientHeight = el.clientHeight;
+
+  const atTop = scrollTop <= 0;
+  const atBottom = scrollTop + clientHeight >= scrollHeight - 1; // допуск в 1px
+
+  setShowScrollUp(!atTop);
+  setShowScrollDown(!atBottom);
+};
+
 
   useEffect(() => {
+     const el = containerRef.current;
+  if (!el) return;
     updateScrollButtons();
+
+     el.addEventListener("scroll", handleScroll);
+  return () => el.removeEventListener("scroll", handleScroll);
   }, [comments]);
 
   const handleScroll = () => updateScrollButtons();
@@ -73,20 +86,34 @@ useEffect(() => {
   };
 
 return (
+<div className={styles.commentsWrapper}>
+  <button
+    className={`${styles["scroll-button"]} ${styles["scroll-up"]}`}
+    onClick={() => scroll("up")}
+    style={{
+      opacity: showScrollUp ? 1 : 0,
+      pointerEvents: showScrollUp ? "auto" : "none",
+    }}
+  >
+    ▲
+  </button>
+     {/*  {showScrollUp && (
+    <button
+      //className={styles.scrollButton}
+      className={`${styles["scroll-button"]} ${styles["scroll-up"]}`}
+      onClick={() => scroll("up")}
+    >
+      ▲
+    </button>
+  )} */}
+
   <div className={styles.comments} ref={containerRef} onScroll={handleScroll}>
     {comments.map((comment: Comment) => {
       const isCommentAuthor = user?.id === comment.author.id;
       const isPostAuthor = user?.id === comment.post?.author?.id;
       const shouldShowReplies = openReplies[comment.id];
 
-      {showScrollUp && (
-    <button
-      className={styles.scrollButton}
-      onClick={() => scroll("up")}
-    >
-      ▲
-    </button>
-  )}
+  
 
       return (
         
@@ -102,7 +129,7 @@ return (
           ) : (
             <>
               <p>
-                <strong>{comment.author.username}:</strong> {comment.content}
+                <strong><span className={styles["username-text"]}>{comment.author.username}:</span></strong> {comment.content}
               </p>
               <small>{new Date(comment.createdAt).toLocaleString()}</small>
             </>
@@ -110,7 +137,7 @@ return (
 
           <div>
             {user && (
-              <button
+              <button className={styles["delete-btn"]}
                 onClick={() => {
                   setReplyingToCommentId(comment.id);
                   setOpenReplies((prev) => ({ ...prev, [comment.id]: true }));
@@ -121,7 +148,7 @@ return (
             )}
 
             {isCommentAuthor && (
-              <button onClick={() => setEditingCommentId(comment.id)}>Edit</button>
+              <button className={styles["delete-btn"]} onClick={() => setEditingCommentId(comment.id)}>Edit</button>
             )}
 
             {(isCommentAuthor || isPostAuthor) && (
@@ -136,12 +163,13 @@ return (
 
           {/* Кнопка показа/скрытия ответов, если есть ответы */}
           {comment.replies && comment.replies.length > 0 && (
-            <button onClick={() => toggleReplies(comment.id)}>
+            <button className={styles["delete-btn"]} onClick={() => toggleReplies(comment.id)}>
               {shouldShowReplies
                 ? `Hide replies (${comment.replies.length})`
                 : `Show replies (${comment.replies.length})`}
             </button>
           )}
+          
 
           {/* Блок с ответами */}
           {shouldShowReplies && (
@@ -177,7 +205,14 @@ return (
                       ) : (
                         <>
                           <p>
-                            <strong>{reply.author.username}:</strong> {reply.content}
+                            <strong><span className={styles["username-text"]}>
+                              {reply.author.username}:</span></strong> 
+                              {reply.parentComment?.author?.username && (
+    <span className={styles["reply-to"]}>
+      {" "}→ @{reply.parentComment.author.username}
+    </span>
+  )}
+  : {reply.content}
                           </p>
                           <small>{new Date(reply.createdAt).toLocaleString()}</small>
                         </>
@@ -185,7 +220,7 @@ return (
 
                       <div>
                         {isReplyAuthor && (
-                          <button onClick={() => setEditingCommentId(reply.id)}>
+                          <button className={styles["delete-btn"]} onClick={() => setEditingCommentId(reply.id)}>
                             Edit
                           </button>
                         )}
@@ -206,6 +241,40 @@ return (
                             }
                           />
                         )}
+                        {user && (
+  <button
+    className={styles["delete-btn"]}
+    onClick={() => {
+      setReplyingToCommentId(reply.id);
+    }}
+  >
+    Reply
+  </button>
+)}
+
+                        {replyingToCommentId === reply.id && (
+  <CommentForm
+    mode="create"
+    commentType="REPLYCOMMENT"
+    targetId={String(comment.post?.id)}
+    parentCommentId={reply.id} // <--- важно!
+    onSuccess={(newReply) => {
+      setReplyingToCommentId(null);
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === comment.id
+            ? {
+                ...c,
+                replies: [...c.replies, newReply], // можно сделать рекурсивно для глубокой вложенности
+              }
+            : c
+        )
+      );
+    }}
+    onCancel={() => setReplyingToCommentId(null)}
+  />
+)}
+
                       </div>
                     </li>
                   </ul>
@@ -238,14 +307,20 @@ return (
       );
     })}
 
-     {showScrollDown && (
-    <button
-      className={styles.scrollButton}
-      onClick={() => scroll("down")}
-    >
-      ▼
-    </button>
-  )}
+     
+  </div>
+
+<button
+    className={`${styles["scroll-button"]} ${styles["scroll-down"]}`}
+    onClick={() => scroll("down")}
+    style={{
+      opacity: showScrollDown ? 1 : 0,
+      pointerEvents: showScrollDown ? "auto" : "none",
+    }}
+  >
+    ▼
+  </button>
+ 
   </div>
 );
 }

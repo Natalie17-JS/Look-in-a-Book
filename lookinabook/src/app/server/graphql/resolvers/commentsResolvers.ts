@@ -83,7 +83,13 @@ const commentsResolvers: CommentsResolversTypes = {
     try {
       const repliesToComment = await prisma.comment.findMany({
         where: { parentCommentId },
-        include: { author: true, replies: {
+        include: { author: true, 
+           parentComment: {
+      include: {
+        author: true, // 👈 сюда, чтобы получить имя пользователя, на чей комментарий ответили
+      },
+    },
+          replies: {
     include: {
       author: true,
     },

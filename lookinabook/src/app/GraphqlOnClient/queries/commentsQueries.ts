@@ -94,6 +94,13 @@ export const GET_REPLIES_TO_COMMENT = gql`
         id
         username
       }
+        parentComment {
+        id
+        author{
+          id
+          username
+        }
+        }
     }
   }
 `;

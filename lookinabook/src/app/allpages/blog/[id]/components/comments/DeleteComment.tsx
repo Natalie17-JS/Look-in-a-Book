@@ -42,7 +42,7 @@ export default function DeleteCommentButton({
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className={styles.button}
+        className={styles["delete-btn"]}
         disabled={loading}
       >
         {loading ? "Deleting..." : "Delete"}
