@@ -74,4 +74,6 @@
 
     .posts-ontable {
       display: flex;
+      align-items: flex-end;
+      
     }

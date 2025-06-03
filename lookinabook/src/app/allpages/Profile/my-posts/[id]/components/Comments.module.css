@@ -1,5 +1,5 @@
 .comments-container {
-    width: 80%;
+    width: 90%;
     height: 80%;
     border: 15px solid rgb(101, 62, 37);
      background-color: rgb(87, 47, 17);
@@ -7,4 +7,20 @@
      flex-direction: column;
      justify-content: flex-end;
      gap: 20px;
+     margin: 0 auto;
+}
+.comments-case-container {
+    width: 100%;
+}
+.image-wrapper {
+    /*width: auto;
+    height: 20%;*/
+    /*border: 1px solid red;*/
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+.flower-image {
+   width: 25%;
+   height: auto;
 }

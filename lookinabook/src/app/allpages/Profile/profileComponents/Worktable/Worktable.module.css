@@ -7,14 +7,14 @@
   height: auto;
 }
 
-/*.ontablethings {
-  border: 1px solid red;
-}*/
+.ontablethings {
+  border: 1px solid rgb(71, 0, 203);
+}
 
 .upperpart {
   width: 80%;
   background-color: rgb(98, 61, 28);
-  height: 30px;
+  height: 20px;
   border-radius: 10px;
   /*border: 2px solid green;*/
 }

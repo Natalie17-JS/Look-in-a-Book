@@ -2,9 +2,9 @@ import styles from "./Carousel.module.css"
 import { useState, ReactNode  } from "react"
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const ITEMS_PER_SLIDE = 3; 
-const PAGE_WIDTH = 200; 
-const ITEM_MARGIN = 20; 
+const ITEMS_PER_SLIDE = 2; 
+const PAGE_WIDTH = 180; 
+const ITEM_MARGIN = 5; 
 
 interface CarouselProps {
     children: ReactNode[]; // или ReactElement[] если нужно строже

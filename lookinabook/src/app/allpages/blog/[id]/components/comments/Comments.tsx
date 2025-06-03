@@ -108,8 +108,11 @@ return (
   )} */}
 
   <div className={styles.comments} ref={containerRef} onScroll={handleScroll}>
-    {comments.map((comment: Comment) => {
-      const isCommentAuthor = user?.id === comment.author.id;
+    {comments
+    .slice() // чтобы не мутировать оригинальный массив
+  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .map((comment: Comment) => {
+      const isCommentAuthor = user?.id === comment.author?.id;
       const isPostAuthor = user?.id === comment.post?.author?.id;
       const shouldShowReplies = openReplies[comment.id];
 
@@ -129,7 +132,7 @@ return (
           ) : (
             <>
               <p>
-                <strong><span className={styles["username-text"]}>{comment.author.username}:</span></strong> {comment.content}
+                <strong><span className={styles["username-text"]}>{comment.author?.username}:</span></strong> {comment.content}
               </p>
               <small><span className={styles.date}>{new Date(comment.createdAt).toLocaleString()}</span></small>
             </>
@@ -209,7 +212,7 @@ return (
                               {reply.author.username}:</span></strong> 
                               {reply.parentComment?.author?.username && (
     <span className={styles["reply-to"]}>
-      {" "}→ @{reply.parentComment.author.username}
+      {" "}→ @{reply.parentComment.author?.username}
     </span>
   )}
   : {reply.content}

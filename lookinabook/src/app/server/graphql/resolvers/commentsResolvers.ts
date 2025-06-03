@@ -65,8 +65,10 @@ const commentsResolvers: CommentsResolversTypes = {
     try {
       const commentsByPost = await prisma.comment.findMany({
         where: { postId },
+        orderBy: { createdAt: 'desc' },
         include: { author: true,  
           replies: {
+            orderBy: { createdAt: 'desc' },
     include: {
       author: true,
        parentComment: {

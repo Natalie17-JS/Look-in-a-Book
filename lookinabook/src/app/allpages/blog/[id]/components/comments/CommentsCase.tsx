@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import flower from "@/app/images/flowers-on-shelf-1.svg"
 import styles from "./CommentsCase.module.css"
@@ -18,7 +20,11 @@ export default function CommentsCase() {
             </div>
 
             <div className={styles["comments-case"]}>
-                <CommentsForPost/>
+                <CommentsForPost
+                postId={postId}
+                comments={comments}
+                setComments={setComments}
+                />
                 <CommentForm
                         mode="create"
                         commentType="POSTCOMMENT"
