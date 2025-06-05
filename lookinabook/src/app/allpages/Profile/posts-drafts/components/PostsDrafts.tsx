@@ -32,7 +32,7 @@ const PostsDrafts = () => {
   }
 
   // Если постов 5 или меньше — не показываем стрелки и не включаем карусель
-  const shouldUseCarousel = PostsDrafts.length > 2;
+  const shouldUseCarousel = PostsDrafts.length > 3;
 
     return(
         <div className={styles["posts-ontable"]}>
@@ -41,8 +41,8 @@ const PostsDrafts = () => {
       {shouldUseCarousel ? (
         <Carousel3slides>
           {PostsDrafts.map((post) => (
-            <Link href={`/allpages/profile/posts-drafts/${post.id}`}>
-            <PostCard key={post.id} post={post} onTable />
+            <Link key={post.id} href={`/allpages/profile/posts-drafts/${post.id}`}>
+            <PostCard  post={post} onTable />
             </Link>
           ))}
         </Carousel3slides>

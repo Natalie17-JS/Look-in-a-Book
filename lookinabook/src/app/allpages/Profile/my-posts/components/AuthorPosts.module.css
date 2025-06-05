@@ -59,7 +59,7 @@
   
     .carouselWrapper {
       width: 100%;
-      padding: 1rem 0;
+      /*padding: 1rem 0;*/
     }
     
     .staticList {
@@ -69,11 +69,21 @@
     }
     
     .staticItem {
-      flex: 0 1 300px;
+      /*flex: 0 1 300px;*/
+      display: flex;
     }
 
     .posts-ontable {
       display: flex;
-      align-items: flex-end;
+     /*justify-content: space-between;*/
+     gap: 5px;
+       align-items: center;
+       width: 100%;
       
+    }
+    .create-post-btn {
+      height: 180px;
+      border: 1px solid orange;
+      border-radius: 8px;
+      background-color: rgb(182, 150, 120);
     }

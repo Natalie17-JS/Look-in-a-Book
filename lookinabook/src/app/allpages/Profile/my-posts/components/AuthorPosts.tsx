@@ -33,19 +33,19 @@ export default function AuthorPosts() {
   }
 
   // Если постов 5 или меньше — не показываем стрелки и не включаем карусель
-  const shouldUseCarousel = AuthorPosts.length > 2;
+  const shouldUseCarousel = AuthorPosts.length > 3;
 
   return (
     <div className={styles["posts-ontable"]}>
 <Link href="/allpages/profile/my-posts/new-post">
-      <button>New +</button>
+      <button className={styles["create-post-btn"]}>New +</button>
       </Link>
     <div className={styles.carouselWrapper}>
       {shouldUseCarousel ? (
         <Carousel3slides>
           {AuthorPosts.map((post) => (
-            <Link href={`/allpages/profile/my-posts/${post.id}`}>
-            <PostCard key={post.id} post={post} onTable />
+            <Link key={post.id} href={`/allpages/profile/my-posts/${post.id}`}>
+            <PostCard post={post} onTable />
             </Link>
           ))}
         </Carousel3slides>

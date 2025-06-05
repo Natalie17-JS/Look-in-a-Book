@@ -29,9 +29,6 @@ export default function BookContent({ book, showEditActions = false }: BookConte
     : `/allpages/books/${book.slug}/chapters`;  // Путь для публичной книги
 
   return (
-  
-    
-
       <div className={styles["table-container"]}>
         <div className={styles["things-on-table"]}>
           <div className={styles.cover}></div>

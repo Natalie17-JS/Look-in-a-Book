@@ -97,9 +97,15 @@ export default function PostCard({ post, preview = false, onTable = false, inPro
       };
     
       const backgroundImage = getImage(displayedPost.category, theme);
-      const contentPreview = preview
-        ? displayedPost.content.split(" ").slice(0, 10).join(" ") + "..."
-        : displayedPost.content;
+
+    const contentPreview =
+  preview || onTable
+    ? displayedPost.content
+        .split(" ")
+        .slice(0, onTable ? 3 : 10)
+        .join(" ") + "..."
+    : displayedPost.content;
+
 
         return (
           <div className={`
@@ -115,9 +121,9 @@ export default function PostCard({ post, preview = false, onTable = false, inPro
                 className={styles["post-image"]}
               />
               <div className={styles["post-container"]}>
-                <h2 className={styles["post-title"]}>{displayedPost.title}</h2>
-                <p className={styles["post-content"]}>{contentPreview}</p>
-                <span className={styles["post-category"]}>{displayedPost.category}</span>
+                <h2 className={styles["post-title"]}><span className={onTable ? styles.textSmall : styles.textRegular}>{displayedPost.title}</span></h2>
+                <p className={styles["post-content"]}><span className={onTable ? styles.textSmall : styles.textRegular}>{contentPreview}</span></p>
+                <p className={styles["post-category"]}><span className={onTable ? styles.textSmaller : styles.textRegular}>{displayedPost.category}</span></p>
               </div>
             </div>
           </div>
