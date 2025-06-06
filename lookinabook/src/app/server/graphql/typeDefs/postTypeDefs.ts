@@ -25,6 +25,7 @@ type Post {
   updatedAt: String!
   author: User!
   comments: [Comment!]
+  likesCount: Int! 
 }
 
 type DeleteResponse {

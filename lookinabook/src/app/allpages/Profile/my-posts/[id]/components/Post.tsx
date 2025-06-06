@@ -8,11 +8,12 @@ import Link from "next/link"
 
 import { useQuery } from "@apollo/client"
 import { useParams } from "next/navigation"
-import { GET_POST_BY_ID } from "@/app/GraphqlOnClient/queries/postQueries"
+//import { GET_POST_BY_ID } from "@/app/GraphqlOnClient/queries/postQueries"
 import { usePostStore } from "@/app/zustand/PostStore"
 import { useLoadPostById } from "@/app/hooks/useFetchPost"
 import DeletePostButton from "../edit-post/components/DeletePost"
 import PublishPostButton from "../edit-post/components/PublishPost"
+import LikeButton from "./LikeButton"
 
 export default function AuthorPost() {
     const params = useParams()

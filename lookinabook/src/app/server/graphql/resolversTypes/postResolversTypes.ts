@@ -40,10 +40,15 @@ export type PostResolversTypes = {
           getPostDrafts: (parent: unknown, args: unknown, context: IContext) => Promise<Post[]>
         };
         Mutation: {
+         
           createPost: (parent: unknown, args: CreatePostArgs, context: IContext) => Promise<Post>;
           editPost: (parent: unknown, args: UpdatePostArgs, context: IContext) => Promise<Post | null>;
           publishPost: (parent: unknown, args: { id: string }, context: IContext) => Promise<Post | null>;
           deletePost: (parent: unknown, args: DeletePostArgs, context: IContext) => Promise<{ message: string; }>;
         };
+        Post:
+        {
+           likesCount: (parent: {id: string}, args: unknown, context: IContext) => Promise<number>;
+        }
         DateTime: GraphQLScalarType;
 }

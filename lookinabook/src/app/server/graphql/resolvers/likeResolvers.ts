@@ -2,25 +2,26 @@ import prisma from "@/app/server/prisma/prismaClient";
 import { getUserFromRequest } from "../../auth/authMiddleware";
 import { LikeResolversTypes } from "../resolversTypes/likeResolversTypes";
 
+
 const likeResolvers: LikeResolversTypes = {
     Query: {
     postLikeCount: async (_, { postId }, { prisma }) => {
       return prisma.like.count({ where: { postId } });
     },
 
-    bookCoverLikeCount: async (_: any, { bookId }: { bookId: number }, { prisma }: any) => {
+    bookCoverLikeCount: async (_, { bookId }, { prisma }) => {
       return prisma.like.count({ where: { bookId, type: "COVER" } });
     },
 
-    bookPlotLikeCount: async (_: any, { bookId }: { bookId: number }, { prisma }: any) => {
+    bookPlotLikeCount: async (_, { bookId }, { prisma }) => {
       return prisma.like.count({ where: { bookId, type: "PLOT" } });
     },
 
-    bookWritingStyleLikeCount: async (_: any, { bookId }: { bookId: number }, { prisma }: any) => {
+    bookWritingStyleLikeCount: async (_, { bookId }, { prisma }) => {
       return prisma.like.count({ where: { bookId, type: "WRITING_STYLE" } });
     },
 
-    bookLikeSummary: async (_: any, { bookId }: { bookId: number }, { prisma }: any) => {
+    bookLikeSummary: async (_, { bookId }, { prisma }) => {
       const grouped = await prisma.like.groupBy({
         by: ["type"],
         where: { bookId },
@@ -122,7 +123,7 @@ const likeResolvers: LikeResolversTypes = {
       where: { id: existing.id },
     });
 
-    return false;
+    return true;
   } catch (error) {
     console.error("Error in unlike resolver:", error);
     throw new Error("Failed to unlike");

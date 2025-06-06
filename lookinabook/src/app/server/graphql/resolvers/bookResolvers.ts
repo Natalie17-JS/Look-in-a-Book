@@ -60,8 +60,7 @@ Query: {
               },
               include: {
                 chapters: true,  
-                comments: true,   
-                /*likes: true, */     
+                comments: true,        
                 author: {         
                     select: { id: true, username: true } 
                 }
@@ -408,8 +407,41 @@ Mutation: {
               throw new Error("Failed to delete book");
             }
           }
-          
-          
     },
+
+     Book: {
+    coverLikeCount: async (parent, _, { prisma }) => {
+     try {
+    return await prisma.like.count({
+      where: { bookId: parent.id, type: "COVER" },
+    });
+  } catch (error) {
+    console.error("Error fetching cover likes:", error);
+    return 0;
+  }
+    },
+
+    plotLikeCount: async (parent, _, { prisma }) => {
+      try {
+    return await prisma.like.count({
+      where: { bookId: parent.id, type: "PLOT" },
+    });
+  } catch (error) {
+    console.error("Error fetching cover likes:", error);
+    return 0;
+  }
+    },
+
+    writingStyleLikeCount: async (parent, _, { prisma }) => {
+     try {
+    return await prisma.like.count({
+      where: { bookId: parent.id, type: "WRITING_STYLE" },
+    });
+  } catch (error) {
+    console.error("Error fetching cover likes:", error);
+    return 0;
+  }
+    },
+  },
 }
 export default bookResolvers;

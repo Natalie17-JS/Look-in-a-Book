@@ -116,6 +116,12 @@ export type DeleteBookByIdArgs = {
         context: IContext
       ) => Promise<{ message: string; }>;
     };
+    Book:
+        {
+           coverLikeCount: (parent: {id: number}, args: unknown, context: IContext) => Promise<number>;
+           plotLikeCount: (parent: {id: number}, args: unknown, context: IContext) => Promise<number>;
+           writingStyleLikeCount: (parent: {id: number}, args: unknown, context: IContext) => Promise<number>;
+        }
     DateTime: GraphQLScalarType;
   };
   

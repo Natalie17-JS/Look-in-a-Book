@@ -37,6 +37,7 @@ const postResolvers: PostResolversTypes = {
               },
             },
             comments: true,
+            
           },
           orderBy: { createdAt: "desc" },
           take: 5,
@@ -95,6 +96,7 @@ const postResolvers: PostResolversTypes = {
               select: { id: true, username: true },
             },
             comments: true,
+            likes: true
           },
           
           orderBy: { createdAt: "desc" },
@@ -107,6 +109,7 @@ const postResolvers: PostResolversTypes = {
   },
 
   Mutation: {
+   
     createPost: async (_, { title, content, image, publishStatus, category  }, { req, res }) => {
       try {
         const user = await getUserFromRequest(req, res);
@@ -215,6 +218,16 @@ const postResolvers: PostResolversTypes = {
         throw new Error("Failed to delete post");
       }
     },
-  },
-};
+     },
+     Post: {
+    likesCount: async (parent, _, { prisma }) => {
+      return prisma.like.count({
+        where: {
+          postId: parent.id,
+        },
+      });
+    },
+  }
+}
+
 export default postResolvers;

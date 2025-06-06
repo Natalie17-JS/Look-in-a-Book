@@ -16,6 +16,8 @@ import uploadResolvers from "./resolvers/uploadResolvers";
 import uploadTypeDefs from "./typeDefs/uploadTypeDefs";
 import commentsResolvers from "./resolvers/commentsResolvers";
 import { commentsTypeDefs } from "./typeDefs/commentsTypeDefs";
+import likeResolvers from "./resolvers/likeResolvers";
+import { likeTypeDefs } from "./typeDefs/likeTypeDefs";
 
 const resolvers = mergeResolvers([
     userResolvers, 
@@ -25,7 +27,8 @@ const resolvers = mergeResolvers([
     chapterResolvers,
     postResolvers, 
     complaintResolvers,
-    commentsResolvers
+    commentsResolvers,
+    likeResolvers
 ]);
 
 const typeDefs = mergeTypeDefs([
@@ -36,7 +39,8 @@ const typeDefs = mergeTypeDefs([
     chapterTypeDefs, 
     postTypeDefs, 
     complaintTypeDefs,
-    commentsTypeDefs
+    commentsTypeDefs,
+    likeTypeDefs
 ]);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });

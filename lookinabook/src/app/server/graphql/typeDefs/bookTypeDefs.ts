@@ -42,9 +42,10 @@ type Book {
     publishStatus: PStatus!
     writingStatus: WStatus!
     chapters: [Chapter!]
-
     comments: [Comment!]
-    #likes: [Like!]
+   coverLikeCount: Int!
+  plotLikeCount: Int!
+  writingStyleLikeCount: Int!
 
     createdAt: DateTime!
     updatedAt: DateTime!
