@@ -26,6 +26,7 @@ type Post {
   author: User!
   comments: [Comment!]
   likesCount: Int! 
+  likedByCurrentUser: Boolean!
 }
 
 type DeleteResponse {
@@ -34,6 +35,7 @@ type DeleteResponse {
 
 type Query {
   getPostById(id: String!): Post
+  getAuthorPostById(id: String!): Post
   getAllPosts: [Post!]!
   getUserPosts(authorId: ID!): [Post!]!
   getPostDrafts: [Post!]!

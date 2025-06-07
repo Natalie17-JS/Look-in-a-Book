@@ -14,8 +14,11 @@ import { useLoadPostById } from "@/app/hooks/useFetchPost"
 import DeletePostButton from "../edit-post/components/DeletePost"
 import PublishPostButton from "../edit-post/components/PublishPost"
 import LikeButton from "./LikeButton"
+import { useEffect, useState } from "react"
 
 export default function AuthorPost() {
+ 
+
     const params = useParams()
   const id =
     typeof params.id === "string"
@@ -26,6 +29,13 @@ export default function AuthorPost() {
 
   const { currentPost } = usePostStore()
   const { loading, error } = useLoadPostById(id)
+   const [likesCount, setLikesCount] = useState(currentPost?.likesCount ?? 0);
+
+   useEffect(() => {
+  if (currentPost?.likesCount !== undefined) {
+    setLikesCount(currentPost.likesCount);
+  }
+}, [currentPost]);
 
 const isDraft = currentPost?.publishStatus === "DRAFT"
 
@@ -52,7 +62,18 @@ const isDraft = currentPost?.publishStatus === "DRAFT"
             {isDraft && (
                 <PublishPostButton/>
             )}
-
+ {!isDraft && (
+  <>
+<LikeButton
+  isLiked={currentPost.likedByCurrentUser}
+  postId={currentPost.id}
+  type="POST"
+  onLike={() => setLikesCount(prev => prev + 1)}
+  onUnlike={() => setLikesCount(prev => prev - 1)}
+/>
+<span>{likesCount}</span>
+</>
+)}
             
 
             </div>

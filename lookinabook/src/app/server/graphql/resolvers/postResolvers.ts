@@ -23,6 +23,26 @@ const postResolvers: PostResolversTypes = {
         throw new Error("Failed to fetch post");
       }
     },
+    getAuthorPostById: async (_, { id }, { req, res, prisma }) => {
+      try {
+        const user = await getUserFromRequest(req, res);
+        if (!user) {
+          throw new Error("Not authenticated");
+        }
+        
+        const post = await prisma.post.findUnique({
+          where: { id },
+          include: { author: true, comments: true },
+        });
+        if (!post) {
+          throw new GraphQLError("Post not found");
+        }
+        return post;
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        throw new Error("Failed to fetch post");
+      }
+    },
 
     getAllPosts: async () => {
       try {
@@ -227,6 +247,23 @@ const postResolvers: PostResolversTypes = {
         },
       });
     },
+
+    likedByCurrentUser: async (parent, _, { prisma, req, res }) => {
+    const user = await getUserFromRequest(req, res);
+        if (!user) {
+          //throw new Error("Not authenticated");
+           return false;
+        }
+
+    const existingLike = await prisma.like.findFirst({
+      where: {
+        postId: parent.id,
+        userId: user.id,
+      },
+    });
+
+    return !!existingLike;
+  },
   }
 }
 

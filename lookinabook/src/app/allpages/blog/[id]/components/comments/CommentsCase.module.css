@@ -27,6 +27,11 @@
    width: 35%;
    height: auto;
 }
+.like-flowers {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+}
 /*--------------Comments container------*/
 
 .reply-container {

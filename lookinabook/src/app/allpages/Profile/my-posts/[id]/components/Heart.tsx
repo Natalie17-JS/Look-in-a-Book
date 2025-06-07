@@ -1,6 +1,5 @@
 
 
-
 interface HeartIconProps {
   filled?: boolean;
   size?: number;

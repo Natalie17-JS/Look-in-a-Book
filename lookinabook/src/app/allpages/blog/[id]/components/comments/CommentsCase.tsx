@@ -6,17 +6,44 @@ import styles from "./CommentsCase.module.css"
 import  CommentsForPost  from "./Comments"
 import CommentForm from "./createComment"
 import { usePostStore } from "@/app/zustand/PostStore"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import LikeButton from "@/app/allpages/profile/my-posts/[id]/components/LikeButton"
+import { useUser } from "@/app/context/authContext"
 
 export default function CommentsCase() {
+    const {user} = useUser()
+    
     const { currentPost } = usePostStore()
            const postId = currentPost?.id;
+           const [likesCount, setLikesCount] = useState(currentPost?.likesCount ?? 0);
+
          const [comments, setComments] = useState(currentPost?.comments || []);
+
+         useEffect(() => {
+           if (currentPost?.likesCount !== undefined) {
+             setLikesCount(currentPost.likesCount);
+           }
+         }, [currentPost]);
 
     return(
         <div className={styles["comments-case-container"]}>
+
+<div className={styles["like-flowers"]}>
+            {user && currentPost && (
+                <>
+                <LikeButton
+                isLiked={currentPost.likedByCurrentUser}
+                postId={postId}
+                type="POST"
+                onLike={() => setLikesCount(prev => prev + 1)}
+                onUnlike={() => setLikesCount(prev => prev - 1)}
+                />
+                <span>{likesCount}</span>
+                </>
+            )}
             <div className={styles["image-wrapper"]}>
             <Image src={flower} alt="flower" className={styles["flower-image"]}/>
+            </div>
             </div>
 
             <div className={styles["comments-case"]}>

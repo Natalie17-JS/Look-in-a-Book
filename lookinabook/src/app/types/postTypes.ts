@@ -20,7 +20,9 @@ export interface Post {
     category: PostCategory;
     createdAt: Date;
     updatedAt: Date;
-    comments: Comment[]
+    comments: Comment[];
+    likesCount: number;
+    likedByCurrentUser: boolean;
 }
 
 export interface PostsData {

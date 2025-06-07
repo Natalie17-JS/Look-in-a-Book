@@ -34,6 +34,7 @@ export type DeletePostArgs = {
 export type PostResolversTypes = {
      Query: {
           getPostById: (parent: unknown, args: { id: string }) => Promise<Post | null>;
+          getAuthorPostById: (parent: unknown, args: { id: string },context: IContext )=> Promise<Post | null>;
           getAllPosts: () => Promise<Post[]>;
           getUserPosts: (parent: unknown, args: { authorId: number }) => Promise<Post[]>;
           getAuthorPosts: (parent: unknown, args: unknown, context: IContext) => Promise<Post[]>;
@@ -49,6 +50,7 @@ export type PostResolversTypes = {
         Post:
         {
            likesCount: (parent: {id: string}, args: unknown, context: IContext) => Promise<number>;
+           likedByCurrentUser: (parent: {id: string}, args: unknown, context: IContext)=> Promise<boolean>;
         }
         DateTime: GraphQLScalarType;
 }

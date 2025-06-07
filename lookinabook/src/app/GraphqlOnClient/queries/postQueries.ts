@@ -56,6 +56,7 @@ export const GET_POSTS_DRAFTS = gql`
             content
             publishStatus
             category
+           
             author {
                 id
                 username
@@ -73,6 +74,33 @@ export const GET_POST_BY_ID = gql`
         publishStatus
         category
         likesCount
+        likedByCurrentUser
+        author{
+            id
+            username
+        }
+            comments {
+                    id
+                    content
+                    author {
+                        id
+                        username
+                    }
+                }
+    }
+    }
+`
+
+export const GET_AUTHOR_POST_BY_ID = gql`
+    query GetAuthorPostById($id: String!) {
+    getAuthorPostById(id: $id) {
+        id
+        title
+        content
+        publishStatus
+        category
+        likesCount
+        likedByCurrentUser
         author{
             id
             username
