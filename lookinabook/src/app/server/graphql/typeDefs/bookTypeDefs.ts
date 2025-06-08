@@ -46,7 +46,9 @@ type Book {
    coverLikeCount: Int!
   plotLikeCount: Int!
   writingStyleLikeCount: Int!
-
+  likedByCurrentUserCover: Boolean!
+  likedByCurrentUserPlot: Boolean!
+  likedByCurrentUserWritingStyle: Boolean!
     createdAt: DateTime!
     updatedAt: DateTime!
 }

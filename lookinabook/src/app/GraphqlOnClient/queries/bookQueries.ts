@@ -44,6 +44,12 @@ export const GET_BOOK_BY_SLUG = gql`
       category
       writingStatus
       publishStatus
+      coverLikeCount
+      plotLikeCount
+      writingStyleLikeCount
+      likedByCurrentUserPlot
+      likedByCurrentUserCover
+      likedByCurrentUserWritingStyle
       author {
         id
         username

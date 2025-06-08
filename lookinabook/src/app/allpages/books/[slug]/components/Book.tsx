@@ -10,9 +10,12 @@ import Link from "next/link";
 import DeleteBookButton from "@/app/allpages/profile/my-books/[slug]/edit-book/components/DeleteBookBtn";
 import PublishBookButton from "@/app/allpages/profile/my-books/[slug]/edit-book/components/PublishBook";
 import { useUser } from "@/app/context/authContext";
+import { useState } from "react";
+import LikeButton from "@/app/allpages/profile/my-posts/[id]/components/LikeButton";
+import { Book } from "@/app/types/bookTypes";
 
 type BookContentProps = {
-  book?: any;
+  book?: Book;
   showEditActions?: boolean; // <- важный пропс
 };
 
@@ -23,10 +26,21 @@ export default function BookContent({ book, showEditActions = false }: BookConte
 
   const { title, annotation, genre, writingStatus, publishStatus, author, slug } = book;
 
+const [plotLiked, setPlotLiked] = useState(book.likedByCurrentUserPlot)
+const [styleLiked, setStyleLiked] = useState(book.likedByCurrentUserWritingStyle)
+const [coverLiked, setCoverLiked] = useState(book.likedByCurrentUserCover)
+
+const [plotLikes, setPlotLikes] = useState<number>(book.plotLikeCount ?? 0)
+const [styleLikes, setStyleLikes] = useState<number>(book.writingStyleLikeCount ?? 0)
+const [coverLikes, setCoverLikes] = useState<number>(book.coverLikeCount ?? 0)
+
+
   // Генерируем правильный путь на основе того, является ли книга авторской
   const chaptersLink = isAuthor
     ? `/allpages/profile/my-books/${book.slug}/chapters`  // Путь для книги автора
     : `/allpages/books/${book.slug}/chapters`;  // Путь для публичной книги
+
+    const isDraft = book?.publishStatus === "DRAFT"
 
   return (
       <div className={styles["table-container"]}>
@@ -57,7 +71,74 @@ export default function BookContent({ book, showEditActions = false }: BookConte
         </div>
 
         <div className={styles.table}>
-          <div className={styles["table-shelf"]}></div>
+          <div className={styles["table-shelf"]}>
+
+            {!isDraft && user  && (
+  <>
+            <div className={styles["likes-group"]}>
+  <div className={styles["like-item"]}>
+  
+    <LikeButton
+      isLiked={plotLiked}
+      bookId={book.id}
+      disabled = {!user}
+      type="PLOT"
+      color = "red"
+      onLike={() => {
+        setPlotLiked(true)
+        setPlotLikes(prev => prev + 1)
+      }}
+      onUnlike={() => {
+        setPlotLiked(false)
+        setPlotLikes(prev => prev - 1)
+      }}
+    />
+    <span>{plotLikes}</span>
+  </div>
+
+  <div className={styles["like-item"]}>
+    <LikeButton
+      isLiked={styleLiked}
+      bookId={book.id}
+      disabled = {!user}
+      type="WRITING_STYLE"
+      color = "orange"
+      onLike={() => {
+        setStyleLiked(true)
+        setStyleLikes(prev => prev + 1)
+      }}
+      onUnlike={() => {
+        setStyleLiked(false)
+        setStyleLikes(prev => prev - 1)
+      }}
+    />
+    <span>{styleLikes}</span>
+  </div>
+
+  <div className={styles["like-item"]}>
+    <LikeButton
+      isLiked={coverLiked}
+      bookId={book.id}
+      disabled = {!user}
+      type="COVER"
+      color = "green"
+      onLike={() => {
+        setCoverLiked(true)
+        setCoverLikes(prev => prev + 1)
+      }}
+      onUnlike={() => {
+        setCoverLiked(false)
+        setCoverLikes(prev => prev - 1)
+      }}
+    />
+    <span>{coverLikes}</span>
+  </div>
+</div>
+</>
+            )}
+
+          </div>
+
           <div className={styles["table-shelf"]}>
             <div className={styles["book-actions"]}>
               {showEditActions && (

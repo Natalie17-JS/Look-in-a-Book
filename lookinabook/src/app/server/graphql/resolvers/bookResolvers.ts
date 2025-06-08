@@ -427,7 +427,7 @@ Mutation: {
       where: { bookId: parent.id, type: "PLOT" },
     });
   } catch (error) {
-    console.error("Error fetching cover likes:", error);
+    console.error("Error fetching plot likes:", error);
     return 0;
   }
     },
@@ -438,10 +438,56 @@ Mutation: {
       where: { bookId: parent.id, type: "WRITING_STYLE" },
     });
   } catch (error) {
-    console.error("Error fetching cover likes:", error);
+    console.error("Error fetching writing style likes:", error);
     return 0;
   }
     },
+    likedByCurrentUserPlot: async (parent, _, { prisma, req, res }) => {
+      const user = await getUserFromRequest(req, res);
+        if (!user) {
+          //throw new Error("Not authenticated");
+           return false;
+        }
+         const existingLike = await prisma.like.findFirst({
+      where: {
+        bookId: parent.id,
+        userId: user.id,
+        type: "PLOT",
+      },
+    });
+
+    return !!existingLike;
+    },
+
+    likedByCurrentUserCover: async (parent, _, { prisma, req, res }) => {
+    const user = await getUserFromRequest(req, res);
+    if (!user) return false;
+
+    const existingLike = await prisma.like.findFirst({
+      where: {
+        bookId: parent.id,
+        userId: user.id,
+        type: "COVER", // 👈 важный момент
+      },
+    });
+
+    return !!existingLike;
+  },
+
+    likedByCurrentUserWritingStyle: async (parent, _, { prisma, req, res }) => {
+    const user = await getUserFromRequest(req, res);
+    if (!user) return false;
+
+    const existingLike = await prisma.like.findFirst({
+      where: {
+        bookId: parent.id,
+        userId: user.id,
+        type: "WRITING_STYLE",
+      },
+    });
+
+    return !!existingLike;
+  },
   },
 }
 export default bookResolvers;

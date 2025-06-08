@@ -1,6 +1,7 @@
 .goback-door {
-    width: 80%;
-    /*border: 1px solid rgb(232, 255, 80);*/
+    width: auto;
+    height: 100vh;
+    border: 1px solid rgb(232, 255, 80);
 }
 .goback-door-image {
 width: 100%;

@@ -64,6 +64,12 @@ export interface Book {
     publishStatus: PStatus;
     createdAt: Date;
     updatedAt: Date;
+    coverLikeCount: number;
+    plotLikeCount: number;
+    writingStyleLikeCount: number;
+    likedByCurrentUserCover: boolean;
+    likedByCurrentUserPlot: boolean;
+    likedByCurrentUserWritingStyle: boolean;
 }
 
 export interface CreateBookFormData {

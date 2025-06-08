@@ -34,6 +34,7 @@ export default function CommentsCase() {
                 <LikeButton
                 isLiked={currentPost.likedByCurrentUser}
                 postId={postId}
+                disabled={!user}
                 type="POST"
                 onLike={() => setLikesCount(prev => prev + 1)}
                 onUnlike={() => setLikesCount(prev => prev - 1)}
