@@ -9,13 +9,23 @@ import { Post } from "@/app/types/postTypes"
 import Link from "next/link"
 import PostCard from "../[id]/components/Post"
 
+//type PostSortOption = "likes" | "comments" | "date";
+export enum PostSortOption {
+  Likes = "likes",
+  Comments = "comments",
+  Date = "date",
+}
+
+
 export default function GetAllPosts() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [sortBy, setSortBy] = useState<PostSortOption>(PostSortOption.Date);
 
   const { user } = useUser();
-  const { loading, error, data } = useQuery(GET_ALL_POSTS, {
+  const { loading, error, data, refetch  } = useQuery(GET_ALL_POSTS, {
+     variables: { sortBy },
     pollInterval: 10000,
   });
 
@@ -52,6 +62,11 @@ export default function GetAllPosts() {
         scrollRef.current.scrollBy({ left: 440, behavior: "smooth" });
       }
     };
+
+     const handleSortChange = (sortOption: PostSortOption) => {
+    setSortBy(sortOption);
+    refetch({ sortBy: sortOption }); // 🔁 Перезапрашиваем с новой сортировкой
+  };
   
 
   if (loading) return <p className={styles.loading}>Loading posts...</p>;
@@ -59,7 +74,17 @@ export default function GetAllPosts() {
 
 return (
   <div className={styles["posts-filter-container"]}>
-    <div className={styles["filter-container"]}></div>
+    <div className={styles["filter-container"]}>
+      <button onClick={() => handleSortChange(PostSortOption.Date)}>
+          By date
+        </button>
+        <button onClick={() => handleSortChange(PostSortOption.Likes)}>
+         Most popular
+        </button>
+        <button onClick={() => handleSortChange(PostSortOption.Comments)}>
+          Most discussed
+        </button>
+    </div>
 
     <div className={styles.posts}>
       <h1 className={styles["welcome-text"]}>Welcome to all posts!</h1>

@@ -22,6 +22,7 @@ export interface Post {
     updatedAt: Date;
     comments: Comment[];
     likesCount: number;
+    commentsCount: number;
     likedByCurrentUser: boolean;
 }
 

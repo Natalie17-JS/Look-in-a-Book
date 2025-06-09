@@ -67,32 +67,19 @@ const postResolvers: PostResolversTypes = {
         throw new Error("Failed to fetch posts");
       }
     },*/
-      getAllPosts: async (_, args, { prisma }) => {
-    const { sortBy } = args;
+      getAllPosts: async (_: any, args: { sortBy?: string }, { prisma }) => {
+  const { sortBy } = args;
 
-    let orderByClause;
-
-   if (sortBy === "likes") {
-    orderByClause = {
-      _count: {
-        likes: "desc",
-      },
-    };
-  } else if (sortBy === "comments") {
-    orderByClause = {
-      _count: {
-        comments: "desc",
-      },
-    };
-  } else {
-    orderByClause = {
-      createdAt: "desc",
-    };
-  }
-
-  return prisma.post.findMany({
+  const posts = await prisma.post.findMany({
+    where: { publishStatus: "PUBLISHED" },
     include: {
-      author: true,
+      author: {
+        select: {
+          id: true,
+          username: true,
+          email: true,
+        },
+      },
       comments: true,
       _count: {
         select: {
@@ -101,9 +88,22 @@ const postResolvers: PostResolversTypes = {
         },
       },
     },
-    orderBy: orderByClause,
   });
-  },
+
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (sortBy === "likes") {
+      return b._count.likes - a._count.likes;
+    } else if (sortBy === "comments") {
+      return b._count.comments - a._count.comments;
+    } else {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+  });
+
+  // Возвращаем первые 5
+  return sortedPosts.slice(0, 5);
+},
+
 
     getUserPosts: async (_, { authorId }) => {
       try {

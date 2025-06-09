@@ -1,28 +1,34 @@
 import { gql } from "@apollo/client";
 
+
 export const GET_ALL_POSTS = gql`
-    query GetAllPosts{
-        getAllPosts {
-            id
-            title
-            content
-            publishStatus
-            category
-            author {
-                id
-                username
-            }
-                comments {
-                    id
-                    content
-                    author {
-                        id
-                        username
-                    }
-                }
+  query GetAllPosts($sortBy: PostSortOption) {
+    getAllPosts(sortBy: $sortBy) {
+      id
+      title
+      content
+      publishStatus
+      category
+      createdAt
+      author {
+        id
+        username
+      }
+      comments {
+        id
+        content
+        author {
+          id
+          username
         }
+      }
+      likesCount
+      commentsCount
+      
     }
-`
+  }
+`;
+
 
 export const GET_AUTHOR_POSTS = gql`
     query GetAuthorPosts{
