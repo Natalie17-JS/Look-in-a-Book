@@ -75,6 +75,7 @@ export const GET_POST_BY_ID = gql`
         category
         likesCount
         likedByCurrentUser
+        commentsCount
         author{
             id
             username
@@ -101,6 +102,7 @@ export const GET_AUTHOR_POST_BY_ID = gql`
         category
         likesCount
         likedByCurrentUser
+        commentsCount
         author{
             id
             username

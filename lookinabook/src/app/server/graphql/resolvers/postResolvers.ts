@@ -44,7 +44,7 @@ const postResolvers: PostResolversTypes = {
       }
     },
 
-    getAllPosts: async () => {
+    /*getAllPosts: async () => {
       try {
         return await prisma.post.findMany({
           where: { publishStatus: "PUBLISHED" },
@@ -66,7 +66,44 @@ const postResolvers: PostResolversTypes = {
         console.error("Error fetching posts:", error);
         throw new Error("Failed to fetch posts");
       }
+    },*/
+      getAllPosts: async (_, args, { prisma }) => {
+    const { sortBy } = args;
+
+    let orderByClause;
+
+   if (sortBy === "likes") {
+    orderByClause = {
+      _count: {
+        likes: "desc",
+      },
+    };
+  } else if (sortBy === "comments") {
+    orderByClause = {
+      _count: {
+        comments: "desc",
+      },
+    };
+  } else {
+    orderByClause = {
+      createdAt: "desc",
+    };
+  }
+
+  return prisma.post.findMany({
+    include: {
+      author: true,
+      comments: true,
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
     },
+    orderBy: orderByClause,
+  });
+  },
 
     getUserPosts: async (_, { authorId }) => {
       try {
@@ -247,6 +284,13 @@ const postResolvers: PostResolversTypes = {
         },
       });
     },
+     commentsCount: async (parent, _, { prisma }) => {
+    return prisma.comment.count({
+      where: {
+        postId: parent.id,
+      },
+    });
+  },
 
     likedByCurrentUser: async (parent, _, { prisma, req, res }) => {
     const user = await getUserFromRequest(req, res);

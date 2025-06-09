@@ -13,6 +13,11 @@ enum PostCategory {
   BOOK_REVIEW
   OTHER
 }
+  enum PostSortOption {
+  likes
+  comments
+  date
+}
 
 type Post {
   id: String!
@@ -27,6 +32,7 @@ type Post {
   comments: [Comment!]
   likesCount: Int! 
   likedByCurrentUser: Boolean!
+  commentsCount: Int! 
 }
 
 type DeleteResponse {
@@ -36,10 +42,11 @@ type DeleteResponse {
 type Query {
   getPostById(id: String!): Post
   getAuthorPostById(id: String!): Post
-  getAllPosts: [Post!]!
+  getAllPosts(sortBy: PostSortOption): [Post!]!
   getUserPosts(authorId: ID!): [Post!]!
   getPostDrafts: [Post!]!
   getAuthorPosts: [Post!]!
+  
 }
 
 

@@ -9,6 +9,7 @@ import { usePostStore } from "@/app/zustand/PostStore"
 import { useEffect, useState } from "react"
 import LikeButton from "@/app/allpages/profile/my-posts/[id]/components/LikeButton"
 import { useUser } from "@/app/context/authContext"
+import LoginTooltip from "@/app/allpages/profile/my-posts/[id]/components/Tooltip"
 
 export default function CommentsCase() {
     const {user} = useUser()
@@ -29,9 +30,33 @@ export default function CommentsCase() {
         <div className={styles["comments-case-container"]}>
 
 <div className={styles["like-flowers"]}>
-            {user && currentPost && (
+            { currentPost && (
                 <>
-                <LikeButton
+                {user ? (
+                  <>
+  <LikeButton
+   isLiked={currentPost.likedByCurrentUser}
+                postId={postId}
+                disabled={!user}
+                type="POST"
+                onLike={() => setLikesCount(prev => prev + 1)}
+                onUnlike={() => setLikesCount(prev => prev - 1)}
+  /><span>{likesCount}</span>
+   </>
+) : (
+  <LoginTooltip>
+    <LikeButton
+      isLiked={false}
+      postId={postId}
+      type="POST"
+      onLike={() => {}}
+      onUnlike={() => {}}
+    />
+    <span>{likesCount}</span>
+  </LoginTooltip>
+)}
+
+              {/*   <LikeButton
                 isLiked={currentPost.likedByCurrentUser}
                 postId={postId}
                 disabled={!user}
@@ -39,7 +64,7 @@ export default function CommentsCase() {
                 onLike={() => setLikesCount(prev => prev + 1)}
                 onUnlike={() => setLikesCount(prev => prev - 1)}
                 />
-                <span>{likesCount}</span>
+                <span>{likesCount}</span>*/}
                 </>
             )}
             <div className={styles["image-wrapper"]}>
