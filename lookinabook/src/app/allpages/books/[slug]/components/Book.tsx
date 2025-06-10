@@ -211,6 +211,12 @@ const [coverLikes, setCoverLikes] = useState<number>(book.coverLikeCount ?? 0)
               Chapters
             </Link>
           </div>
+
+           <div className={styles["go-to-reader-button"]}>
+                       <Link href={`/allpages/books/${slug}/read`} className={styles["reader-link"]}>
+                          Read
+                      </Link>
+                      </div>
         </div>
       </div>
     </div>

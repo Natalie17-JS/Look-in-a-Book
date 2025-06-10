@@ -82,7 +82,12 @@ export default function Book() {
               <Link href={`/allpages/books/${slug}/chapters`} className={styles["chapters-link"]}>
                 Chapters
               </Link>
-              
+            </div>
+
+             <div className={styles["go-to-reader-button"]}>
+              <Link href={`/allpages/books/${slug}/read`} className={styles["reader-link"]}>
+               Read
+            </Link>
             </div>
         </div>
         </div>
