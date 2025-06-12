@@ -3,7 +3,7 @@
 import { useQuery } from "@apollo/client"
 import { GET_CHAPTERS_BY_BOOKSLUG } from "@/app/GraphqlOnClient/queries/chapterQueries"
 import { ChaptersData } from "@/app/types/chapterTypes"
-import { useBook } from "@/app/context/bookContext"
+import { useBook} from "@/app/context/bookContext"
 import Link from "next/link"
 import { useUser } from "@/app/context/authContext"
 import styles from "./Chapters.module.css"

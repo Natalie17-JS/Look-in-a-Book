@@ -12,6 +12,7 @@ import { useSearchParams } from 'next/navigation';
 export default function BookReaderPage() {
   const {currentBook} = useBook()
   const slug = currentBook?.slug;
+  const bookTitle = currentBook?.title;
    const searchParams = useSearchParams();
   
       const { loading, error, data } = useQuery<ChaptersData>(GET_CHAPTERS_BY_BOOKSLUG, {
@@ -32,8 +33,8 @@ export default function BookReaderPage() {
 
 
   return (
-    <div style={{backgroundColor: "gray"}}>
-      <BookReader chapters={chapters} bookSlug={slug} startPage={startPage} />
+    <div style={{backgroundColor: "gray", height: "75vh"}}>
+      <BookReader chapters={chapters} bookSlug={slug} bookTitle={bookTitle} startPage={startPage} />
     </div>
   );
 }

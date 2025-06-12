@@ -1,13 +1,15 @@
 'use client';
 
 import HTMLFlipBook from "react-pageflip";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Chapter } from "@/app/types/chapterTypes";
 import styles from "./Reader.module.css"
+import PageCover from "./Pagecover";
 
 interface BookReaderProps {
   chapters: Chapter[];
   bookSlug: string;
+  bookTitle: string;
   startPage?: number;
 }
 
@@ -15,8 +17,35 @@ interface Page {
   title: string | null;
   content: string;
 }
-function BookReader({ chapters, bookSlug, startPage = 0 }: BookReaderProps) {
+function BookReader({ chapters, bookSlug, bookTitle, startPage = 0 }: BookReaderProps) {
   const flipBook = useRef(null);
+
+   const [currentPage, setCurrentPage] = useState(startPage);
+   const [totalpages, setTotalpages] = useState<Page[]>([]);
+
+  const STORAGE_KEY = `bookmark-${bookSlug}`;
+
+  // Обновление localStorage при смене страницы
+  const handlePageChange = (e: any) => {
+    const page = e.data; // это текущая страница
+    setCurrentPage(page);
+    localStorage.setItem(STORAGE_KEY, String(page));
+  };
+
+
+ /* const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+   useEffect(() => {
+    const updateSize = () => {
+      const vh = window.innerHeight;
+      const height = vh * 0.75; // 75vh
+      const width = height * 0.75; // 3:4 соотношение
+      setDimensions({ width, height });
+    };
+
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);*/
 
   // Функция для разбивки текста на страницы по 100 символов
   const splitContentIntoPages = (text: string, charsPerPage = 100): string[] => {
@@ -27,8 +56,11 @@ function BookReader({ chapters, bookSlug, startPage = 0 }: BookReaderProps) {
     return pages;
   };
 
+
   // Собираем массив страниц — каждая страница содержит часть текста и заголовок главы (только на первой странице главы)
-const pages: Page[] = [];
+/*const pages: Page[] = [];
+const totalPages = pages.length;
+
 
   chapters.forEach(chapter => {
     const chapterPages = splitContentIntoPages(chapter.content, 100);
@@ -38,230 +70,122 @@ const pages: Page[] = [];
         content: pageContent,
       });
     });
+  });*/
+  const pages: Page[] = useMemo(() => {
+  const allPages: Page[] = [];
+
+  chapters.forEach(chapter => {
+    const chapterPages = splitContentIntoPages(chapter.content, 100);
+    chapterPages.forEach((pageContent, idx) => {
+      allPages.push({
+        title: idx === 0 ? chapter.title : null,
+        content: pageContent,
+      });
+    });
   });
 
+  return allPages;
+}, [chapters]);
+
+const totalPages = pages.length;
+
+const numberOfCovers = 2; // PageCover в начале и в конце
+const actualTotalPages = pages.length + numberOfCovers;
+
+const contentPage = currentPage - 1; // вычитаем первую обложку
+
+let progress = 0;
+
+if (currentPage === 0) {
+  // на первой обложке — 0%
+  progress = 0;
+} else if (currentPage === actualTotalPages - 1) {
+  // на последней обложке — 100%
+  progress = 100;
+} else if (contentPage >= 0 && contentPage < pages.length) {
+  // внутри контента считаем прогресс по страницам
+  progress = Math.round(((contentPage + 1) / pages.length) * 100);
+} else {
+  progress = 0; // запасной вариант
+}
+
+
   return (
-     <>
+    <>
+     <div className={styles.readerContainer}>
                 <button onClick={() =>
                     flipBook.current?.pageFlip().flipNext()}>Next page</button>
+
+                   
     <HTMLFlipBook
+    /* width={dimensions.width}
+  height={dimensions.height}*/
       width={550}
-      height={733}
-      size="stretch"
+     height={633}
+      size="fixed"
       ref={flipBook}
       maxShadowOpacity={0.5}
       showCover={true}
       minWidth={315}
             maxWidth={1000}
             minHeight={400}
-            maxHeight={1533}
+            maxHeight={733}
       startPage={startPage}
       showPageCorners
   mobileScrollSupport={true}
       className={styles.bookreader}
+      onFlip={handlePageChange}
     >
+       <PageCover>{bookTitle}</PageCover>
+
       {pages.map((page, index) => (
-        <div key={index} className="page" style={{ padding: 20 }}>
+        <div key={index} className={styles.page} style={{ padding: 20 }}>
           {page.title && <h2>{page.title}</h2>}
           <p style={{ whiteSpace: 'pre-wrap' }}>{page.content}</p>
-           <span className="page-number">{index + 1}</span>
+           <span className={styles["page-number"]}>{index + 1}</span>
         </div>
       ))}
 
-       <button onClick={() =>
-                    flipBook.current.pageFlip().flipPrev()}>Prev page</button>
+   
+
+                     <PageCover>The end</PageCover>
     </HTMLFlipBook>
-    </>
+
+    
+     <button onClick={() =>
+                    flipBook.current.pageFlip().flipPrev()}>Prev page</button>          
+
+    </div>
+
+     <div style={{ textAlign: "center", width: "30%", margin: "5rem auto 0 auto" }}>
+  <div style={{ marginTop: "1rem", textAlign: "center" }}>
+  <div style={{
+    height: "10px",
+    width: "80%",
+    margin: "0 auto 8px",
+    background: "#eee",
+    borderRadius: "5px",
+    overflow: "hidden"
+  }}>
+    <div style={{
+      height: "100%",
+      width: `${progress}%`,
+      background: "#ff9900",
+      transition: "width 0.3s"
+    }}></div>
+  </div>
+  <div>
+    Page {currentPage + 1} of {totalPages+1} ({progress}%)
+  </div>
+</div>
+
+</div>
+
+</>
+
+    
   );
 }
 
 export default BookReader;
 
-
-/*import React, { useRef } from "react";
-import HTMLFlipBook from "react-pageflip";
-import { PageFlip } from "page-flip";
-
-interface HTMLFlipBookElement {
-  getPageFlip: () => PageFlip;
-}
-
-type Chapter = {
-  title: string;
-  content: string;
-};
-
-type PageData = {
-  title: string | null;
-  content: string;
-};
-
-interface BookReaderProps {
-  chapters: Chapter[];
-  bookSlug: string;
-  startPage?: number;
-}
-
-interface BookReaderState {
-  page: number;
-  totalPage: number;
-  state: string;
-  orientation: string;
-}
-
-class BookReader extends React.Component<BookReaderProps, BookReaderState> {
-  //flipBook = React.createRef<HTMLFlipBook>();
-  //flipBook = useRef<InstanceType<typeof HTMLFlipBook> | null>(null);
-  flipBook = React.createRef<HTMLFlipBookElement>();
-
-  constructor(props: BookReaderProps) {
-    super(props);
-    this.state = {
-      page: props.startPage || 0,
-      totalPage: 0,
-      state: "read",
-      orientation: "portrait",
-    };
-  }
-
-  componentDidMount() {
-    if (this.flipBook) {
-      const pageCount = this.flipBook.getPageFlip().getPageCount();
-      this.setState({ totalPage: pageCount });
-    }
-  }
-
-  handleFlip = (e: any) => {
-    this.setState({ page: e.data });
-  };
-
-  handleOrientationChange = (e: any) => {
-    this.setState({ orientation: e.data });
-  };
-
-  handleStateChange = (e: any) => {
-    this.setState({ state: e.data });
-  };
-
-  nextPage = () => {
-    this.flipBook?.getPageFlip().flipNext();
-  };
-
-  prevPage = () => {
-    this.flipBook?.getPageFlip().flipPrev();
-  };
-
-  // Разбивка глав на страницы по 100 символов
-  splitContentIntoPages = (text: string, charsPerPage = 100): string[] => {
-    const pages: string[] = [];
-    for (let i = 0; i < text.length; i += charsPerPage) {
-      pages.push(text.slice(i, i + charsPerPage));
-    }
-    return pages;
-  };
-
-  // Подготовка всех страниц
-  getAllPages = (): PageData[] => {
-    const pages: PageData[] = [];
-
-    this.props.chapters.forEach((chapter) => {
-      const chapterPages = this.splitContentIntoPages(chapter.content);
-      chapterPages.forEach((content, index) => {
-        pages.push({
-          title: index === 0 ? chapter.title : null,
-          content,
-        });
-      });
-    });
-
-    return pages;
-  };
-
-  render() {
-    const pages = this.getAllPages();
-
-    return (
-      <div>
-        <HTMLFlipBook
-          width={500}
-          height={700}
-          size="stretch"
-          minWidth={315}
-          maxWidth={1000}
-          minHeight={400}
-          maxHeight={1533}
-          maxShadowOpacity={0.5}
-          showCover={false}
-          showPageCorners
-          mobileScrollSupport={true}
-          onFlip={this.handleFlip}
-          onChangeOrientation={this.handleOrientationChange}
-          onChangeState={this.handleStateChange}
-          className="demo-book"
-          ref={(el) => (this.flipBook = el)}
-          startPage={this.props.startPage || 0}
-        >
-          {pages.map((page, index) => (
-            <div key={index} className="page">
-              {page.title && <h2>{page.title}</h2>}
-              <p style={{ whiteSpace: "pre-wrap" }}>{page.content}</p>
-              <span className="page-number">{index + 1}</span>
-            </div>
-          ))}
-        </HTMLFlipBook>
-
-        <div className="controls">
-          <button onClick={this.prevPage}>Previous</button>
-          <span>
-            Page {this.state.page + 1} of {this.state.totalPage}
-          </span>
-          <button onClick={this.nextPage}>Next</button>
-        </div>
-
-        <div className="status">
-          State: <i>{this.state.state}</i>, Orientation:{" "}
-          <i>{this.state.orientation}</i>
-        </div>
-
-        <style jsx>{`
-          .page {
-            position: relative;
-            background: white;
-            border: 1px solid #ccc;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-          }
-
-          .page-number {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            font-size: 12px;
-            color: gray;
-          }
-
-          .controls {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            align-items: center;
-          }
-
-          .status {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
-          }
-        `}</style>
-      </div>
-    );
-  }
-}
-
-export default BookReader;
-
-*/
