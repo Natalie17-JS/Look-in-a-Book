@@ -5,10 +5,13 @@ const Navbar = () => {
   return (
     <div className={styles["navbar-shelf"]}>
       <div className={styles.menu}>
+
+        <Link href="/allpages/about">
         <div className={styles.menubox}>
           <div className={styles.tag}></div>
           <p>About us</p>
         </div>
+        </Link>
 
         <Link href="/allpages/books">
         <div className={styles.menubox}>

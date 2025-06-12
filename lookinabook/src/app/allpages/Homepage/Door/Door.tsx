@@ -2,11 +2,11 @@
 
 import doorday from "@/app/images/door-day.svg";
 import doornight from "@/app/images/door-night.svg";
-import { useTheme } from "@/app/context/themeContext";
+import { useTheme} from "@/app/context/themeContext"
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Door.module.css";
-import { useUser } from "@/app/context/authContext";
+import { useUser } from "@/app/context/authContext"
 import SignInModal from "../Signin-modal-window/SignInModal";
 import { useState } from "react";
 
