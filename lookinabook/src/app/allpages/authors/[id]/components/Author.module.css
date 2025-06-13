@@ -1,22 +1,29 @@
 .account-container {
     width: 85%;
-    background-color: rgb(149, 123, 79);
+    background-color: rgb(106, 89, 60);
     height: 100vh;
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
 }
+.user-info{
+    margin-bottom: 150px;
+}
+.username {
+    text-align: center;
+    margin-bottom: 20px;
+}
 .bookslist {
 list-style: none;
-border-bottom: 15px solid rgb(108, 77, 18);
+border-bottom: 15px solid rgb(91, 60, 32);
 height: 50%;
 }
 .door {
     width: 280px;
     height: 500px;
     position: relative;
-    background-color: rgb(123, 80, 39);
+    background-color: rgb(91, 60, 32);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,7 +51,7 @@ border: 1px solid white;;
 .mailbox {
     width: 120px;
     height: 85px;
-    background-color: blueviolet;
+    background-color: rgb(61, 45, 24);
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -52,18 +59,21 @@ border: 1px solid white;;
     align-items: center;
 }
 .hole {
-    width: 90px;
-    height: 10px;
-    background-color: rgb(29, 17, 40);
+    width: 80px;
+    height: 7px;
+    background-color: rgb(40, 30, 17);
+    border-radius: 4px;
 }
 
 .books-posts {
-    border-block: 15px solid rgb(108, 77, 18);
-    margin-bottom: 200px;
-    width: 30%;
-    height: 60%;
+    border-block: 15px solid rgb(91, 60, 32);
+    margin-bottom: 150px;
+    width: 40%;
+    height: 70%;
 }
 .postslist {
     list-style: none;
     height: 50%;
+    border-top: 15px solid rgb(91, 60, 32);
 }
+

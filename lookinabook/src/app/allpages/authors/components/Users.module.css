@@ -52,3 +52,11 @@
     z-index: 1;
    
 }
+
+.user-window {
+   /* border: 1px solid orange;*/
+    width: 100px;
+    display: flex;
+    align-items: flex-end;
+
+}

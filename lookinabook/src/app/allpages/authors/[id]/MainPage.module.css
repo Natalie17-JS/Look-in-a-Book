@@ -1,0 +1,16 @@
+.author-container.light {
+    background-color: white;
+  }
+  .author-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .author-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .author-container {
+    width: auto;
+    height: 100vh;
+   
+  }

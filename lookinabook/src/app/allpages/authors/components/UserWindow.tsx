@@ -27,12 +27,12 @@ export default function UserWindow({ isOnline }: UserWindowProps) {
   }
 
   return (
-    <div className={styles["user-window"]}>
+    
       <Image
         src={windowImage}
         alt={isOnline ? "User is online" : "User is offline"}
         className={styles["user-window-image"]}
       />
-    </div>
+  
   );
 }

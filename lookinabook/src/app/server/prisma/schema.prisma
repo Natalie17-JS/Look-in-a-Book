@@ -221,10 +221,16 @@ model Subscription {
   @@unique([subscriberId, subscribedToId]) // Unique subscription
 }
 
+enum MessageType {
+  LETTER
+  MESSAGE
+}
+
 model Message {
   id          Int      @id @default(autoincrement()) // Unique message identifier
   text        String   // Message text
   createdAt   DateTime @default(now())               // Message creation date
+  type        MessageType @default(MESSAGE)
   senderId    Int?     // Sender ID
   recipientId Int?     // Recipient ID
   isRead      Boolean @default(false)                  // Message read status (default: false)

@@ -42,7 +42,9 @@ export default function UsersList() {
                               )}</p> 
                                </div>
 
+                    <div className={styles["user-window"]}>
                                <UserWindow isOnline={user.isOnline} />
+                               </div>
                         </li>
                 ))}
             </ul>

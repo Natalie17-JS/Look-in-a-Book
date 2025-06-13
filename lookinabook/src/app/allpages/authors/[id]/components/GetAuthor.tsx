@@ -8,7 +8,10 @@ import { formatLastActive } from "./LastActive";
 import { Book } from "@/app/types/bookTypes";
 import { Post } from "@/app/types/postTypes";
 import styles from "./Author.module.css"
+import bookstyles from "@/app/allpages/profile/profileComponents/my-books/MyBooks.module.css"
 import UserWindow from "../../components/UserWindow";
+import Link from "next/link";
+import PostCard from "@/app/allpages/blog/[id]/components/Post";
 
 export default function GetAuthor() {
     const params = useParams();
@@ -33,8 +36,8 @@ export default function GetAuthor() {
 return (
   <div className={styles["account-container"]}>
 
-    <div>
-    <h2>{user.username}</h2>
+    <div className={styles["user-info"]}>
+    <h1 className={styles.username}>{user.username}</h1>
     <h3>{user.bio}</h3>
     <p>
       {user.isOnline ? (
@@ -46,21 +49,28 @@ return (
     <UserWindow isOnline={user.isOnline} />
     </div>
 
-<div className={styles["books-posts"]}>
+<div className={`${styles["books-posts"]} ${styles.bookslist}`}>
     <h3>Books:</h3>
     {user.books.length > 0 ? (
-      <ul className={styles.bookslist}>
+      <ul className={bookstyles.books}>
         {user.books.map((book: Book) => (
-          <li className={styles.shelf} key={book.id}>{book.title}</li>
+          <li className={bookstyles.book} key={book.id}>
+             <Link style={{textDecoration: "none"}} href={`/allpages/books/${book.slug}`}>
+                          <div className={bookstyles.bookInner}>
+                      <h2 className={bookstyles.bookTitle}>{book.title}</h2>
+                    </div>
+                        </Link>
+          </li>
         ))}
       </ul>
     ) : (
       <p>No books yet.</p>
     )}
 
-    <h3>Posts:</h3>
+   
     {user.posts.length > 0 ? (
       <ul className={styles.postslist}>
+         <h3>Posts:</h3>
         {user.posts.map((post: Post) => (
           <li key={post.id}>{post.title}</li>
         ))}
