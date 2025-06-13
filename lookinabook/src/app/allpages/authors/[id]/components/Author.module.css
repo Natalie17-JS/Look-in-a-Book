@@ -1,0 +1,69 @@
+.account-container {
+    width: 85%;
+    background-color: rgb(149, 123, 79);
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+.bookslist {
+list-style: none;
+border-bottom: 15px solid rgb(108, 77, 18);
+height: 50%;
+}
+.door {
+    width: 280px;
+    height: 500px;
+    position: relative;
+    background-color: rgb(123, 80, 39);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.handtag{
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background-color: rgb(83, 69, 36);
+position: absolute;
+top: 50%;
+left: 5%;
+border: 1px solid white;;
+}
+.ondoor-things {
+    width: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+   /* border: 1px solid gray;*/
+    align-items: center;
+}
+.mailbox {
+    width: 120px;
+    height: 85px;
+    background-color: blueviolet;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+.hole {
+    width: 90px;
+    height: 10px;
+    background-color: rgb(29, 17, 40);
+}
+
+.books-posts {
+    border-block: 15px solid rgb(108, 77, 18);
+    margin-bottom: 200px;
+    width: 30%;
+    height: 60%;
+}
+.postslist {
+    list-style: none;
+    height: 50%;
+}

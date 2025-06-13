@@ -1,0 +1,33 @@
+.authors-container.light {
+    background-color: white;
+  }
+  .authors-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .authors-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .authors-container {
+    width: auto;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+  }
+  .cursivtext{
+    font-size: 3rem;
+    background-color: rgb(117, 54, 48);
+    padding: 10px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 5px;
+  text-align: center;
+  }
+  .text-door {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 150px;
+  }

@@ -1,0 +1,54 @@
+.userlist-container {
+    background-color: rgb(151, 120, 85);
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    height: 75vh;
+    width: 1000px;
+    margin: 0 auto;
+}
+.user-item {
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+    border-block: 2px solid rgb(107, 95, 69);
+    border-right:  2px solid rgb(107, 95, 69);
+    height: 50%;
+    width: calc(100%/3);
+    justify-content: center;
+    gap: 20px;
+
+}
+.roof-userlist {
+    display: flex;
+    flex-direction: column;
+   /* justify-content: center;*/
+    align-items: center;
+   /* border: 1px solid yellow;*/
+}
+.username-text {
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+.house-container {
+    display: flex;
+    align-items: flex-end;
+   /* border: 1px solid blue;*/
+}
+.grass1-image,
+.grass2-image {
+    width: 200px;
+    height: auto;
+}
+.grass1-image {
+    margin-right: -100px;
+    margin-left: -100px;
+    z-index: 1;
+}
+.grass2-image {
+    margin-left: -200px;
+     /*margin-right: -50px;*/
+    z-index: 1;
+   
+}

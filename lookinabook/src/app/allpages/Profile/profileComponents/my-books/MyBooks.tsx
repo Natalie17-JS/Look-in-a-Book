@@ -5,6 +5,7 @@ import { GET_AUTHOR_BOOKS } from "@/app/GraphqlOnClient/queries/bookQueries";
 import { useUser } from "@/app/context/authContext";
 import { Book } from "@/app/types/bookTypes";
 import Link from "next/link";
+import styles from "./MyBooks.module.css"
 
 const AuthorBooks = () => {
     const { user, loading: userLoading } = useUser();
@@ -26,25 +27,25 @@ const AuthorBooks = () => {
     if (error) return <p>Error loading books</p>;
 
     return (
-        <div>
-            <h1>My Books</h1>
-            {data?.getMyBooks?.length > 0 ? (
-                data.getMyBooks.map((book: Book) => (
-                    <ul>
-                    <Link href={`/allpages/profile/my-books/${book.slug}`}>
-                       
-                    <li key={book.id}>
-                        <h2>{book.title}</h2>
-                    </li>
-                   
-                    </Link>
-                    </ul>
-                ))
-            ) : (
-                <p>No books</p>
-            )}
+  <div>
+    <h1>My Books</h1>
+    {data?.getMyBooks?.length > 0 ? (
+      <ul className={styles.books}>
+        {data.getMyBooks.map((book: Book) => (
+          <li className={styles.book} key={book.id}>
+            <Link style={{textDecoration: "none"}} href={`/allpages/profile/my-books/${book.slug}`}>
+              <div className={styles.bookInner}>
+          <h2 className={styles.bookTitle}>{book.title}</h2>
         </div>
-    );
-};
+            </Link>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>No books</p>
+    )}
+  </div>
+);
+}
 
 export default AuthorBooks;

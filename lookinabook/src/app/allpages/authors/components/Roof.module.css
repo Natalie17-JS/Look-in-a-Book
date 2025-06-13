@@ -1,0 +1,12 @@
+.roof {
+    height: 25vh;
+   /* border: 1px solid green;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.roof-image {
+    width: 85%;
+    
+}

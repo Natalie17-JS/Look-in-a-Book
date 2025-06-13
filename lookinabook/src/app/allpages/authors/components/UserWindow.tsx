@@ -2,29 +2,37 @@
 
 import dayuserwindow from "@/app/images/user-window-day.svg"
 import cloudsuserwindow from "@/app/images/user-window-clouds.svg"
-import nightuserwindow from "@/app/images/user-window-night.svg"
+//import nightuserwindow from "@/app/images/user-window-night.svg"
+import nightuserwindow_online from "@/app/images/user-window-night-online.svg"
+import nightuserwindow_offline from "@/app/images/user-window-night-offline.svg"
 import { useTheme } from "@/app/context/themeContext"
 import Image from "next/image";
 import styles from "./UserWindow.module.css";
 
-export default function UserWindow() {
+type UserWindowProps = {
+  isOnline: boolean;
+};
+
+export default function UserWindow({ isOnline }: UserWindowProps) {
   const { theme } = useTheme();
 
   let windowImage;
-  switch (theme) {
-    case "dark":
-      windowImage = nightuserwindow;
-      break;
-    case "gray":
-      windowImage = cloudsuserwindow;
-      break;
-    default:
-      windowImage = dayuserwindow;
+
+  if (theme === "dark") {
+    windowImage = isOnline ? nightuserwindow_online : nightuserwindow_offline;
+  } else if (theme === "gray") {
+    windowImage = cloudsuserwindow;
+  } else {
+    windowImage = dayuserwindow;
   }
 
   return (
     <div className={styles["user-window"]}>
-      <Image src={windowImage} alt="user-window" className={styles["user-window-image"]} />
+      <Image
+        src={windowImage}
+        alt={isOnline ? "User is online" : "User is offline"}
+        className={styles["user-window-image"]}
+      />
     </div>
   );
 }

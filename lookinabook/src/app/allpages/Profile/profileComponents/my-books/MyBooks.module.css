@@ -1,0 +1,40 @@
+.books {
+    display: flex;
+}
+
+.book {
+  width: 40px;
+  height: 200px;
+   background: linear-gradient(to right, #5a3d2b, #d2a679, #5a3d2b);
+  border: 2px solid #555;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.book:hover {
+  transform: scale(1.05);
+}
+
+.bookInner {
+ 
+  transform: rotate(-90deg); /* читается сверху вниз */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 100%;
+  padding: 8px;
+ /* border: 1px solid green;*/
+}
+
+.bookTitle {
+  font-size: 16px;
+  color: #fff;
+  
+  font-weight: bold;
+}

@@ -7,6 +7,8 @@ import { useParams } from "next/navigation";
 import { formatLastActive } from "./LastActive";
 import { Book } from "@/app/types/bookTypes";
 import { Post } from "@/app/types/postTypes";
+import styles from "./Author.module.css"
+import UserWindow from "../../components/UserWindow";
 
 export default function GetAuthor() {
     const params = useParams();
@@ -29,8 +31,11 @@ export default function GetAuthor() {
 
 
 return (
-  <div>
+  <div className={styles["account-container"]}>
+
+    <div>
     <h2>{user.username}</h2>
+    <h3>{user.bio}</h3>
     <p>
       {user.isOnline ? (
         <span>🟢 At office</span>
@@ -38,12 +43,15 @@ return (
         <span>{formatLastActive(user.lastActive)}</span>
       )}
     </p>
+    <UserWindow isOnline={user.isOnline} />
+    </div>
 
+<div className={styles["books-posts"]}>
     <h3>Books:</h3>
     {user.books.length > 0 ? (
-      <ul>
+      <ul className={styles.bookslist}>
         {user.books.map((book: Book) => (
-          <li key={book.id}>{book.title}</li>
+          <li className={styles.shelf} key={book.id}>{book.title}</li>
         ))}
       </ul>
     ) : (
@@ -52,7 +60,7 @@ return (
 
     <h3>Posts:</h3>
     {user.posts.length > 0 ? (
-      <ul>
+      <ul className={styles.postslist}>
         {user.posts.map((post: Post) => (
           <li key={post.id}>{post.title}</li>
         ))}
@@ -60,6 +68,18 @@ return (
     ) : (
       <p>No posts yet.</p>
     )}
+    </div>
+
+    <div className={styles.door}>
+      <div className={styles.handtag}></div>
+<div className={styles["ondoor-things"]}>
+  <button>Knock and subscribe</button>
+  <div className={styles.mailbox}>
+    <button>Send a letter</button>
+    <div className={styles.hole}></div>
+  </div>
+</div>
+    </div>
   </div>
 );
 
