@@ -1,0 +1,10 @@
+.goback-door {
+    width: 20vw;
+    /*border: 1px solid orangered;*/
+    display: flex;
+    justify-content: center;
+}
+.goback-door-image{
+    width: 100%;
+    height: auto;
+}
