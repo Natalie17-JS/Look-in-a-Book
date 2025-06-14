@@ -1,4 +1,4 @@
-const adminTypeDefs = `
+export const adminTypeDefs = `
 scalar DateTime
 
 type BannedUser {

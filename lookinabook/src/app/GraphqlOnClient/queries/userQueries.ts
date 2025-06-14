@@ -42,13 +42,25 @@ export const GET_USER_BY_ID = gql`
     books {
       id
       title
+      annotation
+      category
+      cover
+      genre
+      slug
       publishStatus
       writingStatus
+      coverLikeCount
+      plotLikeCount
+      writingStyleLikeCount
+      likedByCurrentUserPlot
+      likedByCurrentUserCover
+      likedByCurrentUserWritingStyle
       createdAt
     }
       posts {
         id
         title
+        content
       }
     createdAt
     points

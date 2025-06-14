@@ -1,4 +1,4 @@
-const adminTypeDefs = `
+export const messageTypeDefs = `
 scalar DateTime
 
 type Message {
@@ -16,27 +16,28 @@ enum MessageType {
   MESSAGE
 }
 
-input CreateMessageInput {
-  text: String!
-  recipientId: Int!
-  type: MessageType!
-}
-
-input UpdateMessageInput {
-  id: Int!
-  text: String
-  isRead: Boolean
+type DeleteResponse {
+  message: String!
 }
 
 type Query {
   getMessageById(id: Int!): Message
   getUserMessages(userId: Int!): [Message!]!
+  countUnreadMessages: Int!
 }
 
 type Mutation {
-  createMessage(input: CreateMessageInput!): Message!
-  updateMessage(input: UpdateMessageInput!): Message!
-  deleteMessage(id: Int!): Message!
+  createMessage( text: String!
+  recipientId: Int!
+  type: MessageType!): Message!
+  
+  editMessage( id: Int!
+  text: String
+  isRead: Boolean): Message!
+
+  markMessageAsRead(id: Int!): Message
+
+  deleteMessage(id: Int!): DeleteResponse!
 }
 
 

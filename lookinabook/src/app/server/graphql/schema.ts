@@ -18,6 +18,8 @@ import commentsResolvers from "./resolvers/commentsResolvers";
 import { commentsTypeDefs } from "./typeDefs/commentsTypeDefs";
 import likeResolvers from "./resolvers/likeResolvers";
 import { likeTypeDefs } from "./typeDefs/likeTypeDefs";
+import messageResolvers from "./resolvers/messageResolvers";
+import { messageTypeDefs } from "./typeDefs/messageTypeDefs";
 
 const resolvers = mergeResolvers([
     userResolvers, 
@@ -28,7 +30,8 @@ const resolvers = mergeResolvers([
     postResolvers, 
     complaintResolvers,
     commentsResolvers,
-    likeResolvers
+    likeResolvers,
+    messageResolvers
 ]);
 
 const typeDefs = mergeTypeDefs([
@@ -40,7 +43,8 @@ const typeDefs = mergeTypeDefs([
     postTypeDefs, 
     complaintTypeDefs,
     commentsTypeDefs,
-    likeTypeDefs
+    likeTypeDefs,
+    messageTypeDefs
 ]);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
