@@ -235,6 +235,10 @@ model Message {
   recipientId Int?     // Recipient ID
   isRead      Boolean @default(false)                  // Message read status (default: false)
 
+  replyToId   Int?      // если это ответ на другое сообщение или письмо
+  replyTo     Message?  @relation("Reply", fields: [replyToId], references: [id])
+  replies     Message[] @relation("Reply")
+
   // Message sender
   sender      User?    @relation("SentMessages", fields: [senderId], references: [id], onDelete: SetNull) // Relation with the sender
 

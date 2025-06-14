@@ -7,7 +7,7 @@ import { CREATE_MESSAGE } from '@/app/GraphqlOnClient/mutations/messageMutations
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
-export default function NewMessage() {
+export default function NewLetter() {
  const params = useParams();
   const recipientId = Number(params.id); 
   const router = useRouter();
@@ -28,6 +28,16 @@ export default function NewMessage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!recipientId || isNaN(recipientId)) {
+      toast.error("Invalid recipient.");
+      return;
+    }
+
+    if (!text.trim()) {
+      toast.error("Please enter your letter.");
+      return;
+    }
+
     try {
       await createMessage({
         variables: {
@@ -36,10 +46,10 @@ export default function NewMessage() {
           type,
         },
       });
-      toast.success("Your message was successfully sent!");
+      toast.success("Your letter was successfully sent!");
       router.push(`/allpages/authors/${recipientId}`); // после отправки можно перенаправить куда нужно
     } catch (err) {
-      toast.error("An error occurred while sending a message.");
+      toast.error("An error occurred while sending a letter.");
     }
   };
 

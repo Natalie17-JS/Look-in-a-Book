@@ -24,6 +24,7 @@ type Query {
   getMessageById(id: Int!): Message
   getUserMessages(userId: Int!): [Message!]!
   countUnreadMessages: Int!
+  countUnreadLetters: Int!
 }
 
 type Mutation {

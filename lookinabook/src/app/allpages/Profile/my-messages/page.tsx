@@ -1,15 +1,10 @@
-"use client"
-
-import UserLetters from "./components/MyMessages"
-import { useTheme } from "@/app/context/themeContext"
+import UserMessages from "./components/MyMessages";
 
 export default function UserMessagesPage() {
-    const {theme} = useTheme()
 
     return(
-        <div>
-            <UserLetters/>
-        </div>
-
+    <div>
+        <UserMessages/>
+    </div>
     )
 }

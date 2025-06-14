@@ -30,12 +30,16 @@ Query:{
                 }
         const messages = await prisma.message.findMany({
           where: {
-            OR: [
-              { senderId: user.id },
-              { recipientId: user.id },
-            ],
-          },
-          orderBy: { createdAt: 'desc' },
+      type: 'MESSAGE',
+      recipientId: user.id,
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    include: {
+      sender: true,
+      replies: true
+    }
         });
         return messages;
       } catch (error) {
@@ -43,6 +47,27 @@ Query:{
         throw new Error("Failed to fetch user messages.");
       }
     },
+
+    getUserLetters: async (_, __, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
+
+  const letters = await prisma.message.findMany({
+    where: {
+      type: 'LETTER',
+      recipientId: user.id,
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    include: {
+      sender: true,
+      replies: true
+    }
+  });
+
+  return letters;
+},
     countUnreadMessages: async (_, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
   if (!user) throw new Error("Not authenticated");
@@ -51,11 +76,27 @@ Query:{
     where: {
       recipientId: user.id,
       isRead: false,
+      type: 'MESSAGE'
+    },
+  });
+
+  return count;
+},
+countUnreadLetters: async (_, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
+
+  const count = await prisma.message.count({
+    where: {
+      recipientId: user.id,
+      isRead: false,
+      type: 'LETTER'
     },
   });
 
   return count;
 }
+
 
   },
 
@@ -86,6 +127,41 @@ Query:{
       }
     },
 
+    replyToLetter: async (_, { text, replyToId }, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
+
+  const original = await prisma.message.findUnique({
+    where: { id: replyToId },
+    include: { replies: true }
+  });
+
+  if (!original || original.type !== 'LETTER') {
+    throw new Error("Original letter not found or is not a letter");
+  }
+
+  if (original.recipientId !== user.id) {
+    throw new Error("You can reply only to letters sent to you");
+  }
+
+  if (original.replies.length > 0) {
+    throw new Error("You already replied to this letter");
+  }
+
+  const reply = await prisma.message.create({
+    data: {
+      text,
+      type: 'LETTER',
+      senderId: user.id,
+      recipientId: original.senderId,
+      replyToId: replyToId
+    },
+  });
+
+  return reply;
+},
+
+
     // Обновление сообщения
     editMessage: async (_, { id, text}, { req, res, prisma }) => {
       try {
@@ -95,7 +171,7 @@ Query:{
                 }
     
 
-        const message = await prisma.book.findUnique({ where: { id } });
+        const message = await prisma.message.findUnique({ where: { id } });
           
               if (!message) {
                 throw new Error("Message not found");
@@ -150,7 +226,7 @@ Query:{
                 if (!user) {
                   throw new Error("Not authenticated");
                 }
-                 const message = await prisma.book.findUnique({ where: { id } });
+                 const message = await prisma.message.findUnique({ where: { id } });
           
               if (!message) {
                 throw new Error("Message not found");

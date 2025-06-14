@@ -35,3 +35,9 @@ query CountUnreadMessages {
 countUnreadMessages 
 }
 `
+
+export const UNREAD_LETTERS_COUNT = gql`
+query CountUnreadLetters {
+countUnreadLetters
+}
+`

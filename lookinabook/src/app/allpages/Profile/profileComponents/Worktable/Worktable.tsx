@@ -10,8 +10,10 @@ import PostsDrafts from "../../posts-drafts/components/PostsDrafts";
 import BooksDrafts from "../BooksDrafts/BooksDrafts";
 import SavedBooks from "../SavedBooks/SavedBooks";
 import AuthorPosts from "../../my-posts/components/AuthorPosts";
+import UserLettersPage from "../../my-letters/page";
 import { useState } from "react";
 import Link from "next/link";
+import UserMessagesPage from "../../my-messages/page";
 
 type ComponentName =
   | "notebookbooks"
@@ -41,7 +43,8 @@ export default function Worktable() {
         {activeComponent === "postsdrafts" && <PostsDrafts />}
         {activeComponent === "booksdrafts" && <BooksDrafts />}
         {activeComponent === "savedbooks" && <SavedBooks />}
-        {activeComponent === "letters" && <SavedBooks />}
+        {activeComponent === "letters" && <UserLettersPage />}
+        {activeComponent === "messages" && <UserMessagesPage />}
       </div>
 
       <div className={styles.upperpart}></div>
@@ -107,7 +110,7 @@ export default function Worktable() {
                 className={styles["switch-content-btn"]}
               >
                 <p className={styles["yashik-text"]}>My table</p>
-              </button>booksdrafts
+              </button>
             </div>
           </div>
           <div className={styles.yashik}>

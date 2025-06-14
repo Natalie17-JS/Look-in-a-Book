@@ -85,7 +85,7 @@ return (
 <div className={styles["ondoor-things"]}>
   <button>Knock and subscribe</button>
   <div className={styles.mailbox}>
-    <Link href={`/allpages/authors/${userId}/new-message`}>
+    <Link href={`/allpages/authors/${userId}/new-letter`}>
     <button>Send a letter</button>
     </Link>
     <div className={styles.hole}></div>
