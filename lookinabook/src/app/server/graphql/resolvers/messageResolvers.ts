@@ -12,7 +12,13 @@ Query:{
                 if (!user) {
                   throw new Error("Not authenticated");
                 }
-        const message = await prisma.message.findUnique({ where: { id } });
+        const message = await prisma.message.findUnique({ 
+          where: { id } , 
+          include: {
+      sender: true,
+      replies: true
+          }
+    });
         if (!message) throw new Error("Message not found");
         return message;
       } catch (error) {
@@ -22,7 +28,7 @@ Query:{
     },
 
     // Получить все сообщения пользователя (и отправленные, и полученные)
-    getUserMessages: async (_, { req, res, prisma }) => {
+    getUserMessages: async (_, __,  { req, res, prisma }) => {
       try {
         const user = await getUserFromRequest(req, res);
                 if (!user) {
@@ -48,12 +54,14 @@ Query:{
       }
     },
 
-    getUserLetters: async (_, __, { req, res, prisma }) => {
-  const user = await getUserFromRequest(req, res);
-  if (!user) throw new Error("Not authenticated");
-
-  const letters = await prisma.message.findMany({
-    where: {
+    getUserLetters: async (_,__, { req, res, prisma }) => {
+   try {
+        const user = await getUserFromRequest(req, res);
+                if (!user) {
+                  throw new Error("Not authenticated");
+                }
+        const letters = await prisma.message.findMany({
+          where: {
       type: 'LETTER',
       recipientId: user.id,
     },
@@ -64,11 +72,15 @@ Query:{
       sender: true,
       replies: true
     }
-  });
-
-  return letters;
+        });
+        return letters;
+      } catch (error) {
+        console.error("Error fetching user messages:", error);
+        throw new Error("Failed to fetch user messages.");
+      }
 },
-    countUnreadMessages: async (_, { req, res, prisma }) => {
+
+    countUnreadMessages: async (_,__, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
   if (!user) throw new Error("Not authenticated");
 
@@ -82,7 +94,7 @@ Query:{
 
   return count;
 },
-countUnreadLetters: async (_, { req, res, prisma }) => {
+countUnreadLetters: async (_, __, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
   if (!user) throw new Error("Not authenticated");
 

@@ -1,17 +1,16 @@
-.author-container.light {
+.write-letter-container.light {
     background-color: white;
   }
-  .author-container.gray {
+  .write-letter-container.gray {
     background-color: rgb(185, 180, 166);
     color: rgb(26, 26, 26);
   }
-  .author-container.dark {
+  .write-letter-container.dark {
     background-color: rgb(36, 36, 36);
     color: white;
   }
-  .author-container {
+  .write-letter-container {
     width: auto;
     height: 100vh;
-   display: flex;
-   justify-content: space-around;
+   
   }

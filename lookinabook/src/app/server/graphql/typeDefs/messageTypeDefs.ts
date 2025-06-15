@@ -4,11 +4,12 @@ scalar DateTime
 type Message {
   id: Int!
   text: String!
-  createdAt: String!
+  createdAt: DateTime!
   senderId: Int
   recipientId: Int
   isRead: Boolean!
   type: MessageType!
+  sender: User
 }
 
 enum MessageType {
@@ -22,7 +23,8 @@ type DeleteResponse {
 
 type Query {
   getMessageById(id: Int!): Message
-  getUserMessages(userId: Int!): [Message!]!
+  getUserMessages: [Message!]
+  getUserLetters: [Message!]
   countUnreadMessages: Int!
   countUnreadLetters: Int!
 }
@@ -35,6 +37,8 @@ type Mutation {
   editMessage( id: Int!
   text: String
   isRead: Boolean): Message!
+
+  replyToLetter(text: String!, replyToId: Int!): Message!
 
   markMessageAsRead(id: Int!): Message
 

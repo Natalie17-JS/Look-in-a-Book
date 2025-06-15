@@ -6,8 +6,10 @@ import { useState } from 'react';
 import { CREATE_MESSAGE } from '@/app/GraphqlOnClient/mutations/messageMutations';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { useUser } from '@/app/context/authContext';
 
 export default function NewLetter() {
+  const {user} = useUser()
  const params = useParams();
   const recipientId = Number(params.id); 
   const router = useRouter();
@@ -35,6 +37,11 @@ export default function NewLetter() {
 
     if (!text.trim()) {
       toast.error("Please enter your letter.");
+      return;
+    }
+
+    if (!user) {
+      toast.error("Please sign in")
       return;
     }
 

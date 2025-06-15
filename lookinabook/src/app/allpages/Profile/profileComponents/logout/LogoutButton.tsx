@@ -14,12 +14,13 @@ export default function LogoutButton({ className }: LogoutButtonProps) {
   const router = useRouter();
 
 //if (!user) return <p>You are not autenticated</p>
+ const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const [logoutUser, { loading }] = useMutation(LOGOUT_USER, {
     fetchPolicy: "no-cache", // Отключаем кеширование, чтобы запрос выполнялся всегда
     context: {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`, // Передаем токен в заголовке
+       Authorization: accessToken ? `Bearer ${accessToken}` : "", 
       },
     },
     onCompleted: () => {

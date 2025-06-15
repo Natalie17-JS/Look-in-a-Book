@@ -16,10 +16,11 @@ import PostCard from "@/app/allpages/blog/[id]/components/Post";
 export default function GetAuthor() {
     const params = useParams();
   const userId = Number(params.id); 
+  const shouldSkip = !userId || isNaN(userId);
 
   const { data, loading, error } = useQuery(GET_USER_BY_ID, {
     variables: { id: userId },
-    skip: !userId,
+    skip: shouldSkip,
     fetchPolicy: 'network-only',
     pollInterval: 10000, // Обновляет данные каждые 10 секунд
     

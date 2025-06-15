@@ -16,7 +16,7 @@ type EditMessageArgs = {
   id: number;
   text?: string;
 };
-type ReplyToIgArgs = {
+type ReplyToLetterArgs = {
   replyToId: number;
   text: string;
 };
@@ -29,10 +29,10 @@ type MarkMessageAsReadArgd = {
 export type MessageResolversTypes = {
      Query: {
         getMessageById: (parent: unknown, args: { id: number }, context: IContext) => Promise<Message | null>;
-        getUserMessages: (parent: unknown, context: IContext)=> Promise<Message[] | null>;
-        getUserLetters: (parent: unknown, context: IContext)=> Promise<Message[] | null>;
-        countUnreadMessages: (parent: unknown, context: IContext)=> Promise<number>;
-        countUnreadLetters: (parent: unknown, context: IContext)=> Promise<number>;
+        getUserMessages: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
+        getUserLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
+        countUnreadMessages: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;
+        countUnreadLetters: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;
      },
      Mutation: {
          createMessage: (
@@ -47,8 +47,9 @@ export type MessageResolversTypes = {
                 context: IContext
                 ) => Promise<Message>;
 
-        replyToletter: (parent: unknown, 
-                args: ReplyToIgArgs, 
+        replyToLetter: (
+                parent: unknown, 
+                args: ReplyToLetterArgs, 
                 context: IContext
                 )=> Promise<Message>;
 

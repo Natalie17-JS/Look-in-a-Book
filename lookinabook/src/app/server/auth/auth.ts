@@ -19,6 +19,10 @@ export const generateRefreshToken = (user: UserPayload): string => {
 };
 
 export const verifyAccessToken = (token: string): UserPayload => {
+   if (!token || typeof token !== "string") {
+    throw new Error("No access token provided");
+  }
+
   const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as JwtPayload;
 
   // Проверяем, что в объекте есть id и email

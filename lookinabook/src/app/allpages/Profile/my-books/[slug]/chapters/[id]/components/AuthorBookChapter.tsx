@@ -19,12 +19,7 @@ export default function AuthorBookChapter() {
             <h1 className={styles["chapter-title"]}>{currentChapter.title}</h1>
             <p className={styles["chapter-content"]}>{currentChapter.content}</p>
         
-
-<Link href={`/allpages/profile/my-books/${slug}/chapters`}>
-            <button>Back to chapters page</button>
-            </Link>
-
-            <Link href={`/allpages/profile/my-books/${slug}/chapters/${id}/edit-chapter`}>
+           <Link href={`/allpages/profile/my-books/${slug}/chapters/${id}/edit-chapter`}>
             <button>Edit</button>
             </Link>
         </div>

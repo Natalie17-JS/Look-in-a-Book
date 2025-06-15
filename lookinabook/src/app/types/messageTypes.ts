@@ -1,3 +1,4 @@
+import { User } from "./userTypes";
 
 
 export enum MessageType {
@@ -13,6 +14,7 @@ isRead: boolean;
 senderId: number;
 recipientId: number;
 createdAt: Date;
+sender: User;
 }
 
   export interface CreateMessageData {
