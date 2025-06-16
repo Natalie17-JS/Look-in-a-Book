@@ -24,3 +24,17 @@
     "clock windows bookcase"
     "door table bookcase";
 }
+
+
+
+/*----------------------media queries-------------------*/
+@media (max-width: 1000px) {
+  .room-container {
+ 
+  grid-template-columns: 30% 70% ;
+  grid-template-rows: 40% 60%;
+  grid-template-areas:
+    "clock windows"
+    "door tumba";
+}
+}

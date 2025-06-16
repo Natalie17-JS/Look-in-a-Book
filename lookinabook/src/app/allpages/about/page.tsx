@@ -27,12 +27,12 @@ export default function AboutUsPage() {
 
                     <div className={styles.about}>
                         <div className={styles["about-info"]}>
-                            <p className={styles["welcome-text"]}>Welcome to </p>
+                            <p className={styles["welcome-text"]}>Welcome to the project <span className={styles.libtext}> Look in a book</span>! Here, you will be able to unlock your potential and try something you've long dreamed of — writing your first book and receiving honest feedback on it. You will find like-minded people, friends, and inspiration for your creativity. Improve your craft and help others do the same — together with us!</p>
                         </div>
                     </div>
 
                     <Link href="/">
-                    <button>Back</button>
+                    <button className={styles["back-btn"]}>Back</button>
                     </Link>
 
         </div>

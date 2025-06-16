@@ -51,5 +51,17 @@ width: auto;
 .welcome-text {
     font-size: 1.5rem;
     padding: 10px;
+    text-align: center;
 }
-
+.libtext {
+    color: coral;
+}
+.back-btn {
+    margin-left: 10px;
+    background: transparent;
+    padding: 10px;
+    border: 1px solid orange;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}

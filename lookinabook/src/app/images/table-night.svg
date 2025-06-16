@@ -7,7 +7,7 @@
    viewBox="0 0 230.18752 185.20836"
    version="1.1"
    id="svg1"
-   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="table-night.svg"
    inkscape:export-filename="table-night.svg"
    inkscape:export-xdpi="96"
@@ -26,15 +26,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="1"
-     inkscape:cx="398"
-     inkscape:cy="325.5"
+     inkscape:zoom="0.5"
+     inkscape:cx="-47"
+     inkscape:cy="311"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer16" />
+     inkscape:current-layer="svg1" />
   <defs
      id="defs1">
     <inkscape:path-effect
@@ -86,7 +86,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="powerstroke"
        id="path-effect32"
@@ -102,7 +102,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect58"
@@ -237,7 +237,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="powerstroke"
        id="path-effect91"
@@ -253,7 +253,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="powerstroke"
        id="path-effect88"
@@ -269,7 +269,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="fill_between_many"
        method="bsplinespiro"
@@ -295,7 +295,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="powerstroke"
        id="path-effect79"
@@ -311,7 +311,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect76"
@@ -786,7 +786,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="spiro"
        id="path-effect4"
@@ -1601,7 +1601,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <inkscape:path-effect
        effect="powerstroke"
        id="path-effect79-9"
@@ -1617,7 +1617,7 @@
        miter_limit="4"
        not_jump="false"
        sort_points="true"
-       message="&lt;b&gt;Ctrl + click&lt;/b&gt; on existing node and move it" />
+       message="" />
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
@@ -1992,19 +1992,6 @@
        apply_with_radius="true"
        only_selected="false"
        hide_knots="false" />
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter21"
-       x="-0.089571317"
-       y="-0.37046106"
-       width="1.1791426"
-       height="1.7409221">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.7950264"
-         id="feGaussianBlur21" />
-    </filter>
     <inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect37-9"
@@ -2039,19 +2026,6 @@
        apply_with_radius="true"
        only_selected="false"
        hide_knots="false" />
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter21-6"
-       x="-0.089571317"
-       y="-0.37046106"
-       width="1.1791426"
-       height="1.7409221">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.7950264"
-         id="feGaussianBlur21-2" />
-    </filter>
     <inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect22-4-5"
@@ -2106,14 +2080,27 @@
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
-       id="filter42"
-       x="-0.14486941"
-       y="-0.22556559"
-       width="1.2897388"
-       height="1.4511312">
+       id="filter72"
+       x="-0.025904553"
+       y="-0.32105978"
+       width="1.0518091"
+       height="1.6421196">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="0.4227428"
+         stdDeviation="0.82591559"
+         id="feGaussianBlur72" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter42"
+       x="-0.025904555"
+       y="-0.32105978"
+       width="1.0518091"
+       height="1.6421196">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.82591559"
          id="feGaussianBlur42" />
     </filter>
   </defs>
@@ -2245,24 +2232,21 @@
        d="m 56.400572,84.26726 c 0,0 0.0167,-2.31825 1.85127,-2.2849 1.8346,0.0334 1.88463,2.33494 1.88463,2.33494"
        id="path2" />
   </g>
+  <path
+     style="display:inline;mix-blend-mode:normal;fill:#131313;fill-opacity:1;stroke-width:1.104;filter:url(#filter72)"
+     d="m 8.0335947,179.08873 c -2.9934185,0.37417 -8.04481262,5.23848 -8.04481262,5.23848 l 70.71951592,0.56126 5.799749,-6.17392 z"
+     id="path42"
+     transform="translate(1.3208386,-5.2833545)" />
+  <path
+     style="display:inline;mix-blend-mode:normal;fill:#131313;fill-opacity:1;stroke-width:1.104;filter:url(#filter42)"
+     d="m 146.17165,173.78093 c -2.99342,0.37417 -8.04481,5.23848 -8.04481,5.23848 l 70.71951,0.56126 5.79975,-6.17392 z"
+     id="path72" />
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Table night"
      transform="translate(1.3208386,-5.2833545)"
      style="display:inline">
-    <path
-       id="rect19-0"
-       style="display:inline;mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke-width:0.746001;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;filter:url(#filter21-6)"
-       d="m 75.010192,177.50095 16.03606,0.20014 -10.94663,3.06346 -10.35554,1.88691 z"
-       sodipodi:nodetypes="ccccc"
-       inkscape:label="shdow" />
-    <path
-       id="path28-3"
-       style="display:inline;mix-blend-mode:normal;fill:#000000;fill-opacity:0.81960785;stroke-width:0.746001;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;filter:url(#filter21-6)"
-       d="m 209.71403,177.50095 16.03606,0.20014 -10.94663,3.06346 -10.35554,1.88691 z"
-       sodipodi:nodetypes="ccccc"
-       inkscape:label="shdowright" />
     <path
        id="path17-6"
        style="fill:#5c3a14;fill-opacity:1;stroke:none;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
@@ -2694,18 +2678,6 @@
      id="layer2"
      inkscape:label="Table day"
      style="display:none">
-    <path
-       id="rect19"
-       style="display:inline;mix-blend-mode:normal;fill:#282828;fill-opacity:1;stroke-width:0.746001;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;filter:url(#filter21)"
-       d="m 78.085452,171.58159 16.03606,0.20014 -10.94663,3.06346 -10.35554,1.88691 z"
-       sodipodi:nodetypes="ccccc"
-       inkscape:label="shdow" />
-    <path
-       id="path28"
-       style="display:inline;mix-blend-mode:normal;fill:#282828;fill-opacity:1;stroke-width:0.746001;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;filter:url(#filter21)"
-       d="m 212.78929,171.58159 16.03606,0.20014 -10.94663,3.06346 -10.35554,1.88691 z"
-       sodipodi:nodetypes="ccccc"
-       inkscape:label="shdowright" />
     <rect
        style="fill:#9a6222;fill-opacity:1;stroke:#909090;stroke-width:0"
        id="rect2"
@@ -3924,11 +3896,6 @@
        id="rect74-9"
        style="display:inline;fill:#ffffff;fill-opacity:0.254613;stroke:none;stroke-width:2.36641;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        d="m 59.401972,53.060789 a 2.6458333,2.6458333 0 0 0 -2.64584,2.64583 v 38.5563 l 77.454708,-40.89414 -0.19069,-0.30799 z" />
-    <path
-       style="fill:#ebe6b7;fill-opacity:0.81960797;stroke:none;stroke-width:10.973;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;filter:url(#filter42)"
-       d="m 145.51304,120.09126 c -0.13229,0 -1.68672,0.8599 -2.01744,2.24896 -0.33073,1.38906 -0.36381,2.24896 -0.36381,2.24896 l 7.00343,-0.0468 c 0,0 -0.28796,-2.08359 -1.61088,-3.175 -1.32291,-1.09141 -3.0113,-1.27615 -3.0113,-1.27615 z"
-       id="path42"
-       sodipodi:nodetypes="csccsc" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -4042,5 +4009,6 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1" />
+     id="layer1"
+     style="display:inline" />
 </svg>

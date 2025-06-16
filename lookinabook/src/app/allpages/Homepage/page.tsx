@@ -8,6 +8,7 @@ import Table from "./Table/Table";
 import Bookcase from "./Bookcase/Bookcase";
 import { useTheme } from "@/app/context/themeContext";
 import styles from "./MainPage.module.css";
+import Tumba from "./Tumba/Tumba";
 
 const HomePage = () => {
   const { theme } = useTheme();
@@ -30,6 +31,7 @@ const HomePage = () => {
       <Table />
       <Door />
       <Bookcase />
+<Tumba/>
     </div>
   );
 };

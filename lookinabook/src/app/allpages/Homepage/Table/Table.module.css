@@ -20,3 +20,10 @@
   position: relative;
   cursor: pointer;
 }
+
+
+@media (max-width: 1000px) {
+  .table-container  {
+    display: none;
+  }
+}

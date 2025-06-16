@@ -1,0 +1,16 @@
+.tumba-container {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .tumba-container{
+        grid-area: tumba;
+        display: flex;
+         height: 100%;
+  width: 100%;
+    }
+    .tumba-image {
+        width: 100%;
+        height: auto;
+    }
+}

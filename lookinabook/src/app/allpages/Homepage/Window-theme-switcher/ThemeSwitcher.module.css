@@ -13,7 +13,7 @@
   position: relative;
   display: flex;
   width: 100%;
- height: 25rem;
+ height: auto;
   justify-content: center;
   align-items: center;
  /*border: 1px solid blue;*/
@@ -24,15 +24,15 @@
   position: absolute;
   top: 0%;
   left: 0;
-  width: auto;
-  height: 100%;
+  width: 110%;
+  height: auto;
  /* border: 1px solid purple;*/
   margin-left: -30px;
 }
 
 .image-in-windows {
-  width: auto;
-  height: 100%;
+  width: 110%;
+  height: auto;
   position: absolute;
   margin-left: -30px;
   top: 0;
@@ -66,23 +66,41 @@
 
 /*--------------------curtain---------------*/
 .curtain-image {
+  width: 100%;
   height: auto;
-  width: 200px;
 }
 .curtain-container {
  /* border: 1px solid red;*/
   position: relative;
-  width: 200px;
+  width: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .overcurtain-image{
-  width: 200px;
+  width: 100%;
   height: auto;
   
 }
 .overcurtain-container {
   position: absolute;
   top:0;
+}
+/*--------------media queries-------------*/
+@media (max-width: 1000px){
+.windows-container {
+  position: relative;
+  display: flex;
+  width: 110%;
+  
+ height: auto;
+  justify-content: center;
+  align-items: center;
+ /*border: 1px solid blue;*/
+  /*margin-top: -250px;*/
+}
+.curtain-container {
+ 
+  width: 60%;
+}
 }
