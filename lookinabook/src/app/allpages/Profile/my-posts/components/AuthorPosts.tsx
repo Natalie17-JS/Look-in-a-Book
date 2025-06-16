@@ -9,18 +9,18 @@ import { Post } from "@/app/types/postTypes";
 import { useUser } from "@/app/context/authContext";
 import styles from "./AuthorPosts.module.css"
 import { Carousel3slides } from "./Carousel";
+import {useToken} from "@/app/hooks/useToken"
 
 export default function AuthorPosts() {
   const { user } = useUser();
-
-  const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
+ const {accesstoken} = useToken()
   const { loading, error, data } = useQuery(GET_AUTHOR_POSTS, {
     context: {
       headers: {
-        Authorization: accessToken ? `bearer ${accessToken}` : "",
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
       },
     },
+    skip: !accesstoken,
   });
 
   const AuthorPosts: Post[] = data?.getAuthorPosts || [];
@@ -52,9 +52,11 @@ export default function AuthorPosts() {
       ) : (
         <div className={styles.staticList}>
           {AuthorPosts.map((post) => (
+            <Link key={post.id} href={`/allpages/profile/my-posts/${post.id}`}>
             <div key={post.id} className={styles.staticItem}>
               <PostCard post={post} onTable />
             </div>
+            </Link>
           ))}
         </div>
       )}

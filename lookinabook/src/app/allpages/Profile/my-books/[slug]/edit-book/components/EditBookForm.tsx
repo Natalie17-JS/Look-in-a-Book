@@ -8,11 +8,11 @@ import { EditBookData, Book, Category, Genre, WStatus, PStatus } from "@/app/typ
 import styles from "@/app/allpages/profile/new-book/components/BookForm.module.css"
 import { useBook } from "@/app/context/bookContext";
 import DeleteBookButton from "./DeleteBookBtn";
-//import { useParams } from "next/navigation";
+import { useToken } from "@/app/hooks/useToken";
 
 
 export default function EditBookForm() {
- 
+ const {accesstoken} = useToken()
   const { currentBook, setCurrentBook } = useBook();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -35,12 +35,10 @@ export default function EditBookForm() {
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<EditBookData>();
 
-  const accessToken = localStorage.getItem("token");
-
   const [updateBook] = useMutation<{ updateBook: Book }>(UPDATE_BOOK_BY_SLUG, {
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
       },
     },
   });

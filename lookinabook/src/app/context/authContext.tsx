@@ -1,36 +1,54 @@
-"use client";
-
-import { useState, useEffect, createContext, useContext } from "react";
-import { useRouter } from "next/navigation";
-import { useFetchUser } from "../hooks/useFetchUser"; // Загружаем пользователя
+// "use client";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_CURRENT_USER } from "../GraphqlOnClient/queries/userQueries";
+import { useToken } from "../hooks/useToken";
 import { CurrentUser } from "../types/userTypes";
 
-interface UserContextType {
+interface AuthContextType {
   user: CurrentUser | null;
   setUser: React.Dispatch<React.SetStateAction<CurrentUser | null>>;
   loading: boolean;
+  refetch: () => void;
 }
 
-const UserContext = createContext<UserContextType | null>(null);
+const UserContext = createContext<AuthContextType | null>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<CurrentUser | null>(null);
-  const { user: fetchedUser, loading, refetch } = useFetchUser();
+  const { accesstoken, isLoading: tokenLoading } = useToken();
 
+  const {
+    data,
+    loading,
+    refetch,
+    error,
+  } = useQuery(GET_CURRENT_USER, {
+    fetchPolicy: "network-only",
+    skip: !accesstoken || tokenLoading,
+    context: {
+      headers: {
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
+      },
+    },
+    onCompleted: (data) => {
+      if (data?.getCurrentUser) {
+        setUser(data.getCurrentUser);
+      }
+    },
+    onError: (error) => {
+      console.error("GraphQL error:", error);
+    },
+  });
+
+  // Можно вручную установить юзера, если нужно
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token && !user) {
-      refetch();
+    if (data?.getCurrentUser) {
+      setUser(data.getCurrentUser);
     }
-  }, [user, refetch]);
+  }, [data]);
 
-  useEffect(() => {
-    if (fetchedUser) {
-      setUser(fetchedUser); // Устанавливаем пользователя в контекст
-    }
-  }, [fetchedUser]);
-
-  // Обновляем время последней активности при закрытии вкладки или перезагрузке страницы
+  // Доп. активность пользователя
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (user?.id) {
@@ -39,24 +57,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Очистка при размонтировании компонента
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [user]);
 
-  /*useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
-    }, 10000); // Запрос каждые 10 секунд
-
-    return () => clearInterval(interval);
-  }, [refetch]);*/
-
-
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, setUser, loading, refetch }}>
       {children}
     </UserContext.Provider>
   );
@@ -64,6 +69,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
 export function useUser() {
   const context = useContext(UserContext);
-  if (!context) throw new Error("useUser must be used within UserProvider");
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
   return context;
 }

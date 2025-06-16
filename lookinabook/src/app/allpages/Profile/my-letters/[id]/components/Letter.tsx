@@ -8,28 +8,29 @@ import { useEffect } from 'react';
 import { MARK_MESSAGE_AS_READ } from '@/app/GraphqlOnClient/mutations/messageMutations';
 import { format } from "date-fns"
 import styles from "./Letter.module.css"
+import { useToken } from '@/app/hooks/useToken';
 
 const Letter = () => {
   const { id } = useParams();
   const messageId = Number(id);
   console.log("letterId:", messageId)
-
-  const accessToken = localStorage.getItem("token");
+const {accesstoken} = useToken()
+  
 
   const { data, loading, error } = useQuery<{ getMessageById: Message }>(GET_MESSAGE_BY_ID, {
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "", 
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
       },
     },
     variables: { id: messageId },
-    skip: isNaN(messageId),
+    skip: isNaN(messageId) || !accesstoken,
   });
 
   const [markAsRead] = useMutation(MARK_MESSAGE_AS_READ, {
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "", 
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
       },
     }
   }

@@ -11,9 +11,11 @@ import styles from "./Publish.module.css"
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import print from "@/app/images/print.svg"
+import {useToken} from "@/app/hooks/useToken"
 
 const PublishPostButton = () => {
   const params = useParams()
+  const {accesstoken} = useToken()
   const router = useRouter()
     const id =
       typeof params.id === "string"
@@ -23,14 +25,14 @@ const PublishPostButton = () => {
         : ""
   
     const { currentPost } = usePostStore()
-    const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    
 
 
   const [publishPost, { loading, error }] = useMutation<{ publishPost: Post }>(PUBLISH_POST, {
     variables: { id },
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
       },
     },
     onCompleted: (data) => {

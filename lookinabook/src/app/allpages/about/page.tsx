@@ -2,25 +2,39 @@
 
 import House from "./components/House"
 import welcome from "@/app/images/lib-welcome.svg"
-import grass from "@/app/images/kusty-right.svg"
+
 import styles from "./MainPage.module.css"
 import Image from "next/image"
+import { useTheme } from "@/app/context/themeContext"
+import { getThemeClass } from "@/app/themeclass"
+import Link from "next/link"
 
 export default function AboutUsPage() {
+     const { theme } = useTheme()
+    const themeClass = getThemeClass(theme, styles)
+      
 
     return(
-        <div className={styles["house-page-container"]}>
-            <div className={styles["house-welcome"]}>
-                <House/>
+        <div className={`${styles["house-page-container"]} ${themeClass}`}>
 
-                <div className={styles.welcome}>
+            <div className={styles.left}>
+            <div className={styles.welcome}>
                     <Image src={welcome} alt="welcome" className={styles["welcome-image"]}/>
                 </div>
-            </div>
-            
-            <div className={styles.grass}>
-        <Image src={grass} alt="grass" className={styles["grass-image"]}/>
-            </div>
+
+                    <House/>
+                    </div>
+
+                    <div className={styles.about}>
+                        <div className={styles["about-info"]}>
+                            <p className={styles["welcome-text"]}>Welcome to </p>
+                        </div>
+                    </div>
+
+                    <Link href="/">
+                    <button>Back</button>
+                    </Link>
+
         </div>
 
     )

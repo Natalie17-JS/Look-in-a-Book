@@ -1,0 +1,55 @@
+.house-page-container.light {
+    background-color: white;
+  }
+  .house-page-container.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .house-page-container.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+.welcome {
+    height: 20vh;
+display: flex;
+justify-content: center;
+width: auto;
+/*border: 1px solid red;*/
+
+    
+}
+.welcome-image {
+    width: auto;
+    height: 100%;
+}
+.house-page-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(17, 17, 38);
+}
+.left {
+    display: flex;
+    width: auto;
+    flex-direction: column;
+    justify-content: center;
+}
+.about {
+    width: 30vw;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+}
+.about-info {
+    width: 30vw;
+    height: 100%;
+    background-color: rgb(108, 108, 108);
+    border: 2px solid white;
+}
+.welcome-text {
+    font-size: 1.5rem;
+    padding: 10px;
+}
+

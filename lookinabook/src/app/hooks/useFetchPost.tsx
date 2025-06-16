@@ -4,19 +4,20 @@ import { GET_AUTHOR_POST_BY_ID, GET_POST_BY_ID } from "@/app/GraphqlOnClient/que
 import { useEffect } from "react"
 import { usePostStore } from "../zustand/PostStore"
 import { useUser } from "../context/authContext"
+import { useToken } from "./useToken"
 
 
 export const useLoadPostById = (id: string | undefined) => {
   const { setCurrentPost, clearCurrentPost } = usePostStore()
   const { user } = useUser();
+const { accesstoken, isLoading } = useToken();
 
-  const accessToken = localStorage.getItem("token");
-   const context = accessToken && user
-    ? { headers: { Authorization: `Bearer ${accessToken}` } }
+   const context = accesstoken && user
+    ? { headers: { Authorization: `Bearer ${accesstoken}` } }
     : undefined;
   const { data, loading, error } = useQuery(user ? GET_AUTHOR_POST_BY_ID : GET_POST_BY_ID, {
     variables: { id },
-    skip: !id,
+    skip: !id || !accesstoken || isLoading,
     context,
     fetchPolicy: 'network-only'
   })

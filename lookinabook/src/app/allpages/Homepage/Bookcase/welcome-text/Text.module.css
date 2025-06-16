@@ -1,0 +1,10 @@
+.welcome-text-container {
+    background-color: rgb(105, 76, 54);
+    border: 2px solid white;
+    padding: 10px;
+    border-radius: 8px;
+}
+.cursivtext {
+    text-align: center;
+    font-size: 34px;
+}

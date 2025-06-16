@@ -7,14 +7,14 @@
 }
 
 .bookreader {
-    background-color: rgb(255, 245, 237);
+    background-color: rgb(255, 251, 237);
      width: 100%;
   height: 70vh;
   margin: 0 auto;
 }
 
 .page {
-  background-color: rgb(255, 250, 236) !important; /* убираем прозрачность */
+  /*background-color: rgb(255, 250, 236) !important; /* убираем прозрачность */
   border: 1px solid #ccc;
   width: 90vw;
   height: 500px;
@@ -40,7 +40,7 @@
 }
 
 .pageCover {
-  background-color: rgb(255, 226, 173) !important;
+  background-color: rgb(161, 138, 96) !important;
   color: white;
   display: flex;
   align-items: center;
@@ -51,4 +51,17 @@
 
 .pageContent {
   text-align: center;
+  /*border: 1px solid red;*/
+}
+
+/* Светлая тема */
+.lightPage {
+  background-color:rgb(255, 250, 236);
+  color: black;
+}
+
+/* Тёмно-синяя тема */
+.darkPage {
+  background-color: #0D1B2A;
+  color: white;
 }

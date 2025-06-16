@@ -1,0 +1,29 @@
+.start-screen.light {
+    background-color: white;
+  }
+  .start-screen.gray {
+    background-color: rgb(185, 180, 166);
+    color: rgb(26, 26, 26);
+  }
+  .start-screen.dark {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .start-screen {
+   width: 100vw;
+    height: 75vh;
+   
+  }
+ .read-container {
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 50%;
+  width: 50%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 8px;
+ }

@@ -55,6 +55,15 @@ const FictionShelf = () => {
           <div className={styles["book-container"]}>
             <div className={`${styles.book} ${styles.sixteenth}`}></div>
           </div>
+          <div className={styles["book-container"]}>
+            <div className={`${styles.book} ${styles.eighteen}`}></div>
+          </div>
+           <div className={styles["book-container"]}>
+            <div className={`${styles.book} ${styles.nineteen}`}></div>
+          </div>
+           <div className={styles["book-container"]}>
+            <div className={`${styles.book} ${styles.twenty}`}></div>
+          </div>
         </div>
       </div>
     </Link>

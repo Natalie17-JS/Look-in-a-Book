@@ -5,25 +5,31 @@ import { useMutation } from "@apollo/client";
 import { CREATE_POST } from "@/app/GraphqlOnClient/mutations/postMutations";
 import { CreatePostFormData, Post } from "@/app/types/postTypes";
 import PostForm from "./CreatePostForm";
+import { useToken } from "@/app/hooks/useToken";
 
 const CreatePost =()=> {
-
-  const accessToken = localStorage.getItem("token");
+const {accesstoken, isLoading} = useToken()
   const [createPost, {loading, error}] = useMutation<Post>(CREATE_POST, {
     context: {
       headers: { 
-        Authorization: accessToken ? `bearer ${accessToken}` : ""
+        Authorization: accesstoken ? `bearer ${accesstoken}` : ""
       }
     },
+    
     onCompleted: (data) => {
       console.log("Post created:", data);
   },
+  
   })
 
   {error && <p className="error">Error: {error.message}</p>}
 
   const handleCreate = async (data: CreatePostFormData) =>{
     console.log("Submitting post data:", data);
+    if (isLoading || !accesstoken) {
+    console.warn("Token not ready, skipping mutation");
+    return;
+  }
     try {
       const newPost = await createPost({
         variables: {

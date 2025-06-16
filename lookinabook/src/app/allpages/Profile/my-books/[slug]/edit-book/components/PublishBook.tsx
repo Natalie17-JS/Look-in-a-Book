@@ -4,17 +4,16 @@ import { useMutation } from "@apollo/client";
 import toast from 'react-hot-toast';
 import { PUBLISH_BOOK } from "@/app/GraphqlOnClient/mutations/bookMutations";
 import { useBook } from "@/app/context/bookContext";
-
+import { useToken } from "@/app/hooks/useToken";
 
 export default function PublishBookButton() {
     const { currentBook } = useBook(); 
-
-    const accessToken = localStorage.getItem("token");
+  const {accesstoken} = useToken()
 
     const [publishBook, { loading, error }] = useMutation(PUBLISH_BOOK, {
         context: {
             headers: {
-              Authorization: accessToken ? `Bearer ${accessToken}` : "",
+              Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
             },
           },
         variables: { slug: currentBook?.slug }, // Берем slug из контекста

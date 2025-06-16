@@ -1,20 +1,21 @@
-"use client"
+/*"use client"
 
 import { useQuery } from "@apollo/client";
 import { GET_CURRENT_USER } from "../GraphqlOnClient/queries/userQueries";
+import { useToken } from "./useToken";
 
 export function useFetchUser() {
   // Токен теперь будем получать из localStorage или контекста
-  const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const { accesstoken } = useToken();
 
   const { data, loading, error, refetch } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: "network-only",
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "", // Отправляем токен в заголовках
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "", // Отправляем токен в заголовках
       },
     },
-    skip: !accessToken, // Если нет токена, запрос не выполняется
+    skip: !accesstoken, // Если нет токена, запрос не выполняется
     onCompleted: (data) => {
       console.log("GraphQL response:", data);
     },
@@ -24,4 +25,4 @@ export function useFetchUser() {
   });
 
   return { user: data?.getCurrentUser || null, loading, error, refetch };
-}
+}*/

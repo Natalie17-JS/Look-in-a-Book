@@ -9,18 +9,19 @@ import { useTheme } from "@/app/context/themeContext"
 import { Post, PostsDraftsData } from "@/app/types/postTypes"
 import { Carousel3slides } from "../../my-posts/components/Carousel"
 import styles from "../../my-posts/components/AuthorPosts.module.css"
+import { useToken } from "@/app/hooks/useToken"
 
 const PostsDrafts = () => {
     const { user } = useUser();
     const { theme } = useTheme();
-    const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
+const {accesstoken, isLoading} = useToken()
     const {loading, error, data} = useQuery<PostsDraftsData>(GET_POSTS_DRAFTS, {
         context: {
             headers: {
-                Authorization: accessToken ? `bearer ${accessToken}` : "",
+                Authorization: accesstoken ? `bearer ${accesstoken}` : "",
             }
-        }
+        },
+        skip: !accesstoken || isLoading,
     })
   const PostsDrafts: Post[] = data?.getPostDrafts || [];
 

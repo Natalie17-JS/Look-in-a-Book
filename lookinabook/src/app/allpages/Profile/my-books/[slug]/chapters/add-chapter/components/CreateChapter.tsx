@@ -10,6 +10,7 @@ import Link from "next/link";
 import styles from "./CreateChapter.module.css"
 import { useTheme } from "@/app/context/themeContext";
 import ChapterForm from "./ChapterForm";
+import { useToken } from "@/app/hooks/useToken";
 
 const CreateChapter = () => {
     const {theme} = useTheme()
@@ -18,7 +19,7 @@ const CreateChapter = () => {
     if (!slug) {
         return <p>Book not found</p>;
     }
-
+const {accesstoken} = useToken()
     /*const themeInput =
           theme === "dark"
             ? styles.dark
@@ -33,12 +34,12 @@ const CreateChapter = () => {
             publishStatus: PStatus.DRAFT
         }
     });*/
-    const accessToken = localStorage.getItem("token");
+    
 
     const [createChapterWithBookSlug, { loading, error }] = useMutation<Chapter>(CREATE_CHAPTER_WITH_BOOKSLUG, {
         context: {
             headers: {
-              Authorization: accessToken ? `Bearer ${accessToken}` : "", 
+              Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
             },
           },
         onCompleted: (data) => {

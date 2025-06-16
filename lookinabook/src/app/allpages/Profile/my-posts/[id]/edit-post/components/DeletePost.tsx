@@ -10,6 +10,7 @@ import { useLoadPostById } from "@/app/hooks/useFetchPost"
 import Image from "next/image"
 import basket from "@/app/images/trash.svg"
 import styles from "./Delete.module.css"
+import {useToken} from "@/app/hooks/useToken"
 
 type Props = {
   onDeleted?: () => void; 
@@ -17,7 +18,7 @@ type Props = {
 
 export default function DeletePostButton({ onDeleted }: Props) {
     const params = useParams();
-      
+      const {accesstoken} = useToken()
       const [errorMessage, setErrorMessage] = useState("");
      const [showConfirm, setShowConfirm] = useState(false);
       const router = useRouter();
@@ -31,12 +32,11 @@ export default function DeletePostButton({ onDeleted }: Props) {
 
        const { currentPost, clearCurrentPost } = usePostStore()
           //const { loading: loadingPost, error: errorPost } = useLoadPostById(id)
-           const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
            const[deletePost, { loading, error }] = useMutation(DELETE_POST, {
             context: {
                 headers: {
-                    Authorization: accessToken ? `Bearer ${accessToken}` : ""
+                    Authorization: accesstoken ? `Bearer ${accesstoken}` : ""
                 }
             },
              onCompleted: () => {

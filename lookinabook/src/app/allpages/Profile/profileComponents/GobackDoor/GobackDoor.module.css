@@ -1,14 +1,14 @@
 .gobackdoor {
   grid-area: gobackdoor;
-  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  border: 1px solid orange;
+/*  border: 1px solid orange;*/
 }
 .goback-door-image {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 500px;
 }
 /*.door {
   width: 100%;

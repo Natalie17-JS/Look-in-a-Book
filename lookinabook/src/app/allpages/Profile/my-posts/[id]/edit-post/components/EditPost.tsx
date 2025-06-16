@@ -10,9 +10,11 @@ import { useParams, useRouter } from "next/navigation"
 import { GET_POST_BY_ID } from "@/app/GraphqlOnClient/queries/postQueries"
 import { usePostStore } from "@/app/zustand/PostStore"
 import { useLoadPostById } from "@/app/hooks/useFetchPost"
+import {useToken} from "@/app/hooks/useToken"
 
 export default function EditPost() {
   const router = useRouter();
+  const {accesstoken} = useToken()
   const params = useParams()
   const id =
     typeof params.id === "string"
@@ -24,12 +26,12 @@ export default function EditPost() {
 
     const { currentPost, setCurrentPost } = usePostStore()
     const { loading: loadingPost, error: errorPost } = useLoadPostById(id)
-    const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+   
 
     const [editPost, {loading, error}] = useMutation<Post>(EDIT_POST, {
         context: {
             headers: {
-                Authorization: accessToken ? `Bearer ${accessToken}` : ""
+                Authorization: accesstoken ? `Bearer ${accesstoken}` : ""
             }
         },
         onCompleted: (data) => {

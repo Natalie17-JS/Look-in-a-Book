@@ -7,12 +7,14 @@ import { useBook } from "@/app/context/bookContext";
 import { useRouter, useParams } from "next/navigation";
 import styles from "@/app/allpages/profile/new-book/components/BookForm.module.css";
 import ConfirmModal from "@/app/confirm/Confirm";
+import { useToken } from "@/app/hooks/useToken";
 
 type Props = {
   onDeleted?: () => void; 
 };
 
 const DeleteBookButton = ({ onDeleted }: Props) => {
+  const {accesstoken} = useToken()
   const params = useParams();
   const { currentBook, setCurrentBook } = useBook();
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,13 +27,12 @@ const DeleteBookButton = ({ onDeleted }: Props) => {
   console.log("Book in context:", currentBook);
   console.log("Looking for book with slug:", bookSlug);
 
-  const accessToken = localStorage.getItem("token");
 
   // Мутация для удаления книги
   const [deleteBook] = useMutation(DELETE_BOOK_BY_SLUG, {
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
       },
     },
     onCompleted: () => {

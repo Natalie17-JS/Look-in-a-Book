@@ -9,22 +9,25 @@ import Image from 'next/image';
 import letterimage from "@/app/images/letter.svg"
 import styles from "./Letters.module.css"
 import Link from 'next/link';
+import {useToken} from "@/app/hooks/useToken"
 
 const UserLetters = () => {
-   const accessToken = localStorage.getItem("token");
+   const {accesstoken, isLoading} = useToken()
   const { data: lettersData, loading: loadingMessages } = useQuery<{ getUserLetters: Message[] }>(GET_USER_LETTERS, {
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "", 
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
       },
     },
+    skip: !accesstoken || isLoading,
   });
   const { data: unreadLettersData, loading: loadingUnread } = useQuery<{ countUnreadLetters: number }>(UNREAD_LETTERS_COUNT, {
     context: {
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "", 
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
       },
     },
+    skip: !accesstoken || isLoading,
   });
 
   if (loadingMessages || loadingUnread) return <p>Loading letters...</p>;

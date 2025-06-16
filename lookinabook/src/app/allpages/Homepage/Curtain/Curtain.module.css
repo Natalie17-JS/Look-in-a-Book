@@ -1,0 +1,9 @@
+.curtain {
+    grid-area: curtain;
+    height: 100%;
+    width: auto;
+}
+.curtain-image{
+     height: 100%;
+    width: auto;
+}

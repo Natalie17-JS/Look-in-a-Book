@@ -1,0 +1,8 @@
+.house {
+    height: 75vh;
+   /* border: 1px solid gray;*/
+}
+.house-image{
+    width: auto;
+    height: 100%;
+}

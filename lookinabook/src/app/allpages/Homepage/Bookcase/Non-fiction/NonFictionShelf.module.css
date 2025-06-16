@@ -1,0 +1,137 @@
+.non-fiction-shelf {
+  display: flex;
+  flex-direction: column;
+}
+
+.shelf {
+  display: flex;
+  /*padding-top: 10px;*/
+  align-items: flex-end;
+  border-bottom: 20px solid rgb(113, 75, 25);
+  /*margin-block: 20px;*/
+}
+
+.book-container {
+  transition: transform 0.3s ease-in-out;
+ /* border: 1px solid green;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  overflow: visible;
+}
+
+.book {
+  border: 1px rgb(52, 52, 52) solid;
+  width: 20px;
+  /*background-color: #afa063;*/
+  background: linear-gradient(to right, #5a3d2b, #d2a679, #5a3d2b);
+  border-radius: 2px; /* Небольшое округление для более реалистичного вида */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Тень для объема */
+}
+
+.first {
+  height: 118px;
+}
+.book-container:hover {
+  transform: translateY(-15px);
+}
+
+.second {
+  height: 100px;
+}
+
+.third {
+  height: 115px;
+}
+
+.forth {
+  height: 120px;
+  transform: skew(5deg, -5deg);
+  /*margin-bottom: 0.2rem;*/
+}
+.fifth {
+  height: 105px;
+  transform: skew(8deg, -8deg);
+  /*margin-left: 0.3rem;*/
+  /*margin-bottom: 0.2rem;*/
+}
+.sixth {
+  height: 90px;
+  transform: skew(10deg, -10deg);
+  /*margin-left: 1rem;*/
+  width: 15px;
+ /* margin-bottom: 0.2rem;*/
+}
+.seventh {
+  height: 120px;
+  margin-left: 0.5rem;
+  width: 20px;
+}
+.eighth {
+  height: 120px;
+  width: 10px;
+}
+
+.ninth {
+  height: 130px;
+  width: 12px;
+}
+
+.tenth {
+  height: 110px;
+  width: 14px;
+}
+
+.eleventh {
+  height: 120px;
+  width: 25px;
+}
+.twelfth {
+  transform: skew(-3deg, 3deg);
+  height: 110px;
+  width: 25px;
+  /*margin-left: 0.6rem;*/
+ /* margin-bottom: 0.2rem;*/
+}
+.thirteenth {
+  transform: skew(-6deg, 6deg);
+  height: 120px;
+  width: 20px;
+  /*margin-left: 0.4rem;*/
+  /*margin-bottom: 0.2rem;*/
+}
+
+.fourteenth {
+  transform: skew(-8deg, 8deg);
+  height: 125px;
+  width: 18px;
+ /* margin-bottom: 0.2rem;*/
+}
+
+.fifteenth {
+  transform: skew(-10deg, 10deg);
+  height: 120px;
+  width: 15px;
+  /*margin-bottom: 0.2rem;*/
+  /*margin-left: 0.5rem;*/
+}
+
+.sixteenth {
+  height: 140px;
+  width: 15px;
+ margin-left: 0.5rem;
+}
+.eighteen {
+   height: 130px;
+  width: 20px;
+}
+.nineteen {
+   height: 125px;
+  width: 25px;
+}
+.twenty {
+   height: 110px;
+  width: 25px;
+}
+

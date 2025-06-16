@@ -7,6 +7,7 @@ import { CREATE_MESSAGE } from '@/app/GraphqlOnClient/mutations/messageMutations
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { useUser } from '@/app/context/authContext';
+import { useToken } from '@/app/hooks/useToken';
 
 export default function NewLetter() {
   const {user} = useUser()
@@ -14,15 +15,16 @@ export default function NewLetter() {
   const recipientId = Number(params.id); 
   const router = useRouter();
   console.log('Recipient ID:', recipientId);
+  const {accesstoken} = useToken()
 
   const [text, setText] = useState('');
   const [type] = useState<'LETTER'>('LETTER'); // по умолчанию LETTER, можно сделать селектор
 
-   const accessToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+   
   const [createMessage, { loading, error }] = useMutation(CREATE_MESSAGE, {
     context: {
       headers: {
-        Authorization: accessToken ? `bearer ${accessToken}` : "",
+        Authorization: accesstoken ? `bearer ${accesstoken}` : "",
       },
     },
   });

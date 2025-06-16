@@ -5,6 +5,7 @@
   justify-content: center;
   height: 100%;
   width: 100%;
+  /*border: 1px solid orange;;*/
 }
 
 /*--------------------------------Window-----------------------------------*/
@@ -12,8 +13,10 @@
   position: relative;
   display: flex;
   width: 100%;
-  height: 100%;
+ height: 25rem;
   justify-content: center;
+  align-items: center;
+ /*border: 1px solid blue;*/
   /*margin-top: -250px;*/
 }
 
@@ -21,14 +24,17 @@
   position: absolute;
   top: 0%;
   left: 0;
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
+ /* border: 1px solid purple;*/
+  margin-left: -30px;
 }
 
 .image-in-windows {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
   position: absolute;
+  margin-left: -30px;
   top: 0;
   left: 0;
 }
@@ -42,14 +48,41 @@
   margin-top: 30px;
 }
 .switch-btn-container {
-  width: 30%;
+  width: 60%;
   height: auto;
   display: flex;
-  margin-top: -100px;
+  /*margin-top: -100px;*/
+  /*border: 1px solid green;*/
   /*margin-left: 100px;*/
+  position: absolute;
+  top: 5%;
+  
 }
 .switch-btn {
   background-color: transparent;
   outline: none;
   border: none;
+}
+
+/*--------------------curtain---------------*/
+.curtain-image {
+  height: auto;
+  width: 200px;
+}
+.curtain-container {
+ /* border: 1px solid red;*/
+  position: relative;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overcurtain-image{
+  width: 200px;
+  height: auto;
+  
+}
+.overcurtain-container {
+  position: absolute;
+  top:0;
 }

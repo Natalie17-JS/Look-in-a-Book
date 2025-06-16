@@ -1,16 +1,17 @@
 .bookcase {
   grid-area: bookcase;
   display: flex;
-  /*justify-content: flex-end;*/
-  align-items: flex-end;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
   height: 100%;
   width: 100%;
-  /*border: 1px solid yellow;*/
+ /* border: 1px solid yellow;*/
 }
 
 .books {
   border: 20px solid rgb(113, 75, 25);
-  height: 90%;
+  height: 75%;
   width: 90%;
   margin-bottom: 15px;
 }

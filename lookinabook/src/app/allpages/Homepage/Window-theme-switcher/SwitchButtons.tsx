@@ -1,4 +1,9 @@
+"use client"
+
 import Image from "next/image";
+import curtainlight from "@/app/images/curtain.svg"
+import darkcurtain from "@/app/images/curtain-night.svg"
+import overcurtain from "@/app/images/overcurtain.svg"
 import { useState, useEffect } from "react";
 import cloudsSwitcher from "@/app/images/clouds-switcher.svg";
 import sunSwitcher from "@/app/images/sun-switcher.svg";
@@ -36,7 +41,23 @@ const SwitchButtons: React.FC<SwitchButtonsProps> = ({ onSwitch }) => {
     }
   };
 
+    let curtainImage;
+  switch (theme) {
+    case "dark":
+      curtainImage = darkcurtain;
+      break;
+    case "gray":
+      curtainImage = curtainlight;
+      break;
+    default:
+      curtainImage = curtainlight;
+  }
+
   return (
+    <div className={styles["main-container"]}>
+      <div className={styles["curtain-container"]}>
+            <Image src={curtainImage} alt="curtain" className={styles["curtain-image"]}/>
+
     <div className={styles["switch-btn-container"]}>
       <button
         className={`${styles["switch-btn"]} ${
@@ -75,6 +96,12 @@ const SwitchButtons: React.FC<SwitchButtonsProps> = ({ onSwitch }) => {
           className={styles["switchbtn-image"]}
         />
       </button>
+    </div>
+
+     <div className={styles["overcurtain-container"]}>
+                <Image src={overcurtain} alt="overcurtain" className={styles["overcurtain-image"]}/>
+            </div>
+</div>
     </div>
   );
 };
