@@ -51,6 +51,8 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../server/prisma/prismaClient";
 import { CustomRequest } from "@/app/server/graphql/resolversTypes/UserResolversTypes";
 import schema from "@/app/server/graphql/schema";
+import { checkDatabaseConnection } from "../CheckDBConnection";
+import { log } from "console";
 
 // Уточняем тип для ApolloServer
 const apolloServer = new ApolloServer({
@@ -60,6 +62,13 @@ const apolloServer = new ApolloServer({
 const handler = startServerAndCreateNextHandler<CustomRequest>(apolloServer as any, {
   context: async (req ) => {
     const res = new NextResponse(); // Создаём новый объект ответа
+
+    const dbConnected = await checkDatabaseConnection();
+  
+    if (!dbConnected) {
+      throw new Error('⛔ Database connection error. Try again later');
+    }
+
     
     return {
       /*req: {

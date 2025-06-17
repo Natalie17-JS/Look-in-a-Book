@@ -8,6 +8,7 @@ import styles from "./SignInUpForm.module.css";
 import { useTheme } from "@/app/context/themeContext";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/authContext";
+import client from "@/app/apolloclient/client";
 
 export default function SignInForm() {
   const {
@@ -32,11 +33,13 @@ export default function SignInForm() {
   const onSubmit: SubmitHandler<SignInFormData> = async (formData) => {
     try {
       const { data } = await loginUser({ variables: formData });
-
+console.log(data)
       if (data?.loginUser?.accessToken) {
         const token = localStorage.setItem('token', data?.loginUser?.accessToken);
         setUser(data.loginUser.user);
+        // await client.resetStore(); 
         router.push("/allpages/profile");
+        
         console.log("User signed in:", data.loginUser) // После логина обновляем пользователя
       }
     } catch (err) {

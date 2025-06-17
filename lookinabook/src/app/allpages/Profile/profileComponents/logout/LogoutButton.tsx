@@ -5,13 +5,14 @@ import { LOGOUT_USER } from "@/app/GraphqlOnClient/mutations/userMutations";
 import { useUser } from "@/app/context/authContext";
 import { useRouter } from "next/navigation";
 import { useToken } from "@/app/hooks/useToken";
+import client from "@/app/apolloclient/client";
 
 interface LogoutButtonProps {
     className?: string; // Добавляем className как необязательный пропс
   }
 
 export default function LogoutButton({ className }: LogoutButtonProps) {
-  const { user, setUser } = useUser(); // Берем функцию выхода из контекста
+  const { user, setUser } = useUser(); 
   const router = useRouter();
 const {accesstoken} = useToken()
 //if (!user) return <p>You are not autenticated</p>
@@ -34,6 +35,7 @@ const {accesstoken} = useToken()
     try {
       // Если ты вызываешь мутацию для выхода, то она будет делать свои действия на сервере
       await logoutUser(); 
+     
 
       // Удаляем токены с клиентской стороны (например, из localStorage или cookies)
       localStorage.removeItem("token");  // Удаляем токен из localStorage

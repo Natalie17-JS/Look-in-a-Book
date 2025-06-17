@@ -354,6 +354,12 @@ const userResolvers: UserResolvers = {
             path: "/",
             maxAge: 0,  // Устанавливаем maxAge в 0, чтобы удалить токен
           });
+          res.cookies.set("refreshToken", "", {
+  httpOnly: true,
+  sameSite: "lax",
+  path: "/",
+  maxAge: 0, // Удаляем cookie
+});
         }
     
         return deletedUser;
@@ -368,6 +374,7 @@ const userResolvers: UserResolvers = {
     // Вход в систему
     async loginUser(_, { email, password }, { res }) {
       try {
+        console.log("Trying to login user with email:", email);
         // Проверить, существует ли пользователь с указанным email
         const user = await prisma.user.findUnique({
           where: { email },
@@ -411,6 +418,12 @@ const userResolvers: UserResolvers = {
       // secure: true, // Включать только на продакшн, если нужен https
       sameSite: "lax",
     });
+   /* res.cookies.set("refreshToken", refreshToken, {
+  httpOnly: true,
+  path: "/",
+  maxAge: 604800,
+  sameSite: "lax",
+});*/
 
     console.log("Refresh token set:", refreshToken);
 

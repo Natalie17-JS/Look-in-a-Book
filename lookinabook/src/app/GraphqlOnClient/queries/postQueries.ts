@@ -38,6 +38,7 @@ export const GET_AUTHOR_POSTS = gql`
             content
             publishStatus
             category
+            createdAt
             author {
                 id
                 username
@@ -82,6 +83,7 @@ export const GET_POST_BY_ID = gql`
         likesCount
         likedByCurrentUser
         commentsCount
+        createdAt
         author{
             id
             username
@@ -109,6 +111,7 @@ export const GET_AUTHOR_POST_BY_ID = gql`
         likesCount
         likedByCurrentUser
         commentsCount
+        createdAt
         author{
             id
             username
