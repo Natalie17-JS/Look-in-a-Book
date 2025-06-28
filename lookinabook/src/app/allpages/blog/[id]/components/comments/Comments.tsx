@@ -112,8 +112,8 @@ return (
   <div className={styles.comments} ref={containerRef} onScroll={handleScroll}>
     {comments
     .slice() // чтобы не мутировать оригинальный массив
-  //.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  .sort((a, b) => compareDesc(parseISO(a.createdAt), parseISO(b.createdAt)))
+  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  //.sort((a, b) => compareDesc(parseISO(a.createdAt), parseISO(b.createdAt)))
     .map((comment: Comment) => {
       const isCommentAuthor = user?.id === comment.author?.id;
       const isPostAuthor = user?.id === comment.post?.author?.id;
@@ -137,7 +137,8 @@ return (
               <p>
                 <strong><span className={styles["username-text"]}>{comment.author?.username}:</span></strong> {comment.content}
               </p>
-              <small><span className={styles.date}>{format(new Date(comment.createdAt), "dd.MM.yyyy HH:mm")}</span></small>
+              <small><span className={styles.date}>{new Date(comment.createdAt).toLocaleString()}</span></small>
+              {/* <small><span className={styles.date}>{format(new Date(comment.createdAt), "dd.MM.yyyy HH:mm")}</span></small> */}
             </>
           )}
 
@@ -220,7 +221,7 @@ return (
   )}
   : {reply.content}
                           </p>
-                          <small><span className={styles.date}>{format(new Date(reply.createdAt), "dd.MM.yyyy HH:mm")}</span></small>
+                          <small><span className={styles.date}>{new Date(comment.createdAt).toLocaleString()}</span></small>
                         </>
                       )}
 

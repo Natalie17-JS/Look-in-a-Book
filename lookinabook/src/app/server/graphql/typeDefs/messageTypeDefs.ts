@@ -10,6 +10,8 @@ type Message {
   isRead: Boolean!
   type: MessageType!
   sender: User
+  recipient: User
+  replies: [Message!]!
 }
 
 enum MessageType {
@@ -25,6 +27,7 @@ type Query {
   getMessageById(id: Int!): Message
   getUserMessages: [Message!]
   getUserLetters: [Message!]
+  getUserSentLetters: [Message!]
   countUnreadMessages: Int!
   countUnreadLetters: Int!
 }

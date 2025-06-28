@@ -6,7 +6,7 @@
     justify-content: space-around;
     align-items: center;
     margin: 0 auto;
-    /*border: 1px solid green;*/
+    border: 1px solid green;
 }
 .content {
     width: 100%;

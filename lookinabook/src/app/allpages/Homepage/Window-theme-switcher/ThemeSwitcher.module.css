@@ -87,7 +87,7 @@
   top:0;
 }
 /*--------------media queries-------------*/
-@media (max-width: 1000px){
+@media (max-width: 768px){
 .windows-container {
   position: relative;
   display: flex;
@@ -99,8 +99,5 @@
  /*border: 1px solid blue;*/
   /*margin-top: -250px;*/
 }
-.curtain-container {
- 
-  width: 60%;
-}
+
 }

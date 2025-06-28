@@ -80,6 +80,35 @@ Query:{
       }
 },
 
+getUserSentLetters: async (_, __, { req, res, prisma }) => {
+  try {
+    const user = await getUserFromRequest(req, res);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
+
+    const sentLetters = await prisma.message.findMany({
+      where: {
+        type: 'LETTER',
+        senderId: user.id,
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include: {
+        recipient: true,  // Важно — recipient!
+        replies: true
+      }
+    });
+
+    return sentLetters;
+  } catch (error) {
+    console.error("Error fetching sent letters:", error);
+    throw new Error("Failed to fetch sent letters.");
+  }
+},
+
+
     countUnreadMessages: async (_,__, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
   if (!user) throw new Error("Not authenticated");

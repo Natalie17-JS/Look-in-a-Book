@@ -41,3 +41,21 @@ mutation CreateMessage($text: String!, $recipientId: Int!, $type: MessageType!) 
   }
 }
   `
+
+export const REPLY_TO_LETTER = gql`
+mutation ReplyToLetter($text: String!, $replyToId: Int!) {
+  replyToLetter(text: $text, replyToId: $replyToId) {
+    id
+    text
+    createdAt
+    sender {
+      id
+      username
+    }
+    recipient {
+      id
+      username
+    }
+  }
+}
+`

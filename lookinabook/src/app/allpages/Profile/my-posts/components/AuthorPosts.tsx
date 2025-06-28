@@ -29,7 +29,14 @@ export default function AuthorPosts() {
   if (error) return <p>Error: {error.message}</p>;
 
   if (AuthorPosts.length === 0) {
-    return <p>No posts found</p>;
+    return (
+      <>
+    <p>No posts found</p>
+    <Link href="/allpages/profile/my-posts/new-post">
+      <button className={styles["create-post-btn"]}>New +</button>
+      </Link>
+      </>
+       );
   }
 
   // Если постов 5 или меньше — не показываем стрелки и не включаем карусель

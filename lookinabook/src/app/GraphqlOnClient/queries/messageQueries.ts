@@ -13,6 +13,10 @@ query GetMessageById($id: Int!) {
       username
     }
     recipientId
+    replies {
+      id
+      text
+    }
   }
 }
 
@@ -28,6 +32,10 @@ query GetUserMessages {
     createdAt
     senderId
     recipientId
+    replies {
+      id
+      text
+    }
   }
 }
 
@@ -44,6 +52,10 @@ query GetUserLetters {
     sender {
       id
       username
+    }
+      replies {
+      id
+      text
     }
   }
 }

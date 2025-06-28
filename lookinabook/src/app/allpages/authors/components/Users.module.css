@@ -12,8 +12,8 @@
     display: flex;
     /*justify-content: center;*/
     align-items: center;
-    border-block: 2px solid rgb(107, 95, 69);
-    border-right:  2px solid rgb(107, 95, 69);
+    border: 2px solid rgb(107, 95, 69);
+    /*border-right:  2px solid rgb(107, 95, 69);*/
     height: 50%;
     width: calc(100%/3);
     justify-content: center;

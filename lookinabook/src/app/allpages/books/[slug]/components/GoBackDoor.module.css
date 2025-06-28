@@ -1,7 +1,7 @@
 .goback-door {
     width: auto;
     height: 75vh;
-    border: 1px solid orangered;
+   /* border: 1px solid orangered;*/
     display: flex;
     justify-content: flex-end;
 }

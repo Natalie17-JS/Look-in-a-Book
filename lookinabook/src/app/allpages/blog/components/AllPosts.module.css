@@ -1,12 +1,15 @@
 .posts-filter-container {
     width: 80vw;
     height: 100vh;
-    border: 2px solid rgb(153, 88, 27);
+   /* border: 2px solid rgb(153, 88, 27);*/
 }
 .filter-container {
     width: 100%;
     height: 200px;
-    border: 15px solid brown;
+    border: 15px solid rgb(153, 88, 27);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 .post-list {
     display: flex;

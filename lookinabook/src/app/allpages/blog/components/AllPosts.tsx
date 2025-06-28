@@ -87,7 +87,7 @@ return (
     </div>
 
     <div className={styles.posts}>
-      <h1 className={styles["welcome-text"]}>Welcome to all posts!</h1>
+      <h1 className={styles["welcome-text"]}>Welcome to posts!</h1>
 
       <div className={styles.carouselContainer}>
       {canScrollLeft && (
