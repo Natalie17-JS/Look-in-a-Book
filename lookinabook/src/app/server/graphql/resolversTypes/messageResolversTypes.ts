@@ -30,7 +30,8 @@ export type MessageResolversTypes = {
      Query: {
         getMessageById: (parent: unknown, args: { id: number }, context: IContext) => Promise<Message | null>;
         getUserMessages: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
-        getUserLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
+        getUserReadLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
+        getUserUnreadLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
         getUserSentLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
         countUnreadMessages: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;
         countUnreadLetters: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;

@@ -26,7 +26,8 @@ type DeleteResponse {
 type Query {
   getMessageById(id: Int!): Message
   getUserMessages: [Message!]
-  getUserLetters: [Message!]
+  getUserReadLetters: [Message!]
+  getUserUnreadLetters: [Message!]
   getUserSentLetters: [Message!]
   countUnreadMessages: Int!
   countUnreadLetters: Int!

@@ -16,6 +16,7 @@ Query:{
           where: { id } , 
           include: {
       sender: true,
+      recipient: true,
       replies: true
           }
     });
@@ -54,16 +55,17 @@ Query:{
       }
     },
 
-    getUserLetters: async (_,__, { req, res, prisma }) => {
+    getUserReadLetters: async (_,__, { req, res, prisma }) => {
    try {
         const user = await getUserFromRequest(req, res);
                 if (!user) {
                   throw new Error("Not authenticated");
                 }
-        const letters = await prisma.message.findMany({
+        const readLetters = await prisma.message.findMany({
           where: {
       type: 'LETTER',
       recipientId: user.id,
+       isRead: true,
     },
     orderBy: {
       createdAt: 'desc'
@@ -73,7 +75,34 @@ Query:{
       replies: true
     }
         });
-        return letters;
+        return readLetters;
+      } catch (error) {
+        console.error("Error fetching user messages:", error);
+        throw new Error("Failed to fetch user messages.");
+      }
+},
+
+   getUserUnreadLetters: async (_,__, { req, res, prisma }) => {
+   try {
+        const user = await getUserFromRequest(req, res);
+                if (!user) {
+                  throw new Error("Not authenticated");
+                }
+        const readLetters = await prisma.message.findMany({
+          where: {
+      type: 'LETTER',
+      recipientId: user.id,
+       isRead: false,
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    include: {
+      sender: true,
+      replies: true
+    }
+        });
+        return readLetters;
       } catch (error) {
         console.error("Error fetching user messages:", error);
         throw new Error("Failed to fetch user messages.");

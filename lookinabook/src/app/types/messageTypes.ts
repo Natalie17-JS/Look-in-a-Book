@@ -15,6 +15,7 @@ senderId: number;
 recipientId: number;
 createdAt: Date;
 sender: User;
+recipient: User;
 replies: Reply[];
 }
 

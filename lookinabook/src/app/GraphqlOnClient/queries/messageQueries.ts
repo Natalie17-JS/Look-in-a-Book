@@ -13,6 +13,10 @@ query GetMessageById($id: Int!) {
       username
     }
     recipientId
+    recipient {
+      id
+      username
+    }
     replies {
       id
       text
@@ -41,15 +45,57 @@ query GetUserMessages {
 
 `
 
-export const GET_USER_LETTERS = gql`
-query GetUserLetters {
-  getUserLetters {
+export const GET_USER_READ_LETTERS = gql`
+query GetUserReadLetters {
+  getUserReadLetters {
     id
     text
     type
     isRead
     createdAt
     sender {
+      id
+      username
+    }
+      replies {
+      id
+      text
+    }
+  }
+}
+
+`
+
+export const GET_USER_UNREAD_LETTERS = gql`
+query GetUserUnreadLetters {
+  getUserUnreadLetters {
+    id
+    text
+    type
+    isRead
+    createdAt
+    sender {
+      id
+      username
+    }
+      replies {
+      id
+      text
+    }
+  }
+}
+
+`
+
+export const GET_USER_SENT_LETTERS = gql`
+query GetUserSentLetters {
+  getUserSentLetters {
+    id
+    text
+    type
+    isRead
+    createdAt
+    recipient {
       id
       username
     }
