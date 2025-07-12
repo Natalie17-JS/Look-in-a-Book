@@ -1,4 +1,4 @@
-import { Role, User } from "@prisma/client";
+import { Role, Subscription, User } from "@prisma/client";
 import { GraphQLScalarType, Kind, ValueNode } from "graphql";
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "../../prisma/prismaClient";
@@ -74,6 +74,10 @@ export type UserResolvers = {
   Query: {
     getUser: (parent: unknown, args: { id: number }) => Promise<User | null>;
     getUsers: () => Promise<User[]>;
+    getUserFollowers: (parent: unknown, args: { id: number })=> Promise<User[]>;
+    getMyFollowers: (parent: unknown, args: unknown, context: IContext)=> Promise<User[]>;
+    getUserFollowing: (parent: unknown, args: { id: number }) => Promise<User[]>;
+    getMyFollowing: (parent: unknown, args: unknown, context: IContext) => Promise<User[]>;
     getCurrentUser: (
       parent: unknown,
       args: unknown,
@@ -121,7 +125,16 @@ export type UserResolvers = {
       args: unknown,
       context: IContext
     ) => Promise<boolean>;
-    
+    subscribeToUser: (
+      parent: unknown,
+      args: {userId: number},
+      context: IContext
+    ) => Promise<Subscription>;
+    unsubscribeFromUser: (
+      parent: unknown,
+      args: {userId: number},
+      context: IContext
+    ) => Promise<{message: string}>;
   };
   DateTime: GraphQLScalarType;
 };

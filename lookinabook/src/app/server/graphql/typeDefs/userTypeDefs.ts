@@ -43,17 +43,31 @@ enum Role {
   ADMIN
 }
 
+type Subscription {
+  id: Int!
+  subscriberId: Int!
+  subscribedToId: Int!
+  createdAt: DateTime!
+}
+
 type LoginResponse {
   accessToken: String!
   refreshToken: String!
   user: User!
 }
 
+type UnsubscribeResult {
+  message: String!
+}
+
 type Query {
   getUser(id: Int!): User 
   getUsers: [User!]! 
   getCurrentUser: User 
-
+  getUserFollowers(id: Int!): [User!]!
+  getMyFollowers: [User!]!
+  getUserFollowing(id: Int!): [User!]!
+  getMyFollowing: [User!]!
 }
 
 type Mutation {
@@ -88,6 +102,9 @@ type Mutation {
   deleteUser(id: Int!): User! 
 
   logoutUser: Boolean! 
+
+  subscribeToUser(userId: Int!): Subscription!
+  unsubscribeFromUser(userId: Int!): UnsubscribeResult!
 }
 `;
 export default userTypeDefs;

@@ -30,11 +30,28 @@ export default function Notebook() {
         className={styles["notebook-image"]}
       />
 
-      <div className={styles.buttons}>
+      <div className={styles["buttons-container"]}>
+
+        <div className={styles.buttons}>
+
+        <div className={styles["buttons-left"]}>
       <LogoutButton className={styles["signout-btn"]} />
         <Link href="/allpages/profile/edit-profile">
           <button className={styles["settings-btn"]}>Edit profile</button>
         </Link>
+        </div>
+
+ <div className={styles["buttons-right"]}>
+       <Link href="/allpages/profile/followers">
+          <button className={styles["settings-btn"]}>Followers</button>
+        </Link>
+        <Link href="/allpages/profile/following">
+          <button className={styles["settings-btn"]}>Following</button>
+        </Link>
+        </div> 
+
+        </div>       
+
       </div>
     </div>
   );

@@ -135,9 +135,87 @@ const userResolvers: UserResolvers = {
           console.error("Error fetching current user:", error);
           throw new Error("Failed to fetch current user");
         }
+      },
+
+      async getUserFollowers(_, {id}) {
+        const user = await prisma.user.findUnique({
+          where: {id},
+          include: {
+            subscriptionsAsSubscribedTo: {
+              include: {
+                subscriber: true
+              }
+            }
+          }
+        })
+        if (!user) {
+          throw new Error("User not found")
+        }
+
+         return user.subscriptionsAsSubscribedTo.map(sub => sub.subscriber);
+      },
+
+      async getMyFollowers(_, __, { req, res, prisma }){
+  const currentUser = await getUserFromRequest(req, res);
+  if (!currentUser) {
+    throw new Error("Not authenticated");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: currentUser.id },
+    include: {
+      subscriptionsAsSubscribedTo: {
+        include: {
+          subscriber: true
+        }
       }
-    
-    
+    }
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.subscriptionsAsSubscribedTo.map(sub => sub.subscriber);
+},
+
+async getUserFollowing(_, {id}) {
+  const user = await prisma.user.findUnique({
+    where: {id},
+    include: {
+      subscriptionsAsSubscriber: {
+        include: {
+          subscribedTo: true
+        }
+      }
+    }
+  })
+  if (!user) {
+    throw new Error("User not found")
+  }
+  return user.subscriptionsAsSubscriber.map(sub => sub.subscribedTo);
+},
+
+async getMyFollowing(_, __, {req, res}) {
+   const currentUser = await getUserFromRequest(req, res);
+  if (!currentUser) {
+    throw new Error("Not authenticated");
+  }
+const user = await prisma.user.findUnique({
+    where: { id: currentUser.id },
+    include: {
+      subscriptionsAsSubscriber: {
+        include: {
+          subscribedTo: true
+        }
+      }
+    }
+  });
+ if (!user) {
+    throw new Error("User not found")
+  }
+  return user.subscriptionsAsSubscriber.map(sub => sub.subscribedTo);
+} 
   },
 
   Mutation: {
@@ -481,9 +559,77 @@ const userResolvers: UserResolvers = {
         console.error("Error during logout:", error);
         throw new Error("Failed to logout");
       }
+    },
+
+    async subscribeToUser(_, { userId }, { req, res, prisma }) {
+  try {
+    const currentUser = await getUserFromRequest(req, res);
+    if (!currentUser) throw new Error("Not authenticated");
+
+    if (currentUser.id === userId) {
+      throw new Error("You cannot subscribe to yourself.");
     }
+
+    const targetUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!targetUser) {
+      throw new Error("User you want to subscribe to doesn't exist");
+    }
+
+    const existingSubscription = await prisma.subscription.findUnique({
+      where: {
+        subscriberId_subscribedToId: {
+          subscriberId: currentUser.id,
+          subscribedToId: userId,
+        },
+      },
+    });
+
+    if (existingSubscription) {
+      throw new Error("Already subscribed to this user.");
+    }
+
+    const subscription = await prisma.subscription.create({
+      data: {
+        subscriber: { connect: { id: currentUser.id } },
+        subscribedTo: { connect: { id: userId } },
+      },
+    });
+
+    return subscription;
+
+  } catch (error) {
+    console.error("Error in subscribeToUser:", error);
+    throw new Error("Failed to subscribe to user.");
   }
-    
+},
+
+
+ async unsubscribeFromUser(_, { userId }, { req, res, prisma }) {
+  try {
+    const currentUser = await getUserFromRequest(req, res);
+    if (!currentUser) throw new Error("Not authenticated");
+
+    await prisma.subscription.delete({
+      where: {
+        subscriberId_subscribedToId: {
+          subscriberId: currentUser.id,
+          subscribedToId: userId,
+        },
+      },
+    });
+
+    return { message: "You successfully unsubscribed from this user" };
+
+  } catch (error) {
+    console.error("Error in unsubscribeFromUser:", error);
+    throw new Error("Failed to unsubscribe from user.");
+  }
+},
+
+} 
 };
 
 export default userResolvers;
