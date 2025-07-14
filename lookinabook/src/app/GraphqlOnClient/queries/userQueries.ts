@@ -101,3 +101,13 @@ query GetMyFollowing{
   }
 }
 `
+export const GET_FOLLOWERS_COUNT = gql`
+  query GetFollowersCount($userId: Int!) {
+    getFollowersCount(userId: $userId)
+  }
+`;
+export const GET_FOLLOWING_COUNT = gql`
+  query GetFollowingCount($userId: Int!) {
+    getFollowingCount(userId: $userId)
+  }
+`;

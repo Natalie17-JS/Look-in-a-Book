@@ -55,6 +55,21 @@ const userResolvers: UserResolvers = {
       }
     },
 
+    getFollowersCount: async (_, { userId }) => {
+  const count = await prisma.subscription.count({
+    where: { subscribedToId: userId },
+  });
+  return count;
+},
+
+    getFollowingCount: async (_, { userId }) => {
+  const count = await prisma.subscription.count({
+    where: { subscriberId: userId },
+  });
+  return count;
+},
+
+
 
     
 

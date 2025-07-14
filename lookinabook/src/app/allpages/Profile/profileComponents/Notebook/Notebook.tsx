@@ -7,9 +7,23 @@ import { useTheme } from "@/app/context/themeContext";
 import styles from "./Notebook.module.css";
 import Link from "next/link";
 import LogoutButton from "../Logout/LogoutButton";
+import { GET_FOLLOWERS_COUNT, GET_FOLLOWING_COUNT } from "@/app/GraphqlOnClient/queries/userQueries";
+import { useQuery } from "@apollo/client";
+import { useUser } from "@/app/context/authContext";
 
 export default function Notebook() {
   const { theme } = useTheme();
+  const {user} = useUser()
+
+    const { data: followersCountData, loading: followersLoading, error: followersError } = useQuery(GET_FOLLOWERS_COUNT, {
+    variables: { userId: user?.id },
+    skip: !user?.id, // пропускаем, пока user не получен
+  });
+
+  const { data: followingCountData, loading: followingLoading, error: followingError } = useQuery(GET_FOLLOWING_COUNT, {
+    variables: { userId: user?.id },
+    skip: !user?.id, // пропускаем, пока user не получен
+  });
 
   let notebookImage;
   switch (theme) {
@@ -22,6 +36,12 @@ export default function Notebook() {
     default:
       notebookImage = notebookday;
   }
+
+  if (followersLoading) return <p>Loading followers count...</p>;
+  if (followersError) return <p>Error: {followersError.message}</p>;
+   if (followingLoading) return <p>Loading following count...</p>;
+  if (followingError) return <p>Error: {followingError.message}</p>;
+
   return (
     <div className={styles.notebook}>
       <Image
@@ -42,11 +62,15 @@ export default function Notebook() {
         </div>
 
  <div className={styles["buttons-right"]}>
-       <Link href="/allpages/profile/followers">
-          <button className={styles["settings-btn"]}>Followers</button>
+       <Link href="/allpages/profile/my-followers">
+          <button className={styles["settings-btn"]}>
+            Followers ({followersCountData?.getFollowersCount ?? 0})
+          </button>
         </Link>
-        <Link href="/allpages/profile/following">
-          <button className={styles["settings-btn"]}>Following</button>
+        <Link href="/allpages/profile/my-following">
+          <button className={styles["settings-btn"]}>
+            Following ({followingCountData?.getFollowersCount ?? 0})
+            </button>
         </Link>
         </div> 
 

@@ -78,6 +78,8 @@ export type UserResolvers = {
     getMyFollowers: (parent: unknown, args: unknown, context: IContext)=> Promise<User[]>;
     getUserFollowing: (parent: unknown, args: { id: number }) => Promise<User[]>;
     getMyFollowing: (parent: unknown, args: unknown, context: IContext) => Promise<User[]>;
+    getFollowersCount: (parent: unknown, args: { userId: number }) => Promise<number>;
+    getFollowingCount: (parent: unknown, args: { userId: number }) => Promise<number>;
     getCurrentUser: (
       parent: unknown,
       args: unknown,

@@ -68,6 +68,8 @@ type Query {
   getMyFollowers: [User!]!
   getUserFollowing(id: Int!): [User!]!
   getMyFollowing: [User!]!
+  getFollowersCount(userId: Int!): Int!
+  getFollowingCount(userId: Int!): Int!
 }
 
 type Mutation {
