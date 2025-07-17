@@ -611,6 +611,10 @@ const user = await prisma.user.findUnique({
         subscriber: { connect: { id: currentUser.id } },
         subscribedTo: { connect: { id: userId } },
       },
+      include: {
+        subscriber: true,
+        subscribedTo: true,
+  },
     });
 
     return subscription;
@@ -643,8 +647,7 @@ const user = await prisma.user.findUnique({
     throw new Error("Failed to unsubscribe from user.");
   }
 },
-
-} 
+  }
 };
 
 export default userResolvers;

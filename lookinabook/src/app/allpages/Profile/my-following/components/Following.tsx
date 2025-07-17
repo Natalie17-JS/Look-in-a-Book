@@ -31,8 +31,8 @@ const [unsubscribeFromUser, {loading: unsubscribeLoading}] = useMutation(UNSUBSC
 })
 
 useEffect(() => {
-  if (myFollowing?.getMyFollowers) {
-    setFollowing(myFollowing.getMyFollowers);
+  if (myFollowing?.getMyFollowing) {
+    setFollowing(myFollowing.getMyFollowing);
   }
 }, [myFollowing]);
 
@@ -45,7 +45,7 @@ const handleUnsubscribe = async (userId: number) => {
     }
 }
 
-if (followingLoading) return <p>Loading followers...</p>;
+if (followingLoading) return <p>Loading followings...</p>;
 
 return (
 <div>
@@ -53,11 +53,11 @@ return (
       {following.length === 0 && <p>You follow no one.</p>}
 
       <ul>
-        {following.map(following => (
-          <li key={following.id}>
-            {following.username}
+        {following.map(user => (
+          <li key={`${user.username}--${user.id}`}>
+            {user.username}
             <button
-              onClick={() => handleUnsubscribe(following.id)}
+              onClick={() => handleUnsubscribe(user.id)}
               disabled={unsubscribeLoading}
             >
               {unsubscribeLoading ? "Unsubscribing..." : "Unsubscribe"}

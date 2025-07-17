@@ -47,6 +47,8 @@ type Subscription {
   id: Int!
   subscriberId: Int!
   subscribedToId: Int!
+  subscriber: User!          
+  subscribedTo: User!         
   createdAt: DateTime!
 }
 

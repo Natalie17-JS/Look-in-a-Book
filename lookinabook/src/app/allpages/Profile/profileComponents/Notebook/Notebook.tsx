@@ -69,7 +69,7 @@ export default function Notebook() {
         </Link>
         <Link href="/allpages/profile/my-following">
           <button className={styles["settings-btn"]}>
-            Following ({followingCountData?.getFollowersCount ?? 0})
+            Following ({followingCountData?.getFollowingCount ?? 0})
             </button>
         </Link>
         </div> 
