@@ -13,6 +13,7 @@ export default function MyFollowersList() {
 const {user} = useUser()
 const {accesstoken} = useToken()
 const[followers, setFollowers] = useState<User[]>([])
+const [followings, setFollowings] = useState<User[]>([]);
 
 const {data: myFollowers, loading: followersLoading} = useQuery(GET_MY_FOLLOWERS, {
     context: {
@@ -31,7 +32,7 @@ const [subscribeToUser, {loading: subscribeLoading}] = useMutation(SUBSCRIBE_TO_
     }
   })
 
-  const { data: myFollowingsData, loading: followingsLoading } = useQuery(GET_MY_FOLLOWING, {
+  const { data: myFollowingsData, loading: followingsLoading, refetch: refetchFollowings } = useQuery(GET_MY_FOLLOWING, {
   context: {
     headers: {
       Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
@@ -45,6 +46,9 @@ const [subscribeToUser, {loading: subscribeLoading}] = useMutation(SUBSCRIBE_TO_
     try{
       await subscribeToUser({variables: {userId}})
       console.log("You subscribed to user with id", userId)
+      const { data } = await refetchFollowings(); // дождаться результата
+      console.log("Updated followings after refetch:", data);
+      setFollowings(data.getMyFollowings || []);
     } catch (err) {
       console.error("Error subscribing to this user:", err);
     }
@@ -57,13 +61,18 @@ useEffect(() => {
   }
 }, [myFollowers]);
 
-const myFollowingsIds = myFollowingsData?.getMyFollowings?.map((u: User) => u.id) || [];
+useEffect(() => {
+    if (myFollowingsData?.getMyFollowing) {
+      setFollowings(myFollowingsData.getMyFollowing);
+    }
+  }, [myFollowingsData]);
 
+const myFollowingsIds = followings.map((u) => u.id); // берём из состояния
 
-if (followersLoading) return <p>Loading followers...</p>;
+  if (followersLoading || followingsLoading) return <p>Loading followers...</p>;
 
 return (
-  <div>
+  <div className={styles["myfollowers-inwardly-container"]}>
     <h2>My Followers</h2>
     {followers.length === 0 && <p>You have no followers.</p>}
 
@@ -72,7 +81,7 @@ return (
     const isAlreadyFollowing = myFollowingsIds.includes(follower.id);
 
         return (
-          <li key={`${follower.username}-${follower.id}`}>
+          <li className={styles["follower-item"]} key={`${follower.username}-${follower.id}`}>
             {follower.username}
 
             {isAlreadyFollowing ? (

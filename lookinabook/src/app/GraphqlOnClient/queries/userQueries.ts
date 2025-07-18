@@ -72,22 +72,25 @@ export const GET_USER_BY_ID = gql`
 export const GET_USER_FOLLOWERS = gql`
 query GetUserFollowers($userId: Int!){
   getUserFollowers(userId: $userId){
+    id
     username
-    bio
+    
   }
 }
 `
 export const GET_USER_FOLLOWING = gql`
 query GetUserFollowing($userId: Int!){
   getUserFollowing(userId: $userId){
+    id
     username
-    bio
+    
   }
 }
 `
 export const GET_MY_FOLLOWERS = gql`
 query GetMyFollowers{
   getMyFollowers{
+    id
     username
     bio
   }
@@ -96,6 +99,7 @@ query GetMyFollowers{
 export const GET_MY_FOLLOWING = gql`
 query GetMyFollowing{
   getMyFollowing{
+    id
     username
     bio
   }

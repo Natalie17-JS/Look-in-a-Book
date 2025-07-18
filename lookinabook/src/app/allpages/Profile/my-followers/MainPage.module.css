@@ -11,4 +11,13 @@
   }
   .myfollowers-container {
     height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid red;
+  }
+  .shelf-door {
+    display: flex;
+    flex-direction: column;
+    
   }
