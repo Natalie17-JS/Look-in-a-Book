@@ -28,6 +28,64 @@ Query:{
       }
     },
 
+  getUserChats: async (_, __, { req, res, prisma }) => {
+  try {
+    const user = await getUserFromRequest(req, res);
+    if (!user) throw new Error("Not authenticated");
+
+    const chats = await prisma.chat.findMany({
+      where: {
+        participants: {
+          some: { id: user.id },
+        },
+      },
+      include: {
+        participants: true,
+        messages: {
+          orderBy: { createdAt: 'desc' },
+          take: 1, // только последнее сообщение
+          include: {
+            sender: true,
+          },
+        },
+        _count: {
+          select: {
+            messages: true,
+          },
+        },
+      },
+    });
+
+    // Подсчёт количества непрочитанных сообщений для каждого чата вручную
+    const chatsWithUnread = await Promise.all(
+      chats.map(async (chat) => {
+        const unreadCount = await prisma.message.count({
+          where: {
+            chatId: chat.id,
+            recipientId: user.id,
+            isRead: false,
+            senderId: {
+              not: user.id, // не считать свои собственные сообщения
+            },
+          },
+        });
+
+        return {
+          ...chat,
+          lastMessage: chat.messages[0] ?? null,
+          unreadCount,
+        };
+      })
+    );
+
+    return chatsWithUnread;
+  } catch (error) {
+    console.error("Error fetching user chats:", error);
+    throw new Error("Failed to fetch user chats.");
+  }
+},
+
+
     // Получить все сообщения пользователя (и отправленные, и полученные)
     getUserMessages: async (_, __,  { req, res, prisma }) => {
       try {
@@ -179,7 +237,37 @@ countUnreadLetters: async (_, __, { req, res, prisma }) => {
                 if (!user) {
                   throw new Error("Not authenticated");
                 }
-      
+      if (user.id === recipientId) {
+    throw new Error("Cannot send a message to yourself.");
+  }
+  let chatId = null;
+
+  if (type === "MESSAGE") {
+    const existingChats = await prisma.chapter.findMany({
+      where: {
+        participants: {some: {id: user.id}},
+      },
+      include: {participants: true}
+    })
+
+    const chat = existingChats.find(
+      c =>
+c.participants.length === 2 && c.participants.some(p => p.id === recipientId)
+    )
+
+    if (chat) {
+      chatId = chat.id
+    } else {
+      const newChat = await prisma.chat.create({
+        data: {
+          participants: {
+            connect: [{ id: user.id }, { id: recipientId }],
+          }
+        }
+      })
+      chatId = newChat.id;
+    }
+  }
 
         const newMessage = await prisma.message.create({
           data: {
@@ -187,6 +275,7 @@ countUnreadLetters: async (_, __, { req, res, prisma }) => {
             recipientId,
             senderId: user.id,
             type,
+            chatId
           },
         });
 
@@ -309,6 +398,116 @@ countUnreadLetters: async (_, __, { req, res, prisma }) => {
         throw new Error("Failed to delete message.");
       }
     },
+
+    requestAddParticipant: async (_, { chatId, targetUserId }, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
+
+  const chat = await prisma.chat.findUnique({
+    where: { id: chatId },
+    include: { participants: true },
+  });
+
+  if (!chat || !chat.participants.some(p => p.id === user.id)) {
+    throw new Error("Access denied to this chat");
+  }
+
+  // 🔒 Ограничение по участникам
+  if (chat.participants.length >= 4) {
+    throw new Error("Maximum number of participants reached (4).");
+  }
+
+  // 🔒 Проверка на существующий pending-инвайт
+  const existingInvite = await prisma.chatInvite.findFirst({
+    where: {
+      chatId,
+      targetId: targetUserId,
+      status: 'PENDING',
+    },
+  });
+
+  if (existingInvite) {
+    throw new Error("An invitation is already pending for this user.");
+  }
+
+  // Создаем приглашение
+  const invite = await prisma.chatInvite.create({
+    data: {
+      chatId,
+      inviterId: user.id,
+      targetId: targetUserId,
+    },
+  });
+
+  return invite;
+},
+
+getPendingInvites: async (_, __, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
+
+  const invites = await prisma.chatInvite.findMany({
+    where: {
+      targetId: user.id,
+      status: 'PENDING',
+    },
+    include: {
+      chat: true,
+      inviter: true,
+    },
+  });
+
+  return invites;
+}, 
+
+respondToInvite: async (_, { inviteId, accept }, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
+
+  const invite = await prisma.chatInvite.findUnique({
+    where: { id: inviteId },
+    include: {
+      chat: {
+        include: { participants: true },
+      },
+    },
+  });
+
+  if (!invite || invite.targetId !== user.id) {
+    throw new Error("Invite not found or unauthorized.");
+  }
+
+  if (invite.status !== 'PENDING') {
+    throw new Error("Invite already responded to.");
+  }
+
+  if (accept) {
+    // 🔒 Ограничение
+    if (invite.chat.participants.length >= 4) {
+      throw new Error("Cannot accept invite. Maximum chat size (4) reached.");
+    }
+
+    await prisma.chat.update({
+      where: { id: invite.chatId },
+      data: {
+        participants: {
+          connect: { id: invite.targetId },
+        },
+      },
+    });
+  }
+
+  await prisma.chatInvite.update({
+    where: { id: inviteId },
+    data: {
+      status: accept ? 'ACCEPTED' : 'REJECTED',
+    },
+  });
+
+  return { success: true };
+}
+
+
   },
 }
 

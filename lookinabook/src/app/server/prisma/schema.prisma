@@ -44,6 +44,9 @@ model User {
   notifications                 Notification[] // User
   subscriptionsAsSubscriber     Subscription[] @relation("SubscriptionsAsSubscriber") // User subscriptions are deleted
   subscriptionsAsSubscribedTo   Subscription[] @relation("SubscriptionsAsSubscribedTo") // Subscriptions to the user are deleted
+  chats                         Chat[]       @relation("ChatParticipants")
+  sentInvites                   ChatInvite[] @relation("Inviter")
+  receivedInvites               ChatInvite[] @relation("InviteTarget")
   messagesSent                  Message[] @relation("SentMessages") 
   messagesReceived              Message[] @relation("ReceivedMessages")
   pointsLogs                    PointsLog[]
@@ -221,6 +224,33 @@ model Subscription {
   @@unique([subscriberId, subscribedToId]) // Unique subscription
 }
 
+model Chat {
+  id           Int          @id @default(autoincrement())
+  participants User[]       @relation("ChatParticipants")
+  messages     Message[]
+  invitations  ChatInvite[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model ChatInvite {
+  id         Int          @id @default(autoincrement())
+  chat       Chat         @relation(fields: [chatId], references: [id])
+  chatId     Int
+  inviter    User         @relation("Inviter", fields: [inviterId], references: [id])
+  inviterId  Int
+  target     User         @relation("InviteTarget", fields: [targetId], references: [id])
+  targetId   Int
+  status     InviteStatus @default(PENDING)
+  createdAt  DateTime     @default(now())
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 enum MessageType {
   LETTER
   MESSAGE
@@ -234,6 +264,8 @@ model Message {
   senderId    Int?     // Sender ID
   recipientId Int?     // Recipient ID
   isRead      Boolean @default(false)                  // Message read status (default: false)
+  chat        Chat?     @relation(fields: [chatId], references: [id])
+  chatId      Int?
 
   replyToId   Int?      // если это ответ на другое сообщение или письмо
   replyTo     Message?  @relation("Reply", fields: [replyToId], references: [id])
