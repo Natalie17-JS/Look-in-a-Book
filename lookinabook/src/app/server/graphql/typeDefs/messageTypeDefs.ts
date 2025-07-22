@@ -9,9 +9,44 @@ type Message {
   recipientId: Int
   isRead: Boolean!
   type: MessageType!
+
   sender: User
   recipient: User
+
+  chatId: Int
+  chat: Chat
+
+  replyToId: Int
+  replyTo: Message
   replies: [Message!]!
+}
+
+
+type Chat {
+  id: Int!
+  participants: [User!]!
+  messages: [Message!]!
+  invitations: [ChatInvite!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ChatInvite {
+  id: Int!
+  chat: Chat!
+  chatId: Int!
+  inviter: User!
+  inviterId: Int!
+  target: User!
+  targetId: Int!
+  status: InviteStatus!
+  createdAt: DateTime!
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 enum MessageType {
@@ -23,14 +58,20 @@ type DeleteResponse {
   message: String!
 }
 
+type Respond {
+  success: Boolean!
+}
+
 type Query {
   getMessageById(id: Int!): Message
-  getUserMessages: [Message!]
   getUserReadLetters: [Message!]
   getUserUnreadLetters: [Message!]
   getUserSentLetters: [Message!]
   countUnreadMessages: Int!
   countUnreadLetters: Int!
+  getUserChats: [Chat]!
+  getPendingInvites: [ChatInvite!]!
+  getUserMessages(chatId: Int!): [Message!]!
 }
 
 type Mutation {
@@ -47,6 +88,10 @@ type Mutation {
   markMessageAsRead(id: Int!): Message
 
   deleteMessage(id: Int!): DeleteResponse!
+
+  requestAddParticipant(chatId: Int!, targetUserId: Int!): ChatInvite!
+
+  respondToInvite(inviteId: Int!, accept: Boolean!): Respond!
 }
 
 

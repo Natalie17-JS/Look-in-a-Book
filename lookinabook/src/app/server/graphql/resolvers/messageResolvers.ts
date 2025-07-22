@@ -84,34 +84,66 @@ Query:{
     throw new Error("Failed to fetch user chats.");
   }
 },
+getPendingInvites: async (_, __, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
 
-
-    // Получить все сообщения пользователя (и отправленные, и полученные)
-    getUserMessages: async (_, __,  { req, res, prisma }) => {
-      try {
-        const user = await getUserFromRequest(req, res);
-                if (!user) {
-                  throw new Error("Not authenticated");
-                }
-        const messages = await prisma.message.findMany({
-          where: {
-      type: 'MESSAGE',
-      recipientId: user.id,
-    },
-    orderBy: {
-      createdAt: 'desc'
+  const invites = await prisma.chatInvite.findMany({
+    where: {
+      targetId: user.id,
+      status: 'PENDING',
     },
     include: {
-      sender: true,
-      replies: true
-    }
-        });
-        return messages;
-      } catch (error) {
-        console.error("Error fetching user messages:", error);
-        throw new Error("Failed to fetch user messages.");
-      }
+      chat: true,
+      inviter: true,
     },
+  });
+
+  return invites;
+}, 
+
+    // Получить все сообщения пользователя (и отправленные, и полученные)
+    getUserMessages: async (_, { chatId }, { req, res, prisma }) => {
+  try {
+    const user = await getUserFromRequest(req, res);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
+
+    // Проверяем, что пользователь — участник чата
+    const isParticipant = await prisma.chat.findFirst({
+      where: {
+        id: chatId,
+        participants: {
+          some: { id: user.id },
+        },
+      },
+    });
+
+    if (!isParticipant) {
+      throw new Error("Access denied. You are not a participant of this chat.");
+    }
+
+    // Получаем сообщения чата
+    const messages = await prisma.message.findMany({
+      where: {
+        chatId: chatId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        sender: true,
+        replies: true,
+      },
+    });
+
+    return messages;
+  } catch (error) {
+    console.error("Error fetching chat messages:", error);
+    throw new Error("Failed to fetch chat messages.");
+  }
+},
 
     getUserReadLetters: async (_,__, { req, res, prisma }) => {
    try {
@@ -243,7 +275,7 @@ countUnreadLetters: async (_, __, { req, res, prisma }) => {
   let chatId = null;
 
   if (type === "MESSAGE") {
-    const existingChats = await prisma.chapter.findMany({
+    const existingChats = await prisma.chat.findMany({
       where: {
         participants: {some: {id: user.id}},
       },
@@ -272,7 +304,7 @@ c.participants.length === 2 && c.participants.some(p => p.id === recipientId)
         const newMessage = await prisma.message.create({
           data: {
             text,
-            recipientId,
+            recipientId: type === 'MESSAGE' && chatId === null ? recipientId : null,
             senderId: user.id,
             type,
             chatId
@@ -442,23 +474,7 @@ c.participants.length === 2 && c.participants.some(p => p.id === recipientId)
   return invite;
 },
 
-getPendingInvites: async (_, __, { req, res, prisma }) => {
-  const user = await getUserFromRequest(req, res);
-  if (!user) throw new Error("Not authenticated");
 
-  const invites = await prisma.chatInvite.findMany({
-    where: {
-      targetId: user.id,
-      status: 'PENDING',
-    },
-    include: {
-      chat: true,
-      inviter: true,
-    },
-  });
-
-  return invites;
-}, 
 
 respondToInvite: async (_, { inviteId, accept }, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
