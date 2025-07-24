@@ -431,7 +431,52 @@ c.participants.length === 2 && c.participants.some(p => p.id === recipientId)
       }
     },
 
-    requestAddParticipant: async (_, { chatId, targetUserId }, { req, res, prisma }) => {
+    deleteChat: async (_, { chatId }, { req, res, prisma }) => {
+  try {
+    const user = await getUserFromRequest(req, res);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
+
+    // Проверяем, существует ли чат и входит ли пользователь в него
+    const chat = await prisma.chat.findUnique({
+      where: { id: chatId },
+      include: { participants: true },
+    });
+
+    if (!chat) {
+      throw new Error("Chat not found");
+    }
+
+    const isParticipant = chat.participants.some(p => p.id === user.id);
+    if (!isParticipant) {
+      throw new Error("You are not a participant of this chat");
+    }
+
+    // Удаляем все связанные сообщения (если onDelete в Prisma не настроен)
+    await prisma.message.deleteMany({
+      where: { chatId },
+    });
+
+    // Удаляем все приглашения (если используются)
+    await prisma.chatInvite.deleteMany({
+      where: { chatId },
+    });
+
+    // Удаляем сам чат
+    await prisma.chat.delete({
+      where: { id: chatId },
+    });
+
+    return { message: "Chat and its messages were successfully deleted" };
+
+  } catch (error) {
+    console.error("Error deleting chat:", error);
+    throw new Error("Failed to delete chat.");
+  }
+},
+
+    addChatParticipant: async (_, { chatId, targetUserId }, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
   if (!user) throw new Error("Not authenticated");
 

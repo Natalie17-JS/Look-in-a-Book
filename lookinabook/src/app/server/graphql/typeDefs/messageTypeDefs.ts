@@ -20,7 +20,7 @@ type Message {
   replyTo: Message
   replies: [Message!]!
 }
-
+ 
 
 type Chat {
   id: Int!
@@ -89,10 +89,11 @@ type Mutation {
 
   deleteMessage(id: Int!): DeleteResponse!
 
-  requestAddParticipant(chatId: Int!, targetUserId: Int!): ChatInvite!
+  addChatParticipant(chatId: Int!, targetUserId: Int!): ChatInvite!
 
   respondToInvite(inviteId: Int!, accept: Boolean!): Respond!
+
+  deleteChat(chatId: Int!): DeleteResponse!
+
 }
-
-
 `

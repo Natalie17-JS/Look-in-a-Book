@@ -26,16 +26,63 @@ query GetMessageById($id: Int!) {
 
 `
 
+export const GET_USER_CHATS = gql `
+  query GetUserChats {
+    getUserChats {
+      id
+      participants {
+        id
+        username
+      }
+      messages {
+          id
+          text
+        }
+      invitations {
+          id
+          chatId
+        }
+      createdAt
+    }  
+  }
+`
+
+export const GET_PENDING_INVITES = gql `
+  query GetPendingInvites {
+    getPendingInvites{
+      id
+      chat
+      inviter{
+        id
+        username
+      }
+      target{
+        id
+        username
+      }
+      status
+      createdAt
+    }
+  }
+`
+
 export const GET_USER_MESSAGES = gql`
 query GetUserMessages {
   getUserMessages {
     id
+    chatId
     text
     type
     isRead
     createdAt
-    senderId
-    recipientId
+    sender{
+      id
+      username
+    }
+    recipient {
+      id
+      username
+    }
     replies {
       id
       text

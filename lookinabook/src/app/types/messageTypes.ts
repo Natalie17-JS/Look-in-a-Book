@@ -6,6 +6,12 @@ export enum MessageType {
     MESSAGE = "MESSAGE"
 }
 
+export enum InviteStatus {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED"
+}
+
 export interface Message {
 id: number;
 text: string;
@@ -16,6 +22,7 @@ recipientId: number;
 createdAt: Date;
 sender: User;
 recipient: User;
+chatId?: number;
 replies: Reply[];
 }
 
@@ -24,6 +31,27 @@ export interface Reply {
   text: string;
   createdAt: Date;
   senderId: number;
+}
+
+export interface Chat {
+  id: number;
+  participants: User[]
+  messages: Message[]
+  invitations: ChatInvite[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface ChatInvite{
+  id: number;
+  chat: Chat
+  chatId: number
+  inviter: User
+  inviterId: number
+  target: User
+  targetId: number
+  status: InviteStatus
+  createdAt: Date
 }
 
   export interface CreateMessageData {

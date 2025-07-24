@@ -13,7 +13,7 @@ import AuthorPosts from "../../my-posts/components/AuthorPosts";
 import UserLettersPage from "../../my-letters/page";
 import { useState } from "react";
 import Link from "next/link";
-import UserMessagesPage from "../../my-messages/page";
+import UserMessagesPage from "../../my-chats/page";
 
 type ComponentName =
   | "notebookbooks"
@@ -131,7 +131,7 @@ export default function Worktable() {
                 onClick={() => handleSwitchContent("messages")}
                 className={styles["switch-content-btn"]}
               >
-                <p className={styles["yashik-text"]}>Messages</p>
+                <p className={styles["yashik-text"]}>Chats</p>
               </button>
             </div>
           </div>

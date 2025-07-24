@@ -7,6 +7,7 @@ mutation CreateMessage($text: String!, $recipientId: Int!, $type: MessageType!) 
     text
     type
     isRead
+    chatId
     createdAt
     senderId
     recipientId
@@ -56,6 +57,34 @@ mutation ReplyToLetter($text: String!, $replyToId: Int!) {
       id
       username
     }
+  }
+}
+`
+
+export const ADD_CHAT_PARTICIPANT = gql`
+mutation GetChatParticipant($chatId: Int!, targetUserId: Int!) {
+  addChatParticipant(chatId: $chatId, targetUserd: $targetUserId) {
+  id
+  chat
+  chatId
+  inviter {
+      id
+      username
+    }
+  target {
+      id
+      username
+    }
+  status
+  createdAt
+  }
+}
+`
+
+export const RESPOND_TO_INVITE = gql`
+mutation RespondToInvite($inviteId: Int!, $accept: Boolean!) {
+  respondToInvite(inviteId: $inviteId, accept: $accept){
+    success
   }
 }
 `

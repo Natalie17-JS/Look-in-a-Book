@@ -10,7 +10,8 @@ MESSAGE = "MESSAGE"
 export type CreateMessageArgs ={
     text: string;
     type: MessageType;
-    recipientId?: number;
+    recipientId: number;
+    chatId?: number;
 }
 type EditMessageArgs = {
   id: number;
@@ -78,17 +79,22 @@ export type MessageResolversTypes = {
                 args: {id: number}, 
                 context: IContext
                 ) => Promise<{ message: string; }>;
-        requestAddParticipant: (
+        addChatParticipant: (
                 parent: unknown, 
                 args: AddParticipantArgs,
                 context: IContext
-        ) => Promise<ChatInvite>;
+                ) => Promise<ChatInvite>;
         
         respondToInvite: (
                 parent: unknown, 
                 args: RespondToInviteArgs,
                 context: IContext
-        ) => Promise<{success: boolean}>
+                ) => Promise<{success: boolean}>
+        deleteChat: (
+                parent: unknown, 
+                args: {chatId: number}, 
+                context: IContext
+                ) => Promise<{ message: string; }>;
      }
         DateTime: GraphQLScalarType;
 }
