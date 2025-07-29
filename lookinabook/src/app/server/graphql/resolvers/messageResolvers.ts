@@ -103,7 +103,7 @@ getPendingInvites: async (_, __, { req, res, prisma }) => {
 }, 
 
     // Получить все сообщения пользователя (и отправленные, и полученные)
-    getUserMessages: async (_, { chatId }, { req, res, prisma }) => {
+    getChatMessages: async (_, { chatId }, { req, res, prisma }) => {
   try {
     const user = await getUserFromRequest(req, res);
     if (!user) {
@@ -262,61 +262,78 @@ countUnreadLetters: async (_, __, { req, res, prisma }) => {
 
   Mutation: {
     // Создание сообщения
-    createMessage: async (_, { text, recipientId, type },{ req, res, prisma } ) => {
-      
-      try {
-        const user = await getUserFromRequest(req, res);
-                if (!user) {
-                  throw new Error("Not authenticated");
-                }
-      if (user.id === recipientId) {
-    throw new Error("Cannot send a message to yourself.");
-  }
-  let chatId = null;
+createChat: async (_, { recipientId }, { req, res, prisma }) => {
+  try {
+    const user = await getUserFromRequest(req, res);
+    if (!user) throw new Error("Not authenticated");
 
-  if (type === "MESSAGE") {
+    if (user.id === recipientId) {
+      throw new Error("Cannot create a chat with yourself.");
+    }
+
     const existingChats = await prisma.chat.findMany({
       where: {
-        participants: {some: {id: user.id}},
+        participants: { some: { id: user.id } },
       },
-      include: {participants: true}
-    })
+      include: { participants: true },
+    });
 
     const chat = existingChats.find(
-      c =>
-c.participants.length === 2 && c.participants.some(p => p.id === recipientId)
-    )
+      (c) =>
+        c.participants.length === 2 &&
+        c.participants.some((p) => p.id === recipientId)
+    );
 
-    if (chat) {
-      chatId = chat.id
-    } else {
-      const newChat = await prisma.chat.create({
-        data: {
-          participants: {
-            connect: [{ id: user.id }, { id: recipientId }],
-          }
-        }
-      })
-      chatId = newChat.id;
-    }
+    if (chat) return chat;
+
+    const newChat = await prisma.chat.create({
+      data: {
+        participants: {
+          connect: [{ id: user.id }, { id: recipientId }],
+        },
+      },
+      include: {
+        participants: true,
+      },
+    });
+
+    return newChat;
+  } catch (error) {
+    console.error("Error creating chat:", error);
+    throw new Error("Failed to create chat.");
   }
+},
 
-        const newMessage = await prisma.message.create({
-          data: {
-            text,
-            recipientId: type === 'MESSAGE' && chatId === null ? recipientId : null,
-            senderId: user.id,
-            type,
-            chatId
-          },
-        });
+createMessage: async (_, { text, chatId }, { req, res, prisma }) => {
+  try {
+    const user = await getUserFromRequest(req, res);
+    if (!user) throw new Error("Not authenticated");
 
-        return newMessage;
-      } catch (error) {
-        console.error("Error creating message:", error);
-        throw new Error("Failed to create message.");
-      }
-    },
+    const chat = await prisma.chat.findUnique({
+      where: { id: chatId },
+      include: { participants: true },
+    });
+
+    if (!chat) throw new Error("Chat not found");
+    const isParticipant = chat.participants.some((p) => p.id === user.id);
+    if (!isParticipant) throw new Error("You are not a participant of this chat");
+
+    const message = await prisma.message.create({
+      data: {
+        text,
+        senderId: user.id,
+        chatId,
+        type: "MESSAGE",
+      },
+    });
+
+    return message;
+  } catch (error) {
+    console.error("Error creating chat message:", error);
+    throw new Error("Failed to send message.");
+  }
+},
+
 
     replyToLetter: async (_, { text, replyToId }, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);

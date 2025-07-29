@@ -16,8 +16,11 @@ import { SUBSCRIBE_TO_USER } from "@/app/GraphqlOnClient/mutations/subscriptionM
 import { useToken } from "@/app/hooks/useToken";
 import { User } from "@/app/types/userTypes";
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import StartChatButton from "./StartChat";
 
 export default function GetAuthor() {
+  const router = useRouter();
     const params = useParams();
   const userId = Number(params.id); 
   const shouldSkip = !userId || isNaN(userId);
@@ -57,6 +60,7 @@ export default function GetAuthor() {
   skip: !accesstoken,
 });
 
+
 const myFollowingsIds = useMemo(() => {
   return myFollowingsData?.getMyFollowing?.map((u: User) => u.id) || [];
 }, [myFollowingsData]);
@@ -88,6 +92,7 @@ const isMutualFollow = useMemo(() => {
       console.error("Error subscribing to this user:", err);
     }
   }
+
 
   if (userLoading) return <p>Loading user...</p>;
   if (userError) return <p>Error: {userError.message}</p>;
@@ -157,9 +162,7 @@ return (
   </button>
 )}
  {isMutualFollow ? (
-  <Link href={`/chat/${userId}`}>
-    <button>Send a message</button>
-  </Link>
+  <StartChatButton recipientId={userId} />
 ) : (
   <div className={styles.mailbox}>
     <Link href={`/allpages/authors/${userId}/new-letter`}>
@@ -168,6 +171,7 @@ return (
     <div className={styles.hole}></div>
   </div>
 )}
+
 
 </div>
     </div>

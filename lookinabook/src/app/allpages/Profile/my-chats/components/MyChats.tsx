@@ -49,7 +49,7 @@ return (
                   {lastMessage.text}
                 </p>
               ) : (
-                <p>No messages yet</p>
+                <p>No chats yet</p>
               )}
             </Link>
           </li>

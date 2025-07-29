@@ -66,9 +66,9 @@ export const GET_PENDING_INVITES = gql `
   }
 `
 
-export const GET_USER_MESSAGES = gql`
-query GetUserMessages {
-  getUserMessages {
+export const GET_CHAT_MESSAGES = gql`
+query GetChatMessages($chatId: Int!) {
+  getChatMessages(chatId: $chatId) {
     id
     chatId
     text

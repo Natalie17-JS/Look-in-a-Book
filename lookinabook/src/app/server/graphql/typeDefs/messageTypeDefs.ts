@@ -71,13 +71,17 @@ type Query {
   countUnreadLetters: Int!
   getUserChats: [Chat]!
   getPendingInvites: [ChatInvite!]!
-  getUserMessages(chatId: Int!): [Message!]!
+  getChatMessages(chatId: Int!): [Message!]!
 }
 
 type Mutation {
   createMessage( text: String!
   recipientId: Int!
-  type: MessageType!): Message!
+  type: MessageType!,
+  chatId: Int
+  ): Message!
+
+  createChat(recipientId: Int!): Chat
   
   editMessage( id: Int!
   text: String

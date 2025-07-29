@@ -1,8 +1,30 @@
 import { gql } from "@apollo/client";
 
+export const CREATE_CHAT = gql`
+mutation CreateChat($recipientId: Int!) {
+  createChat(recipientId: $recipientId){
+     id
+      participants {
+        id
+        username
+      }
+      messages {
+          id
+          text
+        }
+      invitations {
+          id
+          chatId
+        }
+      createdAt
+
+  }
+}
+`
+
 export const CREATE_MESSAGE = gql `
-mutation CreateMessage($text: String!, $recipientId: Int!, $type: MessageType!) {
-  createMessage(text: $text, recipientId: $recipientId, type: $type) {
+mutation CreateChatMessage($text: String!, $chatId: Int!, $type: MessageType!) {
+  createChatMessage(text: $text, chatId: $chatId, type: $type) {
     id
     text
     type
@@ -62,7 +84,7 @@ mutation ReplyToLetter($text: String!, $replyToId: Int!) {
 `
 
 export const ADD_CHAT_PARTICIPANT = gql`
-mutation GetChatParticipant($chatId: Int!, targetUserId: Int!) {
+mutation GetChatParticipant($chatId: Int!, $targetUserId: Int!) {
   addChatParticipant(chatId: $chatId, targetUserd: $targetUserId) {
   id
   chat

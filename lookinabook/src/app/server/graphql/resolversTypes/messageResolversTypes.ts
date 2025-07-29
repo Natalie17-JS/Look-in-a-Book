@@ -10,8 +10,11 @@ MESSAGE = "MESSAGE"
 export type CreateMessageArgs ={
     text: string;
     type: MessageType;
-    recipientId: number;
     chatId?: number;
+}
+
+type CreateChatArgs = {
+     recipientId: number;
 }
 type EditMessageArgs = {
   id: number;
@@ -40,7 +43,7 @@ type RespondToInviteArgs = {
 export type MessageResolversTypes = {
      Query: {
         getMessageById: (parent: unknown, args: { id: number }, context: IContext) => Promise<Message | null>;
-        getUserMessages: (parent: unknown, args: { chatId: number }, context: IContext)=> Promise<Message[] | null>;
+        getChatMessages: (parent: unknown, args: { chatId: number }, context: IContext)=> Promise<Message[] | null>;
         getUserReadLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
         getUserUnreadLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
         getUserSentLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
@@ -55,6 +58,12 @@ export type MessageResolversTypes = {
                 args: CreateMessageArgs, 
                 context: IContext
               ) => Promise<Message>;
+
+        createChat: (
+                parent: unknown, 
+                args: CreateChatArgs, 
+                context: IContext
+              ) => Promise<Chat>;
 
         editMessage: (
                 parent: unknown, 

@@ -9,22 +9,22 @@ import Link from 'next/link';
 import { useUser } from '@/app/context/authContext';
 import { useToken } from '@/app/hooks/useToken';
 
-export default function NewLetter() {
-  const {user} = useUser()
- const params = useParams();
-  const recipientId = Number(params.id); 
+interface MessageFormProps {
+  recipientId?: number;
+  type: 'MESSAGE' | 'LETTER';
+  chatId?: number;
+}
+
+export default function MessageForm({ recipientId, type, chatId }: MessageFormProps) {
   const router = useRouter();
-  console.log('Recipient ID:', recipientId);
-  const {accesstoken} = useToken()
+  const { accesstoken } = useToken();
 
-  const [text, setText] = useState('');
-  const [type] = useState<'LETTER'>('LETTER'); // по умолчанию LETTER, можно сделать селектор
+  const [text, setText] = useState("");
 
-   
   const [createMessage, { loading, error }] = useMutation(CREATE_MESSAGE, {
     context: {
       headers: {
-        Authorization: accesstoken ? `bearer ${accesstoken}` : "",
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
       },
     },
   });
@@ -32,18 +32,8 @@ export default function NewLetter() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!recipientId || isNaN(recipientId)) {
-      toast.error("Invalid recipient.");
-      return;
-    }
-
     if (!text.trim()) {
-      toast.error("Please enter your letter.");
-      return;
-    }
-
-    if (!user) {
-      toast.error("Please sign in")
+      toast.error("Please enter your message.");
       return;
     }
 
@@ -55,16 +45,23 @@ export default function NewLetter() {
           type,
         },
       });
-      toast.success("Your letter was successfully sent!");
-      router.push(`/allpages/authors/${recipientId}`); // после отправки можно перенаправить куда нужно
+
+      toast.success("Message sent successfully!");
+
+      if (type === "LETTER") {
+        router.push(`/allpages/authors/${recipientId}`);
+      } else {
+        setText(""); // Очищаем поле, остаемся в чате
+      }
     } catch (err) {
-      toast.error("An error occurred while sending a letter.");
+      toast.error("Failed to send message.");
     }
   };
 
+
   return (
     <div>
-      <h1>Send a Message</h1>
+      <h1>{type === "LETTER" ? "Send a Letter" : "Send a Message"}</h1>
       <form onSubmit={handleSubmit}>
         <textarea
           value={text}
