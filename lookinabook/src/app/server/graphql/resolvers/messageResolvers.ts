@@ -84,6 +84,33 @@ Query:{
     throw new Error("Failed to fetch user chats.");
   }
 },
+getChat: async (_, { chatId }, { req, res, prisma } ) => {
+  try {
+    const user = await getUserFromRequest(req, res);
+    if (!user) throw new Error("Not authenticated");
+
+      const chat = await prisma.chat.findUnique({
+        where: { id: chatId },
+        include: {
+          participants: true,
+          messages: {
+            orderBy: { createdAt: "desc" },
+            take: 1 // можно убрать, если не нужен последний месседж
+          }
+        }
+      });
+
+      if (!chat) {
+        throw new Error("Chat not found");
+      }
+
+      return chat;
+    } catch (error) {
+    console.error("Error fetching user chats:", error);
+    throw new Error("Failed to fetch user chats.");
+  }
+    },
+
 getPendingInvites: async (_, __, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
   if (!user) throw new Error("Not authenticated");

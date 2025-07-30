@@ -24,7 +24,7 @@ export default function StartChatButton({ recipientId }: { recipientId: number }
       });
 
       const chatId = data.createChat.id;
-      router.push(`/allpages/profile/chats/${chatId}`);
+      router.push(`/allpages/profile/my-chats/${chatId}`);
     } catch (error) {
       console.error("Failed to start chat", error);
     }

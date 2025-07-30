@@ -50,6 +50,7 @@ export type MessageResolversTypes = {
         countUnreadMessages: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;
         countUnreadLetters: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;
         getUserChats: (parent: unknown,args: unknown, context: IContext) => Promise<Chat[]>;
+        getChat: (parent: unknown, args: { chatId: number }, context: IContext) => Promise<Chat>;
         getPendingInvites: (parent: unknown, args: unknown,context: IContext) => Promise<ChatInvite[]>;
      },
      Mutation: {

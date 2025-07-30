@@ -9,8 +9,11 @@ interface ChatMessagesProps {
 }
 
 export default function ChatMessages({ chatId, currentUserId }: ChatMessagesProps) {
+  if (!chatId) return <p>Loading chat...</p>;
+
   const { data, loading, error } = useQuery( GET_CHAT_MESSAGES, {
     variables: { chatId },
+    skip: !chatId,
     pollInterval: 5000, // автообновление каждую 5 сек
   });
 
@@ -19,6 +22,11 @@ export default function ChatMessages({ chatId, currentUserId }: ChatMessagesProp
 
   //const messages = data.chat.messages;
   const messages = data.getChatMessages;
+
+  if (!messages || messages.length === 0) {
+    return <p>No messages yet.</p>;
+  }
+
 
 
   return (

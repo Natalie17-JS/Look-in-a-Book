@@ -25,8 +25,8 @@ type Message {
 type Chat {
   id: Int!
   participants: [User!]!
-  messages: [Message!]!
-  invitations: [ChatInvite!]!
+  messages: [Message!]
+  invitations: [ChatInvite!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -70,6 +70,7 @@ type Query {
   countUnreadMessages: Int!
   countUnreadLetters: Int!
   getUserChats: [Chat]!
+  getChat(chatId: Int!): Chat
   getPendingInvites: [ChatInvite!]!
   getChatMessages(chatId: Int!): [Message!]!
 }

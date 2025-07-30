@@ -42,7 +42,7 @@ return (
           <li
             key={chat.id}
           >
-            <Link href={`/allpages/profile/chats/${chat.id}`}>
+            <Link href={`/allpages/profile/my-chats/${chat.id}`}>
               <div>{names || "You"}</div>
               {lastMessage ? (
                 <p>

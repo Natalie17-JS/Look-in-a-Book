@@ -47,6 +47,22 @@ export const GET_USER_CHATS = gql `
   }
 `
 
+export const GET_CHAT = gql`
+  query GetChat($chatId: Int!) {
+    getChat(chatId: $chatId) {
+      id
+      participants {
+        id
+        username
+      }
+        messages {
+          id
+          text
+        }
+    }
+  }
+`;
+
 export const GET_PENDING_INVITES = gql `
   query GetPendingInvites {
     getPendingInvites{
