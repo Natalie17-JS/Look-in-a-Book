@@ -23,16 +23,14 @@ mutation CreateChat($recipientId: Int!) {
 `
 
 export const CREATE_MESSAGE = gql `
-mutation CreateChatMessage($text: String!, $chatId: Int!, $type: MessageType!) {
-  createChatMessage(text: $text, chatId: $chatId, type: $type) {
+mutation CreateMessage($text: String!, $chatId: Int!) {
+  createMessage(text: $text, chatId: $chatId) {
     id
     text
-    type
     isRead
     chatId
     createdAt
     senderId
-    recipientId
   }
 }
   `
@@ -64,24 +62,6 @@ mutation CreateChatMessage($text: String!, $chatId: Int!, $type: MessageType!) {
   }
 }
   `
-
-export const REPLY_TO_LETTER = gql`
-mutation ReplyToLetter($text: String!, $replyToId: Int!) {
-  replyToLetter(text: $text, replyToId: $replyToId) {
-    id
-    text
-    createdAt
-    sender {
-      id
-      username
-    }
-    recipient {
-      id
-      username
-    }
-  }
-}
-`
 
 export const ADD_CHAT_PARTICIPANT = gql`
 mutation GetChatParticipant($chatId: Int!, $targetUserId: Int!) {

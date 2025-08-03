@@ -16,21 +16,28 @@ type Message {
   replies: [Message!]!
 }
  
-
 type Chat {
   id: Int!
-  participants: [User!]!
+  participants: [ChatParticipant!]!
   messages: [Message!]!
   invitations: [ChatInvite!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
+type ChatParticipant {
+  id: Int!
+  chatId: Int!
+  userId: Int!
+  chat: Chat;
+  user: User;
+}
+
 type ChatInvite {
   id: Int!
   chat: Chat!
   chatId: Int!
-  inviter: User!
+  inviter: ChatParticipant!
   inviterId: Int!
   target: User!
   targetId: Int!

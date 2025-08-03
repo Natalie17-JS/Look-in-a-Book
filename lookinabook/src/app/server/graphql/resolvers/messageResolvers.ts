@@ -373,7 +373,7 @@ markMessagesAsRead: async (_, { chatId }, { req, res, prisma }) => {
       throw new Error("Chat not found");
     }
 
-    const isParticipant = chat.participants.some(p => p.id === user.id);
+    const isParticipant = chat.participants.some(p => p.userId === user.id);
     if (!isParticipant) {
       throw new Error("You are not a participant of this chat");
     }
@@ -410,10 +410,12 @@ markMessagesAsRead: async (_, { chatId }, { req, res, prisma }) => {
     include: { participants: true },
   });
 
-  if (!chat || !chat.participants.some(p => p.id === user.id)) {
-    throw new Error("Access denied to this chat");
-  }
+  if (!chat) throw new Error("Chat not found");
 
+  const inviterParticipant = chat.participants.find(p => p.userId === user.id);
+  if (!inviterParticipant) {
+    throw new Error("You are not a participant of this chat");
+  }
   // 🔒 Ограничение по участникам
   if (chat.participants.length >= 4) {
     throw new Error("Maximum number of participants reached (4).");
@@ -436,7 +438,7 @@ markMessagesAsRead: async (_, { chatId }, { req, res, prisma }) => {
   const invite = await prisma.chatInvite.create({
     data: {
       chatId,
-      inviterId: user.id,
+      inviterId: inviterParticipant.id,
       targetId: targetUserId,
     },
   });

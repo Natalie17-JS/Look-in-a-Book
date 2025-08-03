@@ -250,7 +250,7 @@ model ChatInvite {
   id         Int          @id @default(autoincrement())
   chat       Chat         @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId     Int
-  inviter    User         @relation("Inviter", fields: [inviterId], references: [id])
+  inviter    ChatParticipant  @relation("InviteInviter", fields: [inviterId], references: [id])
   inviterId  Int
   target     User         @relation("InviteTarget", fields: [targetId], references: [id])
   targetId   Int

@@ -5,7 +5,6 @@ query GetMessageById($id: Int!) {
   getMessageById(id: $id) {
     id
     text
-    type
     isRead
     createdAt
     sender {
@@ -88,14 +87,9 @@ query GetChatMessages($chatId: Int!) {
     id
     chatId
     text
-    type
     isRead
     createdAt
     sender{
-      id
-      username
-    }
-    recipient {
       id
       username
     }
@@ -108,77 +102,9 @@ query GetChatMessages($chatId: Int!) {
 
 `
 
-export const GET_USER_READ_LETTERS = gql`
-query GetUserReadLetters {
-  getUserReadLetters {
-    id
-    text
-    type
-    isRead
-    createdAt
-    sender {
-      id
-      username
-    }
-      replies {
-      id
-      text
-    }
-  }
-}
-
-`
-
-export const GET_USER_UNREAD_LETTERS = gql`
-query GetUserUnreadLetters {
-  getUserUnreadLetters {
-    id
-    text
-    type
-    isRead
-    createdAt
-    sender {
-      id
-      username
-    }
-      replies {
-      id
-      text
-    }
-  }
-}
-
-`
-
-export const GET_USER_SENT_LETTERS = gql`
-query GetUserSentLetters {
-  getUserSentLetters {
-    id
-    text
-    type
-    isRead
-    createdAt
-    recipient {
-      id
-      username
-    }
-      replies {
-      id
-      text
-    }
-  }
-}
-
-`
-
 export const UNREAD_MESSAGES_COUNT = gql`
-query CountUnreadMessages {
-countUnreadMessages 
+query CountUnreadMessagesByChat($chatId: Int!) {
+countUnreadMessagesByChat(chatId: $chatId) 
 }
 `
 
-export const UNREAD_LETTERS_COUNT = gql`
-query CountUnreadLetters {
-countUnreadLetters
-}
-`

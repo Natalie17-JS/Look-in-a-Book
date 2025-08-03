@@ -2,27 +2,27 @@
 
 import { useQuery, useMutation } from '@apollo/client';
 import { useParams } from 'next/navigation';
-import { GET_MESSAGE_BY_ID } from '@/app/GraphqlOnClient/queries/messageQueries';
-import { MessageType, Message, Reply } from '@/app/types/messageTypes';
+import { GET_LETTER_BY_ID } from '@/app/GraphqlOnClient/queries/letterQueries';
+import { Letter } from '@/app/types/letterTypes';
 import { useEffect, useState } from 'react';
-import { MARK_MESSAGE_AS_READ } from '@/app/GraphqlOnClient/mutations/messageMutations';
+import { MARK_LETTER_AS_READ } from '@/app/GraphqlOnClient/mutations/letterMutations';
 import { format } from "date-fns"
 import styles from "./Letter.module.css"
 import { useToken } from '@/app/hooks/useToken';
 import ReplyToLetterForm from './ReplyToLetter';
 import { useUser } from '@/app/context/authContext';
 
-const Letter = () => {
+const UserLetter = () => {
   const {user} = useUser()
   const { id } = useParams();
   const messageId = Number(id);
   console.log("letterId:", messageId)
 const {accesstoken} = useToken()
-  const [localReplies, setLocalReplies] = useState<Reply[]>([]);
+  const [localReplies, setLocalReplies] = useState<Letter[]>([]);
 
   const userId = user?.id;
 
-  const { data, loading, error, refetch  } = useQuery<{ getMessageById: Message }>(GET_MESSAGE_BY_ID, {
+  const { data, loading, error, refetch  } = useQuery<{ getMessageById: Letter }>(GET_LETTER_BY_ID, {
     context: {
       headers: {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
@@ -32,7 +32,7 @@ const {accesstoken} = useToken()
     skip: isNaN(messageId) || !accesstoken,
   });
 
-  const [markAsRead] = useMutation(MARK_MESSAGE_AS_READ, {
+  const [markAsRead] = useMutation(MARK_LETTER_AS_READ, {
     context: {
       headers: {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
@@ -52,7 +52,6 @@ const {accesstoken} = useToken()
   useEffect(() => {
     if (data?.getMessageById && 
     !data.getMessageById.isRead && 
-    data.getMessageById.type === MessageType.LETTER &&
     data.getMessageById.sender.id !== userId
     ) {
       markAsRead({ variables: { id: messageId } });
@@ -65,7 +64,6 @@ const {accesstoken} = useToken()
   const letter = data.getMessageById;
   const isSentByMe = letter.sender.id === userId;
 
-  if (letter.type !== MessageType.LETTER) return <p>This is not a letter.</p>;
 
    // Проверка: можно ли ответить на письмо
   //const canReply = letter.replies.length === 0;
@@ -108,4 +106,4 @@ const {accesstoken} = useToken()
   );
 };
 
-export default Letter;
+export default UserLetter;

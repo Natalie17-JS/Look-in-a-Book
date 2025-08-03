@@ -2,9 +2,9 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { GET_USER_READ_LETTERS, GET_USER_UNREAD_LETTERS, UNREAD_LETTERS_COUNT, GET_USER_SENT_LETTERS } from "@/app/GraphqlOnClient/queries/messageQueries"
+import { GET_USER_READ_LETTERS, GET_USER_UNREAD_LETTERS, UNREAD_LETTERS_COUNT, GET_USER_SENT_LETTERS } from "@/app/GraphqlOnClient/queries/letterQueries"
 import React, { useState } from 'react';
-import { Message } from '@/app/types/messageTypes';
+import { Letter } from '@/app/types/letterTypes';
 import Image from 'next/image';
 import letterimage from "@/app/images/letter.svg"
 import styles from "./Letters.module.css"
@@ -14,7 +14,7 @@ import {useToken} from "@/app/hooks/useToken"
 const UserLetters = () => {
   const [selectedTab, setSelectedTab] = useState<'received' | 'unread' | 'sent'>('received');
    const {accesstoken, isLoading} = useToken()
-  const { data: readLettersData, loading: loadingRead } = useQuery<{ getUserReadLetters: Message[] }>(GET_USER_READ_LETTERS, {
+  const { data: readLettersData, loading: loadingRead } = useQuery<{ getUserReadLetters: Letter[] }>(GET_USER_READ_LETTERS, {
     context: {
       headers: {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
@@ -23,7 +23,7 @@ const UserLetters = () => {
     skip: !accesstoken || isLoading,
   });
 
-    const { data: unreadLettersData, loading: loadingUnread } = useQuery<{ getUserUnreadLetters: Message[] }>(GET_USER_UNREAD_LETTERS, {
+    const { data: unreadLettersData, loading: loadingUnread } = useQuery<{ getUserUnreadLetters: Letter[] }>(GET_USER_UNREAD_LETTERS, {
     context: {
       headers: {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
@@ -32,7 +32,7 @@ const UserLetters = () => {
     skip: !accesstoken || isLoading,
   });
 
-    const { data: sentLettersData, loading: loadingSent } = useQuery<{ getUserSentLetters: Message[] }>(GET_USER_SENT_LETTERS, {
+    const { data: sentLettersData, loading: loadingSent } = useQuery<{ getUserSentLetters: Letter[] }>(GET_USER_SENT_LETTERS, {
     context: {
       headers: {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
@@ -58,7 +58,7 @@ const receivedLetters = readLettersData?.getUserReadLetters || [];
   const unreadCount = unreadLettersCountData?.countUnreadLetters || 0;
 
   // --- какие письма показывать
-  let lettersToShow: Message[] = [];
+  let lettersToShow: Letter[] = [];
   if (selectedTab === "received") {
     lettersToShow = receivedLetters;
   } else if (selectedTab === "sent") {

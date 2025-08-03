@@ -1,11 +1,5 @@
 import { User } from "./userTypes";
 
-
-export enum MessageType {
-    LETTER = "LETTER",
-    MESSAGE = "MESSAGE"
-}
-
 export enum InviteStatus {
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
@@ -15,27 +9,26 @@ export enum InviteStatus {
 export interface Message {
 id: number;
 text: string;
-type: MessageType;
 isRead: boolean;
 senderId: number;
-recipientId: number;
 createdAt: Date;
 sender: User;
-recipient: User;
-chatId?: number;
-replies: Reply[];
+chatId: number;
+replies: Message[];
 }
 
-export interface Reply {
+
+export interface ChatParticipant {
   id: number;
-  text: string;
-  createdAt: Date;
-  senderId: number;
+  chatId: number;
+  userId: number;
+  chat: Chat;
+  user: User;
 }
 
 export interface Chat {
   id: number;
-  participants: User[]
+  participants: ChatParticipant[]
   messages: Message[]
   invitations: ChatInvite[]
   createdAt: Date
@@ -46,7 +39,7 @@ export interface ChatInvite{
   id: number;
   chat: Chat
   chatId: number
-  inviter: User
+  inviter: ChatParticipant
   inviterId: number
   target: User
   targetId: number
@@ -56,12 +49,10 @@ export interface ChatInvite{
 
   export interface CreateMessageData {
    text: string;
-   type: MessageType;
-   recipientId: number;
+   chatId: number;
 }
-
 
 export interface EditMessageData {
 id: number;
-text: string;
+text?: string;
 }

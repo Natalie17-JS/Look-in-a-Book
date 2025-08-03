@@ -1,6 +1,6 @@
 "use client"
 
-import Letter from "./components/Letter";
+import UserLetter from "./components/Letter";
 import { useTheme } from "@/app/context/themeContext";
 import { getThemeClass } from "@/app/themeclass";
 import styles from "./MainPage.module.css"
@@ -12,7 +12,7 @@ export default function LetterPage() {
 
     return ( 
         <div className={`${styles["letter-container"]} ${themeClass}`}> 
-        <Letter/>
+        <UserLetter/>
         <GoBackDoor/>
         </div>
     )
