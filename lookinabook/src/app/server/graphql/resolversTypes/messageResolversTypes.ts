@@ -1,16 +1,11 @@
-import {Message, ChatInvite, Chat} from "@prisma/client"
+import {Message, ChatInvite, Chat, Letter} from "@prisma/client"
 import { GraphQLScalarType } from "graphql";
 import { IContext } from "./UserResolversTypes";
 
-export enum MessageType {
-LETTER = "LETTER",
-MESSAGE = "MESSAGE"
-}
 
 export type CreateMessageArgs ={
     text: string;
-    type: MessageType;
-    chatId?: number;
+    chatId: number;
 }
 
 type CreateChatArgs = {
@@ -19,16 +14,8 @@ type CreateChatArgs = {
 type EditMessageArgs = {
   id: number;
   text?: string;
+  chatId: number;
 };
-type ReplyToLetterArgs = {
-  replyToId: number;
-  text: string;
-};
-
-type MarkMessageAsReadArgd = {
-        id: number;
-        isRead: boolean;
-}
 
 type AddParticipantArgs = {
         chatId: number;
@@ -44,11 +31,7 @@ export type MessageResolversTypes = {
      Query: {
         getMessageById: (parent: unknown, args: { id: number }, context: IContext) => Promise<Message | null>;
         getChatMessages: (parent: unknown, args: { chatId: number }, context: IContext)=> Promise<Message[] | null>;
-        getUserReadLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
-        getUserUnreadLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
-        getUserSentLetters: (parent: unknown, args: unknown, context: IContext)=> Promise<Message[] | null>;
-        countUnreadMessages: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;
-        countUnreadLetters: (parent: unknown,args: unknown, context: IContext)=> Promise<number>;
+        countUnreadMessagesByChat: (parent: unknown,args: { chatId: number }, context: IContext)=> Promise<number>;
         getUserChats: (parent: unknown,args: unknown, context: IContext) => Promise<Chat[]>;
         getChat: (parent: unknown, args: { chatId: number }, context: IContext) => Promise<Chat>;
         getPendingInvites: (parent: unknown, args: unknown,context: IContext) => Promise<ChatInvite[]>;
@@ -72,17 +55,11 @@ export type MessageResolversTypes = {
                 context: IContext
                 ) => Promise<Message>;
 
-        replyToLetter: (
+        markMessagesAsRead: (
                 parent: unknown, 
-                args: ReplyToLetterArgs, 
+                args: {chatId: number}, 
                 context: IContext
-                )=> Promise<Message>;
-
-        markMessageAsRead:(
-                parent: unknown, 
-                args: MarkMessageAsReadArgd, 
-                context: IContext
-                ) => Promise<Message>;
+                ) => Promise<number>;
 
         deleteMessage: (
                 parent: unknown, 

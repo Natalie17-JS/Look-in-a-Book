@@ -20,6 +20,8 @@ import likeResolvers from "./resolvers/likeResolvers";
 import { likeTypeDefs } from "./typeDefs/likeTypeDefs";
 import messageResolvers from "./resolvers/messageResolvers";
 import { messageTypeDefs } from "./typeDefs/messageTypeDefs";
+import letterResolvers from "./resolvers/letterResolvers";
+import { letterTypeDefs } from "./typeDefs/letterTypeDefs";
 
 const resolvers = mergeResolvers([
     userResolvers, 
@@ -31,7 +33,8 @@ const resolvers = mergeResolvers([
     complaintResolvers,
     commentsResolvers,
     likeResolvers,
-    messageResolvers
+    messageResolvers,
+    letterResolvers
 ]);
 
 const typeDefs = mergeTypeDefs([
@@ -44,7 +47,8 @@ const typeDefs = mergeTypeDefs([
     complaintTypeDefs,
     commentsTypeDefs,
     likeTypeDefs,
-    messageTypeDefs
+    messageTypeDefs,
+    letterTypeDefs
 ]);
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });

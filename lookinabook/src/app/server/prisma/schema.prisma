@@ -44,11 +44,12 @@ model User {
   notifications                 Notification[] // User
   subscriptionsAsSubscriber     Subscription[] @relation("SubscriptionsAsSubscriber") // User subscriptions are deleted
   subscriptionsAsSubscribedTo   Subscription[] @relation("SubscriptionsAsSubscribedTo") // Subscriptions to the user are deleted
-  chats                         Chat[]       @relation("ChatParticipants")
+  chatParticipants              ChatParticipant[]
   sentInvites                   ChatInvite[] @relation("Inviter")
   receivedInvites               ChatInvite[] @relation("InviteTarget")
-  messagesSent                  Message[] @relation("SentMessages") 
-  messagesReceived              Message[] @relation("ReceivedMessages")
+  sentMessages                  Message[] @relation("SentMessages") 
+  sentLetters                   Letter[] @relation("SentLetters")
+  receivedLetters               Letter[] @relation("ReceivedLetters")
   pointsLogs                    PointsLog[]
   complaintsFiled               Complaint[] @relation("ReportedBy")     // Complaints send by this user
   complaintsReceived            Complaint[] @relation("ReportedUser")   // Complaints on this user
@@ -225,17 +226,29 @@ model Subscription {
 }
 
 model Chat {
-  id           Int          @id @default(autoincrement())
-  participants User[]       @relation("ChatParticipants")
-  messages     Message[]
-  invitations  ChatInvite[]
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id              Int                @id @default(autoincrement())
+  participants    ChatParticipant[]  
+  messages        Message[]          
+  invitations     ChatInvite[]       
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
 }
+
+model ChatParticipant {
+  id      Int   @id @default(autoincrement())
+  chatId  Int
+  userId  Int
+
+  chat    Chat  @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user    User  @relation(fields: [userId], references: [id])
+
+  @@unique([chatId, userId])
+}
+
 
 model ChatInvite {
   id         Int          @id @default(autoincrement())
-  chat       Chat         @relation(fields: [chatId], references: [id])
+  chat       Chat         @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId     Int
   inviter    User         @relation("Inviter", fields: [inviterId], references: [id])
   inviterId  Int
@@ -251,35 +264,43 @@ enum InviteStatus {
   REJECTED
 }
 
-enum MessageType {
-  LETTER
-  MESSAGE
-}
-
 model Message {
-  id          Int      @id @default(autoincrement()) // Unique message identifier
-  text        String   // Message text
-  createdAt   DateTime @default(now())               // Message creation date
-  type        MessageType @default(MESSAGE)
-  senderId    Int?     // Sender ID
-  recipientId Int?     // Recipient ID
-  isRead      Boolean @default(false)                  // Message read status (default: false)
-  chat        Chat?     @relation(fields: [chatId], references: [id])
-  chatId      Int?
+  id          Int      @id @default(autoincrement())
+  text        String
+  createdAt   DateTime @default(now())
+  isRead      Boolean  @default(false)
+  senderId    Int
+  chatId      Int
 
-  replyToId   Int?      // если это ответ на другое сообщение или письмо
-  replyTo     Message?  @relation("Reply", fields: [replyToId], references: [id])
-  replies     Message[] @relation("Reply")
+  sender      User @relation("SentMessages", fields: [senderId], references: [id])
 
-  // Message sender
-  sender      User?    @relation("SentMessages", fields: [senderId], references: [id], onDelete: SetNull) // Relation with the sender
+  chat        Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
-  // Message recipient
-  recipient   User?    @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: SetNull) // Relation with the recipient
+  replyToId   Int?      
+  replyTo     Message?  @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies     Message[] @relation("MessageReplies")
 
-  // Message belongs to both users
-  @@index([senderId, recipientId])  // Index for quick search of messages between users
+  @@index([chatId, createdAt])
 }
+
+model Letter {
+  id          Int      @id @default(autoincrement())
+  text        String
+  createdAt   DateTime @default(now())
+  isRead      Boolean  @default(false)
+  senderId    Int
+  recipientId Int
+
+  sender      User @relation("SentLetters", fields: [senderId], references: [id])
+  recipient   User @relation("ReceivedLetters", fields: [recipientId], references: [id])
+
+  replyToId   Int?     // если это ответ на другое письмо
+  replyTo     Letter?  @relation("LetterReplies", fields: [replyToId], references: [id])
+  replies     Letter[] @relation("LetterReplies")
+
+  @@index([senderId, recipientId])
+}
+
 
 enum NotificationType {
   MESSAGE
@@ -330,6 +351,3 @@ model Complaint {
   reportedByUser User @relation("ReportedBy", fields: [reportedBy], references: [id])
   reportedUser   User @relation("ReportedUser", fields: [reportedUserId], references: [id])
 }
-
-
-

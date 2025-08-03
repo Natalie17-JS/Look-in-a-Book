@@ -5,16 +5,11 @@ type Message {
   id: Int!
   text: String!
   createdAt: DateTime!
-  senderId: Int
-  recipientId: Int
+  senderId: Int!
   isRead: Boolean!
-  type: MessageType!
-
-  sender: User
-  recipient: User
-
-  chatId: Int
-  chat: Chat
+  sender: User!
+  chatId: Int!
+  chat: Chat!
 
   replyToId: Int
   replyTo: Message
@@ -25,7 +20,7 @@ type Message {
 type Chat {
   id: Int!
   participants: [User!]!
-  messages: [Message!]
+  messages: [Message!]!
   invitations: [ChatInvite!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -49,11 +44,6 @@ enum InviteStatus {
   REJECTED
 }
 
-enum MessageType {
-  LETTER
-  MESSAGE
-}
-
 type DeleteResponse {
   message: String!
 }
@@ -64,12 +54,8 @@ type Respond {
 
 type Query {
   getMessageById(id: Int!): Message
-  getUserReadLetters: [Message!]
-  getUserUnreadLetters: [Message!]
-  getUserSentLetters: [Message!]
-  countUnreadMessages: Int!
-  countUnreadLetters: Int!
-  getUserChats: [Chat]!
+  countUnreadMessagesByChat(chatId: Int!): Int!
+  getUserChats: [Chat!]!
   getChat(chatId: Int!): Chat
   getPendingInvites: [ChatInvite!]!
   getChatMessages(chatId: Int!): [Message!]!
@@ -77,9 +63,7 @@ type Query {
 
 type Mutation {
   createMessage( text: String!
-  recipientId: Int!
-  type: MessageType!,
-  chatId: Int
+  chatId: Int!
   ): Message!
 
   createChat(recipientId: Int!): Chat
@@ -87,8 +71,6 @@ type Mutation {
   editMessage( id: Int!
   text: String
   isRead: Boolean): Message!
-
-  replyToLetter(text: String!, replyToId: Int!): Message!
 
   markMessageAsRead(id: Int!): Message
 

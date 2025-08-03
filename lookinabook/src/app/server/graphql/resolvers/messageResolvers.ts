@@ -16,7 +16,6 @@ Query:{
           where: { id } , 
           include: {
       sender: true,
-      recipient: true,
       replies: true
           }
     });
@@ -36,11 +35,15 @@ Query:{
     const chats = await prisma.chat.findMany({
       where: {
         participants: {
-          some: { id: user.id },
+          some: { userId: user.id },
         },
       },
       include: {
-        participants: true,
+        participants: {
+          include: {
+            user: true, // если хочешь имена пользователей
+          },
+        },
         messages: {
           orderBy: { createdAt: 'desc' },
           take: 1, // только последнее сообщение
@@ -62,7 +65,6 @@ Query:{
         const unreadCount = await prisma.message.count({
           where: {
             chatId: chat.id,
-            recipientId: user.id,
             isRead: false,
             senderId: {
               not: user.id, // не считать свои собственные сообщения
@@ -84,6 +86,7 @@ Query:{
     throw new Error("Failed to fetch user chats.");
   }
 },
+
 getChat: async (_, { chatId }, { req, res, prisma } ) => {
   try {
     const user = await getUserFromRequest(req, res);
@@ -172,118 +175,23 @@ getPendingInvites: async (_, __, { req, res, prisma }) => {
   }
 },
 
-    getUserReadLetters: async (_,__, { req, res, prisma }) => {
-   try {
-        const user = await getUserFromRequest(req, res);
-                if (!user) {
-                  throw new Error("Not authenticated");
-                }
-        const readLetters = await prisma.message.findMany({
-          where: {
-      type: 'LETTER',
-      recipientId: user.id,
-       isRead: true,
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    include: {
-      sender: true,
-      replies: true
-    }
-        });
-        return readLetters;
-      } catch (error) {
-        console.error("Error fetching user messages:", error);
-        throw new Error("Failed to fetch user messages.");
-      }
-},
-
-   getUserUnreadLetters: async (_,__, { req, res, prisma }) => {
-   try {
-        const user = await getUserFromRequest(req, res);
-                if (!user) {
-                  throw new Error("Not authenticated");
-                }
-        const readLetters = await prisma.message.findMany({
-          where: {
-      type: 'LETTER',
-      recipientId: user.id,
-       isRead: false,
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    include: {
-      sender: true,
-      replies: true
-    }
-        });
-        return readLetters;
-      } catch (error) {
-        console.error("Error fetching user messages:", error);
-        throw new Error("Failed to fetch user messages.");
-      }
-},
-
-getUserSentLetters: async (_, __, { req, res, prisma }) => {
-  try {
-    const user = await getUserFromRequest(req, res);
-    if (!user) {
-      throw new Error("Not authenticated");
-    }
-
-    const sentLetters = await prisma.message.findMany({
-      where: {
-        type: 'LETTER',
-        senderId: user.id,
-      },
-      orderBy: {
-        createdAt: 'desc'
-      },
-      include: {
-        recipient: true,  // Важно — recipient!
-        replies: true
-      }
-    });
-
-    return sentLetters;
-  } catch (error) {
-    console.error("Error fetching sent letters:", error);
-    throw new Error("Failed to fetch sent letters.");
-  }
-},
-
-
-    countUnreadMessages: async (_,__, { req, res, prisma }) => {
+countUnreadMessagesByChat: async (_, { chatId }, { req, res, prisma }) => {
   const user = await getUserFromRequest(req, res);
   if (!user) throw new Error("Not authenticated");
 
   const count = await prisma.message.count({
     where: {
-      recipientId: user.id,
+      chatId,
       isRead: false,
-      type: 'MESSAGE'
+      senderId: { not: user.id }, // свои сообщения не считаем
     },
   });
 
   return count;
 },
-countUnreadLetters: async (_, __, { req, res, prisma }) => {
-  const user = await getUserFromRequest(req, res);
-  if (!user) throw new Error("Not authenticated");
 
-  const count = await prisma.message.count({
-    where: {
-      recipientId: user.id,
-      isRead: false,
-      type: 'LETTER'
-    },
-  });
 
-  return count;
-}
-
+    
 
   },
 
@@ -298,29 +206,41 @@ createChat: async (_, { recipientId }, { req, res, prisma }) => {
       throw new Error("Cannot create a chat with yourself.");
     }
 
+    // Ищем чаты, в которых участвует текущий пользователь
     const existingChats = await prisma.chat.findMany({
       where: {
-        participants: { some: { id: user.id } },
-      },
-      include: { participants: true },
-    });
-
-    const chat = existingChats.find(
-      (c) =>
-        c.participants.length === 2 &&
-        c.participants.some((p) => p.id === recipientId)
-    );
-
-    if (chat) return chat;
-
-    const newChat = await prisma.chat.create({
-      data: {
         participants: {
-          connect: [{ id: user.id }, { id: recipientId }],
+          some: { userId: user.id },
         },
       },
       include: {
         participants: true,
+      },
+    });
+
+    // Проверяем, есть ли уже чат с этим участником
+    const chat = existingChats.find(
+      (c) =>
+        c.participants.length === 2 &&
+        c.participants.some((p) => p.userId === recipientId)
+    );
+
+    if (chat) return chat;
+
+    // Создаем новый чат
+    const newChat = await prisma.chat.create({
+      data: {
+        participants: {
+          create: [
+            { user: { connect: { id: user.id } } },
+            { user: { connect: { id: recipientId } } },
+          ],
+        },
+      },
+      include: {
+        participants: {
+          include: { user: true },
+        },
       },
     });
 
@@ -342,7 +262,8 @@ createMessage: async (_, { text, chatId }, { req, res, prisma }) => {
     });
 
     if (!chat) throw new Error("Chat not found");
-    const isParticipant = chat.participants.some((p) => p.id === user.id);
+
+    const isParticipant = chat.participants.some((p) => p.userId === user.id);
     if (!isParticipant) throw new Error("You are not a participant of this chat");
 
     const message = await prisma.message.create({
@@ -350,52 +271,16 @@ createMessage: async (_, { text, chatId }, { req, res, prisma }) => {
         text,
         senderId: user.id,
         chatId,
-        type: "MESSAGE",
+        isRead: false,
       },
     });
 
     return message;
   } catch (error) {
-    console.error("Error creating chat message:", error);
+    console.error("Error creating message:", error);
     throw new Error("Failed to send message.");
   }
 },
-
-
-    replyToLetter: async (_, { text, replyToId }, { req, res, prisma }) => {
-  const user = await getUserFromRequest(req, res);
-  if (!user) throw new Error("Not authenticated");
-
-  const original = await prisma.message.findUnique({
-    where: { id: replyToId },
-    include: { replies: true }
-  });
-
-  if (!original || original.type !== 'LETTER') {
-    throw new Error("Original letter not found or is not a letter");
-  }
-
-  if (original.recipientId !== user.id) {
-    throw new Error("You can reply only to letters sent to you");
-  }
-
-  if (original.replies.length > 0) {
-    throw new Error("You already replied to this letter");
-  }
-
-  const reply = await prisma.message.create({
-    data: {
-      text,
-      type: 'LETTER',
-      senderId: user.id,
-      recipientId: original.senderId,
-      replyToId: replyToId
-    },
-  });
-
-  return reply;
-},
-
 
     // Обновление сообщения
     editMessage: async (_, { id, text}, { req, res, prisma }) => {
@@ -427,30 +312,26 @@ createMessage: async (_, { text, chatId }, { req, res, prisma }) => {
       }
     },
 
-    markMessageAsRead: async (_, { id }, { req, res, prisma }) => {
+markMessagesAsRead: async (_, { chatId }, { req, res, prisma }) => {
   try {
     const user = await getUserFromRequest(req, res);
     if (!user) throw new Error("Not authenticated");
 
-    const message = await prisma.message.findUnique({ where: { id } });
-    if (!message) throw new Error("Message not found");
-
-    // Убедись, что только получатель может прочитать сообщение
-    if (message.recipientId !== user.id) {
-      throw new Error("You are not authorized to read this message");
-    }
-
-    if (message.isRead) return message; // уже прочитано
-
-    const updated = await prisma.message.update({
-      where: { id },
-      data: { isRead: true },
+    const result = await prisma.message.updateMany({
+      where: {
+        chatId,
+        isRead: false,
+        senderId: { not: user.id }, // не отмечаем свои сообщения
+      },
+      data: {
+        isRead: true,
+      },
     });
 
-    return updated;
+    return result.count;
   } catch (error) {
-    console.error("Error marking message as read:", error);
-    throw new Error("Failed to mark message as read");
+    console.error("Error marking messages as read:", error);
+    throw new Error("Failed to mark messages as read.");
   }
 },
 
