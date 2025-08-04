@@ -1,27 +1,23 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
-import { CREATE_MESSAGE } from '@/app/GraphqlOnClient/mutations/messageMutations';
+import { CREATE_LETTER } from '@/app/GraphqlOnClient/mutations/letterMutations';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { useUser } from '@/app/context/authContext';
 import { useToken } from '@/app/hooks/useToken';
 
-interface MessageFormProps {
-  recipientId?: number;
-  type: 'MESSAGE' | 'LETTER';
-  chatId?: number;
+interface LetterFormProps {
+  recipientId: number;
 }
 
-export default function MessageForm({ recipientId, type, chatId }: MessageFormProps) {
+export default function LetterForm({ recipientId}: LetterFormProps) {
   const router = useRouter();
   const { accesstoken } = useToken();
-
   const [text, setText] = useState("");
 
-  const [createMessage, { loading, error }] = useMutation(CREATE_MESSAGE, {
+  const [createLetter, { loading, error }] = useMutation(CREATE_LETTER, {
     context: {
       headers: {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
@@ -38,35 +34,29 @@ export default function MessageForm({ recipientId, type, chatId }: MessageFormPr
     }
 
     try {
-      await createMessage({
+      await createLetter({
         variables: {
           text,
           recipientId,
-          type,
         },
       });
 
-      toast.success("Message sent successfully!");
-
-      if (type === "LETTER") {
-        router.push(`/allpages/authors/${recipientId}`);
-      } else {
-        setText(""); // Очищаем поле, остаемся в чате
-      }
+      toast.success("Letter sent successfully!")
+      router.push(`/allpages/authors/${recipientId}`);
     } catch (err) {
-      toast.error("Failed to send message.");
+      toast.error("Failed to send this letter.");
     }
   };
 
 
   return (
     <div>
-      <h1>{type === "LETTER" ? "Send a Letter" : "Send a Message"}</h1>
+      <h1>Send a letter</h1>
       <form onSubmit={handleSubmit}>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Write your message..."
+          placeholder="Write your letter text..."
           rows={6}
           required
         />

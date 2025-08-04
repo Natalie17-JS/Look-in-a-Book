@@ -45,7 +45,6 @@ model User {
   subscriptionsAsSubscriber     Subscription[] @relation("SubscriptionsAsSubscriber") // User subscriptions are deleted
   subscriptionsAsSubscribedTo   Subscription[] @relation("SubscriptionsAsSubscribedTo") // Subscriptions to the user are deleted
   chatParticipants              ChatParticipant[]
-  sentInvites                   ChatInvite[] @relation("Inviter")
   receivedInvites               ChatInvite[] @relation("InviteTarget")
   sentMessages                  Message[] @relation("SentMessages") 
   sentLetters                   Letter[] @relation("SentLetters")
@@ -235,12 +234,13 @@ model Chat {
 }
 
 model ChatParticipant {
-  id      Int   @id @default(autoincrement())
-  chatId  Int
-  userId  Int
+  id           Int   @id @default(autoincrement())
+  chatId       Int
+  userId       Int
 
-  chat    Chat  @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  user    User  @relation(fields: [userId], references: [id])
+  chat         Chat  @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user         User  @relation(fields: [userId], references: [id])
+  sentInvites  ChatInvite[] @relation("InviteInviter")
 
   @@unique([chatId, userId])
 }

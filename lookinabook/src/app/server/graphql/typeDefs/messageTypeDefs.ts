@@ -29,8 +29,8 @@ type ChatParticipant {
   id: Int!
   chatId: Int!
   userId: Int!
-  chat: Chat;
-  user: User;
+  chat: Chat
+  user: User
 }
 
 type ChatInvite {
@@ -79,7 +79,7 @@ type Mutation {
   text: String
   isRead: Boolean): Message!
 
-  markMessageAsRead(id: Int!): Message
+  markMessagesAsRead(chatId: Int!): Boolean!
 
   deleteMessage(id: Int!): DeleteResponse!
 

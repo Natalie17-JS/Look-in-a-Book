@@ -1,10 +1,10 @@
 "use client"
 
-import MessageForm from "./components/MessageForm"
 import { useParams } from "next/navigation";
 import { useTheme } from "@/app/context/themeContext"
 import styles from "./MainPage.module.css"
 import { getThemeClass } from "@/app/themeclass"
+import LetterForm from "./components/LetterForm";
 
 export default function NewMessagePage() {
     const params = useParams();
@@ -14,7 +14,7 @@ export default function NewMessagePage() {
 
     return(
 <div className={`${styles["write-letter-container"]} ${themeClass}`}>
-    <MessageForm recipientId={recipientId} type="LETTER" />
+    <LetterForm recipientId={recipientId}/>
 </div>
     )
 }

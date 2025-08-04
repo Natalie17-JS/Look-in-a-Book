@@ -30,10 +30,10 @@ type User {
   # comments: [Comment!] 
   # likes: [Like!]
   # notifications: [Notification!] 
-  # subscriptionsAsSubscriber: [Subscription!]
-  # subscriptionsAsSubscribedTo: [Subscription!]
-  # messagesSent: [Message!] 
-  # messagesReceived: [Message!]
+  subscriptionsAsSubscriber: [Subscription!]
+  subscriptionsAsSubscribedTo: [Subscription!]
+  messagesSent: [Message!] 
+  messagesReceived: [Message!]
   # pointsLogs: [PointsLog!] 
 }
 

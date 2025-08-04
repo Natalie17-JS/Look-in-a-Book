@@ -32,7 +32,7 @@ return (
           (p) => p.id !== user?.id
         );
         const names = otherParticipants
-          .map((p) => p.username)
+          .map((p) => p.user.username)
           .join(", ");
 
         // последнее сообщение (мы отдавали его сервером через take: 1)
