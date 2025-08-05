@@ -2,13 +2,16 @@
 
 import { useQuery } from "@apollo/client";
 import { GET_CHAT_MESSAGES } from "@/app/GraphqlOnClient/queries/messageQueries";
+import { useUser } from "@/app/context/authContext";
 
 interface ChatMessagesProps {
   chatId: number;
-  currentUserId?: number;
 }
 
-export default function ChatMessages({ chatId, currentUserId }: ChatMessagesProps) {
+export default function ChatMessages({ chatId }: ChatMessagesProps) {
+  const {user} = useUser()
+    const currentUserId = user?.id;
+
   if (!chatId) return <p>Loading chat...</p>;
 
   const { data, loading, error } = useQuery( GET_CHAT_MESSAGES, {
