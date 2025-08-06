@@ -29,7 +29,7 @@ return (
       {chats.map((chat) => {
         // участники, кроме самого пользователя
         const otherParticipants = chat.participants.filter(
-          (p) => p.id !== user?.id
+          (p) => p.user.id !== user?.id
         );
         const names = otherParticipants
           .map((p) => p.user.username)
@@ -49,7 +49,7 @@ return (
                   {lastMessage.text}
                 </p>
               ) : (
-                <p>No chats yet</p>
+                <p></p>
               )}
             </Link>
           </li>

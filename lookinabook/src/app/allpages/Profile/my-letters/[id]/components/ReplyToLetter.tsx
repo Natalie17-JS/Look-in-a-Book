@@ -2,14 +2,14 @@
 
 import { useMutation } from "@apollo/client"
 import { useState } from "react"
-import { REPLY_TO_LETTER } from "@/app/GraphqlOnClient/mutations/messageMutations"
+import { REPLY_TO_LETTER } from "@/app/GraphqlOnClient/mutations/letterMutations"
 import { useToken } from "@/app/hooks/useToken"
 import styles from "./Letter.module.css"
-import { Reply } from "@/app/types/messageTypes"
+import { Letter } from "@/app/types/letterTypes"
 
 type ReplyToLetterProps = {
   replyToId: number;
-   onReplySent: (reply: Reply) => void;
+   onReplySent: (reply: Letter) => void;
    refetchLetter: () => void;
 }
 

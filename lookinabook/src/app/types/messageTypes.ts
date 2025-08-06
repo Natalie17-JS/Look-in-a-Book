@@ -22,7 +22,6 @@ export interface ChatParticipant {
   id: number;
   chatId: number;
   userId: number;
-  chat: Chat;
   user: User;
 }
 

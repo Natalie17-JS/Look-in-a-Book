@@ -5,17 +5,11 @@ mutation CreateChat($recipientId: Int!) {
   createChat(recipientId: $recipientId){
      id
       participants {
-        id
-        username
+        user {
+					id
+					username
+				}
       }
-      messages {
-          id
-          text
-        }
-      invitations {
-          id
-          chatId
-        }
       createdAt
 
   }

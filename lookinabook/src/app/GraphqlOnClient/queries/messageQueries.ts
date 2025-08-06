@@ -29,9 +29,11 @@ export const GET_USER_CHATS = gql `
   query GetUserChats {
     getUserChats {
       id
-      participants {
-        id
-        username
+     participants {
+        user {
+					id
+					username
+				}
       }
       messages {
           id
@@ -51,12 +53,15 @@ export const GET_CHAT = gql`
     getChat(chatId: $chatId) {
       id
       participants {
+      user { 
         id
         username
+        }
       }
         messages {
           id
           text
+          createdAt
         }
     }
   }

@@ -15,10 +15,14 @@ Query: {
           where: { id } , 
           include: {
       sender: true,
+      recipient: true,
       replies: true
           }
     });
         if (!letter) throw new Error("Letter not found");
+        if (!letter || !letter.sender) {
+      throw new Error("Letter or sender not found");
+    }
         return letter;
       } catch (error) {
         console.error("Error getting letter:", error);

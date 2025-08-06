@@ -12,6 +12,7 @@ query GetLetterById($id: Int!) {
       username
     }
     recipientId
+    senderId
     recipient {
       id
       username

@@ -9,8 +9,8 @@ type Letter {
   recipientId: Int!
   isRead: Boolean!
 
-  sender: User!
-  recipient: User!
+  sender: User
+  recipient: User
 
   replyToId: Int
   replyTo: Letter

@@ -95,7 +95,7 @@ getChat: async (_, { chatId }, { req, res, prisma } ) => {
       const chat = await prisma.chat.findUnique({
         where: { id: chatId },
         include: {
-          participants: true,
+          participants: { include: { user: true } },
           messages: {
             orderBy: { createdAt: "desc" },
             take: 1 // можно убрать, если не нужен последний месседж
@@ -110,7 +110,7 @@ getChat: async (_, { chatId }, { req, res, prisma } ) => {
       return chat;
     } catch (error) {
     console.error("Error fetching user chats:", error);
-    throw new Error("Failed to fetch user chats.");
+    throw new Error("Failed to fetch chat.");
   }
     },
 

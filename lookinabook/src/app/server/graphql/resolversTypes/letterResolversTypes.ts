@@ -1,4 +1,4 @@
-import {Message, ChatInvite, Chat, Letter} from "@prisma/client"
+import {Letter} from "@prisma/client"
 import { GraphQLScalarType } from "graphql";
 import { IContext } from "./UserResolversTypes";
 

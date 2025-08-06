@@ -15,21 +15,21 @@ import { useUser } from '@/app/context/authContext';
 const UserLetter = () => {
   const {user} = useUser()
   const { id } = useParams();
-  const messageId = Number(id);
-  console.log("letterId:", messageId)
+  const letterId = Number(id);
+  console.log("letterId:", letterId)
 const {accesstoken} = useToken()
   const [localReplies, setLocalReplies] = useState<Letter[]>([]);
 
   const userId = user?.id;
 
-  const { data, loading, error, refetch  } = useQuery<{ getMessageById: Letter }>(GET_LETTER_BY_ID, {
+  const { data, loading, error, refetch  } = useQuery<{ getLetterById: Letter }>(GET_LETTER_BY_ID, {
     context: {
       headers: {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
       },
     },
-    variables: { id: messageId },
-    skip: isNaN(messageId) || !accesstoken,
+    variables: { id: letterId },
+    skip: isNaN(letterId) || !accesstoken,
   });
 
   const [markAsRead] = useMutation(MARK_LETTER_AS_READ, {
@@ -43,25 +43,25 @@ const {accesstoken} = useToken()
 
    // При загрузке письма заполняем replies
   useEffect(() => {
-    if (data?.getMessageById) {
-      setLocalReplies(data.getMessageById.replies);
+    if (data?.getLetterById) {
+      setLocalReplies(data.getLetterById.replies);
     }
   }, [data]);
 
   // Mark as read if unread and type is LETTER
   useEffect(() => {
-    if (data?.getMessageById && 
-    !data.getMessageById.isRead && 
-    data.getMessageById.sender.id !== userId
+    if (data?.getLetterById && 
+    !data.getLetterById.isRead && 
+    data.getLetterById.sender.id !== userId
     ) {
-      markAsRead({ variables: { id: messageId } });
+      markAsRead({ variables: { id: letterId } });
     }
-  }, [data, markAsRead, messageId, userId]);
+  }, [data, markAsRead, letterId, userId]);
 
   if (loading) return <p>Loading letter...</p>;
-  if (error || !data?.getMessageById) return <p>Letter not found.</p>;
+  if (error || !data?.getLetterById) return <p>Letter not found.</p>;
 
-  const letter = data.getMessageById;
+  const letter = data.getLetterById;
   const isSentByMe = letter.sender.id === userId;
 
 
@@ -91,7 +91,7 @@ const {accesstoken} = useToken()
       {!isSentByMe && (
   canReply ? (
     <ReplyToLetterForm
-      replyToId={messageId}
+      replyToId={letterId}
       onReplySent={(newReply) => setLocalReplies([newReply])}
       refetchLetter={refetch}
     />
