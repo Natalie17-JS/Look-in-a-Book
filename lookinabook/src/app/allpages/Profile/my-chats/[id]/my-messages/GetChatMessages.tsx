@@ -3,6 +3,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_CHAT_MESSAGES } from "@/app/GraphqlOnClient/queries/messageQueries";
 import { useUser } from "@/app/context/authContext";
+import { useToken } from "@/app/hooks/useToken";
 
 interface ChatMessagesProps {
   chatId: number;
@@ -11,12 +12,19 @@ interface ChatMessagesProps {
 export default function ChatMessages({ chatId }: ChatMessagesProps) {
   const {user} = useUser()
     const currentUserId = user?.id;
+    const {accesstoken} = useToken()
+    
 
   if (!chatId) return <p>Loading chat...</p>;
 
   const { data, loading, error } = useQuery( GET_CHAT_MESSAGES, {
+    context: {
+      headers: {
+        Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
+      },
+    },
     variables: { chatId },
-    skip: !chatId,
+    skip: !chatId || !accesstoken,
     pollInterval: 5000, // автообновление каждую 5 сек
   });
 

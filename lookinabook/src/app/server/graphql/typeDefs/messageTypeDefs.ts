@@ -29,7 +29,6 @@ type ChatParticipant {
   id: Int!
   chatId: Int!
   userId: Int!
-  chat: Chat
   user: User
 }
 
