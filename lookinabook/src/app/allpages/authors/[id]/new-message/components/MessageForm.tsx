@@ -5,6 +5,9 @@ import { useMutation } from "@apollo/client";
 import toast from 'react-hot-toast';
 import { CREATE_MESSAGE } from "@/app/GraphqlOnClient/mutations/messageMutations";
 import { useToken } from "@/app/hooks/useToken";
+import styles from "./MessageForm.module.css"
+import Image from "next/image";
+import sendicon from "@/app/images/send-icon.svg"
 
 interface MessageFormProps {
   chatId: number;
@@ -47,17 +50,22 @@ export default function MessageForm({ chatId }: MessageFormProps) {
 
   return (
     <div>
-      <h1>Send a Message</h1>
-      <form onSubmit={handleSubmit}>
+     
+      <form className={styles.form} onSubmit={handleSubmit}>
         <textarea
+        className={styles.textarea}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Write your message..."
           rows={6}
           required
         />
-        <button type="submit" disabled={loading}>
-          {loading ? "Sending..." : "Send"}
+         <button
+        type="submit"
+        disabled={loading}
+        className={styles["send-btn"]}
+      >
+        <Image src={sendicon} alt="send" className={styles["send-icon"]}/>
         </button>
       </form>
       {error && <p style={{ color: "red" }}>Error: {error.message}</p>}

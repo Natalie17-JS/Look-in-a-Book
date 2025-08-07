@@ -1,9 +1,10 @@
-// components/ChatMessages.tsx
+"use client"
 
 import { useQuery } from "@apollo/client";
 import { GET_CHAT_MESSAGES } from "@/app/GraphqlOnClient/queries/messageQueries";
 import { useUser } from "@/app/context/authContext";
 import { useToken } from "@/app/hooks/useToken";
+import styles from "./Chat.module.css"
 
 interface ChatMessagesProps {
   chatId: number;
@@ -32,7 +33,7 @@ export default function ChatMessages({ chatId }: ChatMessagesProps) {
   if (error) return <p>Error loading messages: {error.message}</p>;
 
   //const messages = data.chat.messages;
-  const messages = data.getChatMessages;
+  const messages = data?.getChatMessages;
 
   if (!messages || messages.length === 0) {
     return <p>No messages yet.</p>;
@@ -41,9 +42,10 @@ export default function ChatMessages({ chatId }: ChatMessagesProps) {
 
 
   return (
-    <ul>
+    <ul className={styles["messages-list"]}>
       {messages.map((msg: any) => (
         <li
+        className={styles["message-item"]}
           key={msg.id}
           style={{
             textAlign: msg.sender.id === currentUserId ? "right" : "left",

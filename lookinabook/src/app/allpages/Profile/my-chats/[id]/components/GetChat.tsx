@@ -7,6 +7,7 @@ import { GET_CHAT } from "@/app/GraphqlOnClient/queries/messageQueries"
 import { useQuery } from "@apollo/client"
 import { useParams } from "next/navigation"
 import { useToken } from "@/app/hooks/useToken"
+import styles from "./Chat.module.css"
 
 export default function Chat() {
   const params  = useParams();
@@ -43,7 +44,7 @@ export default function Chat() {
   if (!recipient) return <p>Recipient not found.</p>;
 
   return (
-    <div>
+    <div className={styles["chat-inside-container"]}>
       <ChatMessages chatId={chatId} />
       <MessageForm chatId={chatId} />
     </div>

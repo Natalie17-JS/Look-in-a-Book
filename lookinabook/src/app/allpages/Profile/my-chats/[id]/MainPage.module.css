@@ -1,0 +1,25 @@
+.chat-container.light {
+  background-color: white;
+}
+.chat-container.gray {
+  background-color: rgb(185, 180, 166);
+  color: rgb(26, 26, 26);
+}
+.chat-container.dark {
+  background-color: rgb(36, 36, 36);
+  color: white;
+}
+
+
+.chat-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+    justify-content: space-around;
+    /*border: 1px solid red;*/
+}
+ .shelf-door {
+    display: flex;
+    flex-direction: column;
+    
+  }

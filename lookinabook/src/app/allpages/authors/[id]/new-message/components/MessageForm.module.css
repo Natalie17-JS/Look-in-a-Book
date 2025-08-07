@@ -1,0 +1,24 @@
+.textarea {
+    width: 90%;
+    border-radius: 5px;
+    padding: 5px;
+}
+.send-icon {
+    width: 100%;
+    height: auto;
+}
+.send-btn {
+    width: 40px;
+    /*height: 100px;*/
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    outline: none;
+   /* border: 1px solid red;*/
+    border: none;
+    cursor: pointer;
+}
+.form{
+display: flex;
+justify-content: space-between;
+}

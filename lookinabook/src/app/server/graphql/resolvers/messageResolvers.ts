@@ -145,7 +145,9 @@ getPendingInvites: async (_, __, { req, res, prisma }) => {
       where: {
         id: chatId,
         participants: {
-          some: { id: user.id },
+         some: {
+        userId: user.id, // <-- Важно!
+      },
         },
       },
     });
