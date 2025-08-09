@@ -29,8 +29,8 @@ mutation CreateMessage($text: String!, $chatId: Int!) {
 }
   `
   export const EDIT_MESSAGE = gql `
-  mutation EditMessage($id: Int!, $text: String, $isRead: Boolean) {
-  editMessage(id: $id, text: $text, isRead: $isRead) {
+  mutation EditMessage($id: Int!, $text: String) {
+  editMessage(id: $id, text: $text) {
     id
     text
     createdAt
@@ -51,8 +51,7 @@ mutation CreateMessage($text: String!, $chatId: Int!) {
   export const DELETE_MESSAGE = gql`
   mutation DeleteMessage($id: Int!) {
   deleteMessage(id: $id) {
-    id
-    text
+   message
   }
 }
   `

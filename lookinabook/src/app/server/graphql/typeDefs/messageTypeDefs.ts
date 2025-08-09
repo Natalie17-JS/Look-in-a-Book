@@ -75,8 +75,7 @@ type Mutation {
   createChat(recipientId: Int!): Chat
   
   editMessage( id: Int!
-  text: String
-  isRead: Boolean): Message!
+  text: String): Message!
 
   markMessagesAsRead(chatId: Int!): Boolean!
 

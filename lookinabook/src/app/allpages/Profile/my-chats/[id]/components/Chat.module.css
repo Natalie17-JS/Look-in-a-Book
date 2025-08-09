@@ -13,10 +13,57 @@
 .messages-list{
     /*border: 1px solid green;*/
     list-style: none;
+    display: flex;
+    gap: 10px;
+    flex-direction: column-reverse;
 }
 .message-item {
-    border: 1px solid gray;
-    border-radius: 10px;
-    padding: 8px;
-   background-color: rgb(50, 36, 26);
+  display: inline-block; /* чтобы ширина была по содержимому */
+  max-width: 50%; /* сообщение не шире половины чата */
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 8px;
+  color: white;
+  word-wrap: break-word;
+  position: relative;
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Сообщения текущего пользователя справа */
+.message-item.sent {
+  align-self: flex-end;
+  background-color: #634d24;
+  border-bottom-right-radius: 3px;
+}
+
+/* Сообщения получателя слева */
+.message-item.received {
+  align-self: flex-start;
+  background-color: #555;
+  border-bottom-left-radius: 3px;
+}
+.smalltext {
+  font-size: x-small;
+}
+.edit-btn {
+  background-color: transparent;
+  outline: none;
+  border: none;
+}
+.control-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+/* Анимация появления */
+@keyframes fadeInUp {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

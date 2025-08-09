@@ -349,6 +349,10 @@ markMessagesAsRead: async (_, { chatId }, { req, res, prisma }) => {
               if (!message) {
                 throw new Error("Message not found");
               }
+              // Проверка, что удаляет именно автор сообщения
+    if (message.senderId !== user.id) {
+      throw new Error("You can only delete your own messages");
+    }
 
         const deletedMessage = await prisma.message.delete({ where: { id } });
        return { message: "Message was successfully deleted" };

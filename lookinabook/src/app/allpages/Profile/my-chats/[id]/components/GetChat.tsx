@@ -8,6 +8,7 @@ import { useQuery } from "@apollo/client"
 import { useParams } from "next/navigation"
 import { useToken } from "@/app/hooks/useToken"
 import styles from "./Chat.module.css"
+import { useState } from "react"
 
 export default function Chat() {
   const params  = useParams();
@@ -15,6 +16,11 @@ export default function Chat() {
   const { user } = useUser();
   const userId = user?.id;
   const {accesstoken} = useToken()
+
+   const [editingMessage, setEditingMessage] = useState<{
+    id: number;
+    text: string;
+  } | null>(null);
 
   const { data, loading, error } = useQuery(GET_CHAT, {
     context: {
@@ -45,8 +51,13 @@ export default function Chat() {
 
   return (
     <div className={styles["chat-inside-container"]}>
-      <ChatMessages chatId={chatId} />
-      <MessageForm chatId={chatId} />
+      <ChatMessages chatId={chatId}  onEditClick={(id, text) => setEditingMessage({ id, text })}/>
+      <MessageForm chatId={chatId} editingMessage={editingMessage}
+        onCancelEdit={() => setEditingMessage(null)}
+        onMessageUpdated={(id, newText) => {
+          // тут можно обновить UI без перезапроса чата
+          setEditingMessage(null);
+        }}/>
     </div>
   );
 }

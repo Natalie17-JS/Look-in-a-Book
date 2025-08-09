@@ -44,12 +44,14 @@ return (
           >
             <Link href={`/allpages/profile/my-chats/${chat.id}`}>
               <div>{names || "You"}</div>
-              {lastMessage ? (
-                <p>
-                  {lastMessage.text}
-                </p>
-              ) : (
-                <p></p>
+                {lastMessage ? (
+        <p>
+          {lastMessage.text.length > 20
+            ? lastMessage.text.slice(0, 20) + "..."
+            : lastMessage.text}
+        </p>
+      ) : (
+        <p></p>
               )}
             </Link>
           </li>

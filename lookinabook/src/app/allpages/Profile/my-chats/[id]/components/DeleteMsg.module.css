@@ -1,0 +1,8 @@
+.deleteButton {
+padding: 0 3px;
+background-color: transparent;
+outline: none;
+border: none;
+color: rgb(253, 73, 73);
+font-size: larger;
+}

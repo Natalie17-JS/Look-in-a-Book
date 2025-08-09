@@ -5,12 +5,14 @@ import { GET_CHAT_MESSAGES } from "@/app/GraphqlOnClient/queries/messageQueries"
 import { useUser } from "@/app/context/authContext";
 import { useToken } from "@/app/hooks/useToken";
 import styles from "./Chat.module.css"
+import DeleteMessageButton from "./DeleteMsgBtn";
 
 interface ChatMessagesProps {
   chatId: number;
+  onEditClick: (id: number, text: string) => void;
 }
 
-export default function ChatMessages({ chatId }: ChatMessagesProps) {
+export default function ChatMessages({ chatId, onEditClick }: ChatMessagesProps) {
   const {user} = useUser()
     const currentUserId = user?.id;
     const {accesstoken} = useToken()
@@ -42,21 +44,36 @@ export default function ChatMessages({ chatId }: ChatMessagesProps) {
 
 
   return (
-    <ul className={styles["messages-list"]}>
-      {messages.map((msg: any) => (
-        <li
-        className={styles["message-item"]}
-          key={msg.id}
-          style={{
-            textAlign: msg.sender.id === currentUserId ? "right" : "left",
-            margin: "0.5rem 0",
-          }}
-        >
-          <strong>{msg.sender.username}</strong>: {msg.text}
-          <br />
-          <small>{new Date(msg.createdAt).toLocaleString()}</small>
-        </li>
-      ))}
-    </ul>
+  <ul className={styles["messages-list"]}>
+  {messages.map((msg: any) => {
+    const isOwnMessage = msg.sender.id === currentUserId;
+    return (
+      <li
+        key={msg.id}
+        className={`${styles["message-item"]} ${
+          isOwnMessage ? styles.sent : styles.received
+        }`}
+      >
+        <strong>{msg.sender.username}</strong>: {msg.text}
+        <br />
+        <small className={styles.smalltext}>{new Date(msg.createdAt).toLocaleString()}</small>
+
+        {isOwnMessage && (
+          <div className={styles["control-buttons"]}>
+              <button
+                className={styles["edit-btn"]}
+                onClick={() => onEditClick(msg.id, msg.text)}
+              >
+                ✏️
+              </button>
+            
+            <DeleteMessageButton messageId={msg.id}/>
+            </div>
+            )}
+      </li>
+    );
+  })}
+</ul>
+
   );
 }
