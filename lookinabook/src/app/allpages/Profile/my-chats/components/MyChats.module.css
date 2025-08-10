@@ -1,0 +1,31 @@
+.chat-card {
+  position: relative;
+  width: 200px;
+/*  height: 120px;*/
+  cursor: pointer;
+  text-align: center;
+}
+.chat-image {
+  width: 100%;
+  height: auto;
+}
+.chat-info {
+  /*width: 65%;*/
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-70%);
+}
+.chats-list{
+  list-style: none;
+}
+.last-message{
+font-size: small;
+color:rgb(189, 105, 45)
+}
+.undreadcount {
+  background-color: chocolate;
+  padding: 0 4px;
+  border-radius: 50%;
+  font-size: smaller;
+}

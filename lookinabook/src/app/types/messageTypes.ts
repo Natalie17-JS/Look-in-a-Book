@@ -30,6 +30,7 @@ export interface Chat {
   participants: ChatParticipant[]
   messages: Message[]
   invitations: ChatInvite[]
+  unreadCount: number;
   createdAt: Date
   updatedAt: Date
 }

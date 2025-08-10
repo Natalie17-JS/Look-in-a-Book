@@ -21,6 +21,7 @@ type Chat {
   participants: [ChatParticipant!]!
   messages: [Message!]!
   invitations: [ChatInvite!]
+  unreadCount: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
 }

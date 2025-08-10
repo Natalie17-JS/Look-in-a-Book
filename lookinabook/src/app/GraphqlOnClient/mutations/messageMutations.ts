@@ -38,15 +38,11 @@ mutation CreateMessage($text: String!, $chatId: Int!) {
 }
   `
 
-  export const MARK_MESSAGE_AS_READ = gql`
-    mutation MarkMessageAsRead($id: Int!) {
-    markMessageAsRead(id: $id) {
-    id
-    isRead
-  }
+  export const MARK_MESSAGES_AS_READ = gql`
+  mutation MarkMessagesAsRead($chatId: Int!) {
+  markMessagesAsRead(chatId: $chatId)
 }
-
-    `
+ `
 
   export const DELETE_MESSAGE = gql`
   mutation DeleteMessage($id: Int!) {

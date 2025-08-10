@@ -43,6 +43,7 @@ export const GET_USER_CHATS = gql `
           id
           chatId
         }
+      unreadCount
       createdAt
     }  
   }
