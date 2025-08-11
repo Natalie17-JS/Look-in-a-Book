@@ -18,7 +18,34 @@
     border: none;
     cursor: pointer;
 }
-.form{
+
+.input-sendbtn{
 display: flex;
 justify-content: space-between;
+}
+
+/*--------------reply header-----------------*/
+.reply-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px;
+  border-left:4px solid rgb(156, 74, 15);
+  background: rgba(77, 77, 77, 0.5);
+  margin-bottom:6px;
+  border-radius:4px;
+}
+.reply-header-text {
+  font-size: 13px;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.reply-preview {
+  border-left: 3px solid rgba(183, 101, 0, 0.5);
+  padding-left:8px;
+  margin-bottom:4px;
+  font-size: 13px;
+  color: #444;
 }

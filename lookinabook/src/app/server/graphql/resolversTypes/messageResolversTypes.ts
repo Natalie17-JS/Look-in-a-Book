@@ -6,6 +6,7 @@ import { IContext } from "./UserResolversTypes";
 export type CreateMessageArgs ={
     text: string;
     chatId: number;
+    replyToId?: number;
 }
 
 type CreateChatArgs = {

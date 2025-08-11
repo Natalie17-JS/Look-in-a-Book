@@ -71,6 +71,7 @@ type Query {
 type Mutation {
   createMessage( text: String!
   chatId: Int!
+  replyToId: Int
   ): Message!
 
   createChat(recipientId: Int!): Chat

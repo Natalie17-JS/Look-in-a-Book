@@ -6,17 +6,18 @@ import { useUser } from "@/app/context/authContext";
 import { useToken } from "@/app/hooks/useToken";
 import styles from "./Chat.module.css"
 import DeleteMessageButton from "./DeleteMsgBtn";
+import { Message } from "@/app/types/messageTypes";
 
 interface ChatMessagesProps {
   chatId: number;
   onEditClick: (id: number, text: string) => void;
+  onReplyClick: (message: Message) => void;
 }
 
-export default function ChatMessages({ chatId, onEditClick }: ChatMessagesProps) {
+export default function ChatMessages({ chatId, onEditClick, onReplyClick }: ChatMessagesProps) {
   const {user} = useUser()
     const currentUserId = user?.id;
     const {accesstoken} = useToken()
-    
 
   if (!chatId) return <p>Loading chat...</p>;
 
@@ -54,10 +55,25 @@ export default function ChatMessages({ chatId, onEditClick }: ChatMessagesProps)
           isOwnMessage ? styles.sent : styles.received
         }`}
       >
+
+        {/* Если это ответ на сообщение — показать хедер с цитатой */}
+        {msg.replyTo && (
+          <div className={styles["reply-header"]}>
+            <div>
+              <strong>{msg.replyTo.sender.username}</strong>
+              <div className={styles["reply-header-text"]}>
+                {msg.replyTo.text.length > 50
+                  ? msg.replyTo.text.slice(0, 50) + "…"
+                  : msg.replyTo.text}
+              </div>
+            </div>
+          </div>
+        )}
         <strong>{msg.sender.username}</strong>: {msg.text}
         <br />
         <small className={styles.smalltext}>{new Date(msg.createdAt).toLocaleString()}</small>
 
+        
         {isOwnMessage && (
           <div className={styles["control-buttons"]}>
               <button
@@ -70,6 +86,11 @@ export default function ChatMessages({ chatId, onEditClick }: ChatMessagesProps)
             <DeleteMessageButton messageId={msg.id}/>
             </div>
             )}
+
+             {!isOwnMessage && (
+                <button onClick={() => onReplyClick(msg)}>Reply</button>
+
+             )}
       </li>
     );
   })}

@@ -8,6 +8,7 @@ import { useToken } from "@/app/hooks/useToken";
 import styles from "./MessageForm.module.css"
 import Image from "next/image";
 import sendicon from "@/app/images/send-icon.svg"
+import { Message } from "@/app/types/messageTypes";
 
 interface MessageFormProps {
   chatId: number;
@@ -15,6 +16,8 @@ interface MessageFormProps {
   onCancelEdit?: () => void;
   onMessageUpdated?: (id: number, newText: string) => void;
   onMessageCreated?: () => void;
+  replyTo: Message | null;
+  clearReply: () => void;
 }
 
 export default function MessageForm({ 
@@ -22,7 +25,7 @@ export default function MessageForm({
   editingMessage,
   onCancelEdit,
   onMessageUpdated,
-  onMessageCreated, }: MessageFormProps) {
+  onMessageCreated, replyTo, clearReply }: MessageFormProps) {
   const { accesstoken } = useToken();
   const [text, setText] = useState("");
 
@@ -32,12 +35,18 @@ const [createMessage, { loading: creating }] = useMutation(CREATE_MESSAGE, {
         Authorization: accesstoken ? `Bearer ${accesstoken}` : "",
       },
     },
-    onCompleted: () => {
+    onCompleted: (data) => {
+      console.log("Message created:", data);
       toast.success("Message sent!");
       setText("");
+      clearReply();
       onMessageCreated?.();
     },
-    onError: () => toast.error("Failed to send message."),
+    
+    onError: (error) => {
+  console.error("Create message error:", error);
+  toast.error("Failed to send message.");
+}
   });
 
   const [editMessage, { loading: editing }] = useMutation(EDIT_MESSAGE, {
@@ -80,14 +89,38 @@ const [createMessage, { loading: creating }] = useMutation(CREATE_MESSAGE, {
     } else {
       // режим создания
       await createMessage({
-        variables: { text, chatId },
+        variables: { text, chatId, replyToId: replyTo ? replyTo.id : null, },
       });
+    }
+  };
+
+    const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+    if (e.key === "Escape") {
+      if (replyTo) clearReply();
+      if (editingMessage) onCancelEdit?.();
     }
   };
 
    return (
     <div>
       <form className={styles.form} onSubmit={handleSubmit}>
+        {replyTo && (
+        <div className={styles["reply-header"]}>
+          <div>
+            <strong>{replyTo.sender.username}</strong>
+            <div className={styles["reply-header-text"]}>
+              {replyTo.text.length > 50 ? replyTo.text.slice(0,50) + "…" : replyTo.text}
+            </div>
+          </div>
+          <button type="button" onClick={clearReply} aria-label="Cancel reply">x</button>
+        </div>
+      )}
+
+      <div className={styles["input-sendbtn"]}>
         <textarea
           className={styles.textarea}
           value={text}
@@ -118,6 +151,7 @@ const [createMessage, { loading: creating }] = useMutation(CREATE_MESSAGE, {
             />
           </button>
         )}
+        </div>
       </form>
     </div>
   );

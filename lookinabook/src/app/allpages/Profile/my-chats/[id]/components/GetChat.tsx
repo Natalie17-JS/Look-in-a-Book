@@ -9,6 +9,7 @@ import { useParams } from "next/navigation"
 import { useToken } from "@/app/hooks/useToken"
 import styles from "./Chat.module.css"
 import { useState } from "react"
+import { Message } from "@/app/types/messageTypes"
 
 export default function Chat() {
   const params  = useParams();
@@ -16,6 +17,7 @@ export default function Chat() {
   const { user } = useUser();
   const userId = user?.id;
   const {accesstoken} = useToken()
+   const [replyTo, setReplyTo] = useState<Message | null>(null);
 
    const [editingMessage, setEditingMessage] = useState<{
     id: number;
@@ -51,13 +53,14 @@ export default function Chat() {
 
   return (
     <div className={styles["chat-inside-container"]}>
-      <ChatMessages chatId={chatId}  onEditClick={(id, text) => setEditingMessage({ id, text })}/>
+      <ChatMessages chatId={chatId}  onEditClick={(id, text) => setEditingMessage({ id, text })} onReplyClick={setReplyTo}/>
       <MessageForm chatId={chatId} editingMessage={editingMessage}
-        onCancelEdit={() => setEditingMessage(null)}
+        onCancelEdit={() => setEditingMessage(null)} replyTo={replyTo} clearReply={() => setReplyTo(null)}
         onMessageUpdated={(id, newText) => {
-          // тут можно обновить UI без перезапроса чата
           setEditingMessage(null);
-        }}/>
+        }}
+         
+        />
     </div>
   );
 }

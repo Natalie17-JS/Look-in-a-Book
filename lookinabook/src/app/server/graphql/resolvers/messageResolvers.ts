@@ -166,7 +166,21 @@ getPendingInvites: async (_, __, { req, res, prisma }) => {
       },
       include: {
         sender: true,
-        replies: true,
+         replyTo: {
+    include: {
+      sender: true,
+    },
+  },
+         replies: {
+    include: {
+      sender: true,
+      replyTo: {
+        include: {
+          sender: true,
+        },
+      },
+    },
+  },
       },
     });
 
@@ -253,7 +267,7 @@ createChat: async (_, { recipientId }, { req, res, prisma }) => {
   }
 },
 
-createMessage: async (_, { text, chatId }, { req, res, prisma }) => {
+createMessage: async (_, { text, chatId, replyToId }, { req, res, prisma }) => {
   try {
     const user = await getUserFromRequest(req, res);
     if (!user) throw new Error("Not authenticated");
@@ -268,12 +282,32 @@ createMessage: async (_, { text, chatId }, { req, res, prisma }) => {
     const isParticipant = chat.participants.some((p) => p.userId === user.id);
     if (!isParticipant) throw new Error("You are not a participant of this chat");
 
+    let replyToMessage = null;
+    if (replyToId) {
+      replyToMessage = await prisma.message.findUnique({
+        where: { id: Number(replyToId) },
+      });
+
+      if (!replyToMessage || replyToMessage.chatId !== chat.id) {
+        throw new Error("Reply target message not found in this chat");
+      }
+    }
+
     const message = await prisma.message.create({
       data: {
         text,
         senderId: user.id,
         chatId,
         isRead: false,
+        replyToId: replyToId ? Number(replyToId) : null,
+      },
+      include: {
+         sender: true, // обязательно
+    replyTo: {
+      include: {
+        sender: true, // вложенно подгружаем sender у replyTo
+      },
+    },
       },
     });
 

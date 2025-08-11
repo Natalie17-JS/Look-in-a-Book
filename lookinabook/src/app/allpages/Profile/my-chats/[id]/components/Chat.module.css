@@ -55,6 +55,25 @@
   justify-content: flex-end;
 }
 
+/*----------------reply header-----------------*/
+.reply-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px;
+  border-left:4px solid rgb(156, 74, 15);
+  background: rgba(77, 77, 77, 0.5);
+  margin-bottom:6px;
+  border-radius:4px;
+}
+.reply-header-text {
+  font-size: 13px;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 /* Анимация появления */
 @keyframes fadeInUp {

@@ -15,6 +15,8 @@ createdAt: Date;
 sender: User;
 chatId: number;
 replies: Message[];
+replyToId?: number;
+replyTo?: Message;
 }
 
 

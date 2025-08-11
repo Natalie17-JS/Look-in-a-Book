@@ -17,14 +17,27 @@ mutation CreateChat($recipientId: Int!) {
 `
 
 export const CREATE_MESSAGE = gql `
-mutation CreateMessage($text: String!, $chatId: Int!) {
-  createMessage(text: $text, chatId: $chatId) {
+mutation CreateMessage($text: String!, $chatId: Int!, $replyToId: Int) {
+  createMessage(text: $text, chatId: $chatId, replyToId: $replyToId) {
     id
     text
     isRead
     chatId
     createdAt
     senderId
+    sender {
+        id
+        username
+    }
+    replyToId
+    replyTo {
+        id
+        text 
+        sender { 
+        id
+        username
+         }   
+    }
   }
 }
   `

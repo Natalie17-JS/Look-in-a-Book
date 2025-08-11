@@ -102,6 +102,18 @@ query GetChatMessages($chatId: Int!) {
     replies {
       id
       text
+      sender {
+        id
+        username
+      }
+         replyTo {
+        id
+        text 
+        sender { 
+        id
+        username
+         }   
+    }
     }
   }
 }
