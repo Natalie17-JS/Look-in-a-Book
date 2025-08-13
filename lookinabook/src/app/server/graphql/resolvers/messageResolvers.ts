@@ -206,6 +206,30 @@ countUnreadMessagesByChat: async (_, { chatId }, { req, res, prisma }) => {
   return count;
 },
 
+getMutualFollowersForChat: async (_, { chatId }, { req, res, prisma }) => {
+  const user = await getUserFromRequest(req, res);
+  if (!user) throw new Error("Not authenticated");
+
+  // Участник чата?
+  const chat = await prisma.chat.findUnique({
+    where: { id: chatId },
+    include: { participants: { include: { user: true } } }
+  });
+
+  const isParticipant = chat?.participants.some(p => p.userId === user.id);
+  if (!isParticipant) throw new Error("You are not a participant of this chat");
+
+  // Получаем ID пользователей с взаимной подпиской
+  const mutuals = await prisma.user.findMany({
+    where: {
+      followers: { some: { id: user.id } }, // они подписаны на нас
+      following: { some: { id: user.id } }, // мы подписаны на них
+    },
+    select: { id: true, username: true }
+  });
+
+  return mutuals;
+}
 
     
 

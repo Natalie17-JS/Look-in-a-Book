@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "@/app/context/themeContext";
-import Chat from "./components/GetChat"
+import UserChat from "./components/GetChat"
 import { getThemeClass } from "@/app/themeclass";
 import styles from "./MainPage.module.css"
 import GoBackDoor from "./components/GoBackDoor";
@@ -13,7 +13,7 @@ export default function ChatPage() {
 
   return(
     <div className={`${styles["chat-container"]} ${themeClass}`}>
-    <Chat/>
+    <UserChat/>
 
      <div className={styles["shelf-door"]}>
             <SideShelf/>

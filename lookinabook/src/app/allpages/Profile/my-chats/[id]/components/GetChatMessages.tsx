@@ -62,8 +62,8 @@ export default function ChatMessages({ chatId, onEditClick, onReplyClick }: Chat
             <div>
               <strong>{msg.replyTo.sender.username}</strong>
               <div className={styles["reply-header-text"]}>
-                {msg.replyTo.text.length > 50
-                  ? msg.replyTo.text.slice(0, 50) + "…"
+                {msg.replyTo.text.length > 30
+                  ? msg.replyTo.text.slice(0, 30) + "…"
                   : msg.replyTo.text}
               </div>
             </div>

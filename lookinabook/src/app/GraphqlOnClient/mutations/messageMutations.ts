@@ -67,7 +67,7 @@ mutation CreateMessage($text: String!, $chatId: Int!, $replyToId: Int) {
 
 export const ADD_CHAT_PARTICIPANT = gql`
 mutation GetChatParticipant($chatId: Int!, $targetUserId: Int!) {
-  addChatParticipant(chatId: $chatId, targetUserd: $targetUserId) {
+  addChatParticipant(chatId: $chatId, targetUserId: $targetUserId) {
   id
   chat
   chatId

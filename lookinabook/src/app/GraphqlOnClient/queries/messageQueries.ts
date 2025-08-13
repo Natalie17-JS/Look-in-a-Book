@@ -19,6 +19,10 @@ query GetMessageById($id: Int!) {
     replies {
       id
       text
+      sender {
+        id
+        username
+      }
     }
   }
 }
@@ -62,6 +66,7 @@ export const GET_CHAT = gql`
         messages {
           id
           text
+          isRead
           createdAt
         }
     }
@@ -98,6 +103,14 @@ query GetChatMessages($chatId: Int!) {
     sender{
       id
       username
+    }
+      replyTo {
+        id
+        text 
+        sender { 
+        id
+        username
+         }   
     }
     replies {
       id

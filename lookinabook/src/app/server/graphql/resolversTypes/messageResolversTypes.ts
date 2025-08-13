@@ -1,4 +1,4 @@
-import {Message, ChatInvite, Chat, Letter} from "@prisma/client"
+import {Message, ChatInvite, Chat, Letter, User} from "@prisma/client"
 import { GraphQLScalarType } from "graphql";
 import { IContext } from "./UserResolversTypes";
 
@@ -36,6 +36,7 @@ export type MessageResolversTypes = {
         getUserChats: (parent: unknown,args: unknown, context: IContext) => Promise<Chat[]>;
         getChat: (parent: unknown, args: { chatId: number }, context: IContext) => Promise<Chat>;
         getPendingInvites: (parent: unknown, args: unknown,context: IContext) => Promise<ChatInvite[]>;
+        getMutualFollowersForChat: (parent: unknown, args: { chatId: number }, context: IContext) => Promise<User[]>;
      },
      Mutation: {
         createMessage: (

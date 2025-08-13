@@ -1,6 +1,6 @@
 "use client"
 
-import { useMutation, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import { GET_USER_CHATS } from "@/app/GraphqlOnClient/queries/messageQueries"
 import { useToken } from "@/app/hooks/useToken"
 import { useUser } from "@/app/context/authContext"
@@ -11,16 +11,12 @@ import chatday from "@/app/images/chat-day.svg"
 import chatnight from "@/app/images/chat-night.svg"
 import styles from "./MyChats.module.css"
 import { useTheme } from "@/app/context/themeContext"
-import { MARK_MESSAGES_AS_READ } from "@/app/GraphqlOnClient/mutations/messageMutations"
-import { useEffect } from "react"
-import { useParams } from "next/navigation"
 
 export default function Chats(){
     const {accesstoken} = useToken()
     const {user} = useUser()
     const {theme} = useTheme()
-    const params = useParams();
-    const chatId = Number(params.id);
+
 
     let chaticon;
   switch (theme) {
@@ -42,47 +38,7 @@ const {data: chatData, loading: chatLoading} = useQuery<{getUserChats: Chat[]}>(
     },
     skip: !accesstoken
 })
-const [markAsRead] = useMutation(MARK_MESSAGES_AS_READ,{
-   context: {
-      headers: {
-        Authorization: accesstoken ? `Bearer ${accesstoken}` : "", 
-      },
-    },
-});
-
-/*useEffect(() => {
-    if (chatId) {
-      markAsRead({ variables: { chatId } });
-    }
-  }, [chatId, markAsRead]);*/
-  useEffect(() => {
-  if (chatId) {
-    markAsRead({
-      variables: { chatId },
-      update: (cache, { data }) => {
-        const readCount = data?.markMessagesAsRead;
-
-        if (readCount > 0) {
-          cache.modify({
-            fields: {
-              getUserChats(existingChats = []) {
-                return existingChats.map((chat: Chat) => {
-                  if (chat.id === chatId) {
-                    return {
-                      ...chat,
-                      unreadCount: 0 // сразу обнуляем
-                    };
-                  }
-                  return chat;
-                });
-              }
-            }
-          });
-        }
-      }
-    });
-  }
-}, [chatId, markAsRead]);
+ 
 
 if (chatLoading) return <p>Loading letters...</p>;
 const chats = chatData?.getUserChats || [];

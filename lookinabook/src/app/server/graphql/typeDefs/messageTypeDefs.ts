@@ -66,6 +66,7 @@ type Query {
   getChat(chatId: Int!): Chat
   getPendingInvites: [ChatInvite!]!
   getChatMessages(chatId: Int!): [Message!]!
+  getMutualFollowersForChat(chatId: Int!): [User!]!
 }
 
 type Mutation {
